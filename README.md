@@ -1,7 +1,5 @@
 # Ditto-Go-React
 
-Gonna make a mono Ditto repo.
-
 ## Status
 
 | Date | Status |

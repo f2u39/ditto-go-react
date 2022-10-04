@@ -1,0 +1,99 @@
+{{ define "nav" }}
+    <header class="mb-5">
+        <nav class="nav nav-masthead justify-content-center float-md-end">
+            {{/* <!-- Otoge -->
+            <a class="nav-link" href="/game/otoge"><i class="bi bi-music-note-list" style="color:pink;"></i></a> */}}
+
+            <!-- Games -->
+            <a class="nav-link" href="/game"><i class="bi bi-controller" style="color:slateblue;"></i></a>
+
+            <!-- Words -->
+            <a class="nav-link" href="/word"><i class="bi bi-bookmarks" style="color:cadetblue;"></i></a>
+
+            <!-- Todo -->
+            <!-- <a class="nav-link" href="/todo"><i class="bi bi-card-checklist" style="color:cornflowerblue;"></i></a> -->
+
+            <!-- Activities -->
+            <a class="nav-link" href="/act"><i class="bi bi-activity" style="color:darkorange;"></i></a>
+
+            <!-- Home -->
+            <!-- <a class="nav-link" href="/"><i class="bi bi-snapchat" style="color:plum;"></i></a> -->
+        </nav>
+    </header>
+{{ end }}
+
+{{ define "blank-nav" }}
+  <header class="mb-auto">
+    <div>
+        <nav class="nav nav-masthead justify-content-center float-md-end"></nav>
+    </div>
+  </header>
+{{ end }}
+
+{{ define "act-nav" }}
+    <header>
+        <nav class="nav nav-masthead justify-content-center float-md-center">
+            <a class="nav-link" href="/act/create"><i class="bi bi-journal-plus text-light"></i></a>
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modal_stopwatch" aria-expanded="false">
+                <i class="bi bi-stopwatch text-light"></i>
+            </a>
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modal_date" aria-expanded="false">
+                <i class="bi bi-calendar3 text-light"></i>
+            </a>
+        </nav>
+    </header>
+{{ end }}
+
+{{ define "game-nav" }}
+    <header>
+        <nav class="nav nav-masthead justify-content-center float-md-center">
+            <a class="nav-link" href="/game?status=Played"><i class="bi bi-battery-full text-secondary"></i></a>
+            <a class="nav-link" href="/game?status=Playing"><i class="bi bi-battery-charging text-success"></i></a>
+            <a class="nav-link" href="/game?status=Blocking"><i class="bi bi-battery text-danger"></i></a>
+            
+            <a class="nav-link" href="/inc"><i class="bi bi-code-slash text-light"></i></a>
+            <a class="nav-link" href="/game/create"><i class="bi bi-journal-plus text-light"></i></a>
+        </nav>
+    </header>
+{{ end }}
+
+{{ define "inc-nav" }}
+    <header>
+        <nav class="nav nav-masthead justify-content-center float-md-center">
+            <!-- Create -->
+            <a class="nav-link" href="/inc/create"><i class="bi bi-journal-plus text-light"></i></a>
+
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modal_search" aria-expanded="false">
+                <i class="bi bi-search text-light"></i>
+            </a>
+        </nav>
+    </header>
+{{ end }}
+
+{{ define "todo-nav" }}
+    <header>
+        <nav class="nav nav-masthead justify-content-center float-md-center">
+            <form class="col-12 mx-auto" method="post" action="/todo/create">
+                <div class="input-group" role="group">
+                    <!-- Content -->
+                    <input type="text" class="form-control bg-dark text-light" id="content" name="content" required>
+
+                    <!-- Create -->
+                    <button type="submit" id="create" class="btn btn-outline-light">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                </div>
+            </form>
+        </nav>
+    </header>
+{{ end }}
+
+{{ define "word-nav" }}
+    <header>
+        <nav class="nav nav-masthead justify-content-center float-md-center">
+            <a class="nav-link" href="/word?is_checked=1"><i class="bi bi-bookmark-check text-light"></i></a>
+            <a class="nav-link" href="/word?is_checked=0"><i class="bi bi-bookmark-dash text-light"></i></a>
+            <a class="nav-link" href="/word/create"><i class="bi bi-journal-plus text-light"></i></a>
+        </nav>
+    </header>
+{{ end }}

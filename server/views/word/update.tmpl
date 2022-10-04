@@ -1,0 +1,75 @@
+{{ define "word/update" }}
+<head>
+    <title>Update Word</title>
+    {{ template "head" }}
+</head>
+<body class="text-white bg-dark">
+  <div class="cover-container d-flex w-100 h-50 p-3 mx-auto flex-column">
+    {{ template "nav" }}
+    <main role="main" class="container">
+        <h4 class="mb-3 text-center">Update Word</h4><hr>
+        <form class="needs-validation" method="post" action="/word/update" novalidate>
+            <input type="hidden" name="id" value="{{.word.ID.Hex}}" />
+
+            <!-- Word -->
+            <div class="row g-3">
+                <div class="col-12">
+                    <label for="word" class="form-label">Word</label>
+                    <button type="button" class="btn btn-sm btn-outline-secondary float-end" data-bs-toggle="modal" data-bs-target="#confirmation">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                    <input type="text" class="form-control bg-dark text-light" name="word" value="{{.word.Word}}" required>
+                    <div class="invalid-feedback">
+                        Valid word is required.
+                    </div>
+                </div>
+
+                <!-- Example -->
+                <div class="col-12">
+                    <label for="example" class="form-label">Example</label>
+                    <textarea name="example" rows="3" class="form-control bg-dark text-light">{{.word.Example}}</textarea>
+                </div>
+
+                <!-- Meaning -->
+                <div class="col-12">
+                    <label for="meaning" class="form-label">Meaning</label>
+                    <textarea name="meaning" rows="5" class="form-control bg-dark text-light">{{.word.Meaning}}</textarea>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="btn-group btn-group-lg col-12" role="group">
+                <button type="button" class="btn btn-outline-light col-4" onclick="window.history.go(-1); return false;">
+                    <i class="bi bi-arrow-left-circle"></i>
+                </button>
+                <button type="submit" class="btn btn-outline-light col-8">
+                    <i class="bi bi-arrow-right-circle"></i>
+                </button>
+            </div>
+
+            <!-- Delete confirmation modal -->
+            <div class="modal fade" id="confirmation" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-dark text-light">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Confirmation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body bg-dark text-light">
+                            Are your sure to delete it?
+                        </div>
+                        <div class="modal-footer bg-dark text-light">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger" onclick="location.href='/word/delete?id={{.word.ID.Hex}}';">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+    <footer class="mt-auto text-white-50 text-center text-small"></footer>
+  </div>
+  {{ template "js" }}
+</body>
+{{ end }}

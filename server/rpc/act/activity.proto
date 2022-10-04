@@ -1,0 +1,22 @@
+syntax = "proto3";
+package activity;
+
+option go_package = "/";
+
+service Activity {
+  rpc GetActs (Req) returns (Rep) {}
+}
+
+message Req {
+  string date = 1;
+}
+
+message Rep {
+  repeated Act acts = 1;
+}
+
+message Act {
+  string date = 1;
+  int32 duration  = 2;
+  string type = 3;
+}

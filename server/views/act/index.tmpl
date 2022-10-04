@@ -1,0 +1,223 @@
+{{ define "act/index" }}
+<head>
+    <title>Watch</title>
+    {{ template "head" }}
+    <script>
+        window.onload = function() {
+            // Date picker
+            const date = document.getElementById("date");
+             {{if .date}}
+                date.value = "{{.date}}"
+             {{end}}
+
+            // Game select options
+            const type = document.getElementById("type");
+            const gameId = document.getElementById("game_id");
+            const gameTitle = document.getElementById("game_title");
+
+            type.addEventListener('change', (event) => {
+                if (type.value == "Gaming") {
+                    game_id.required = true;
+                    game_id.value = "";
+                    gameTitle.value = "";
+                    game_id.disabled = false;
+                } else {
+                    game_id.required = false;
+                    game_id.value = "";
+                    gameTitle.value = "";
+                    game_id.disabled = true;
+                }
+            });
+
+            gameId.addEventListener('change', (event) => {
+                gameTitle.value = gameId.options[gameId.selectedIndex].text;
+            });
+        };
+    </script>
+</head>
+<body class="d-flex h-80 text-white bg-dark">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        {{ template "nav" }}
+        <main class="col-10 mx-auto" role="main">
+            <div class="row g-3">
+                {{ template "act-nav" }}
+                <!-- Activities -->
+                <div class="col-12 mx-auto">
+                    <div class="col-12 p-3 mx-auto text-white bg-dark border rounded-3" style="display:table;">
+                        <table class="table table-hover table-dark caption-top">
+                            <!-- <caption class="text-end">{{ .date }}</caption> -->
+                            <thead>
+                                <tr>
+                                    <th scope="col"><i class="bi bi-activity"></i></th>
+                                    <th scope="col"><i class="bi bi-clock"></i></th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Daily header -->
+                                <tr>
+                                    <th colspan="5">📆Daily</th>
+                                </tr>
+
+                                <!-- Daily body -->
+                                {{ range $dtl := .daily_acts }}
+                                    <tr>
+                                        {{ if $dtl.Game }}
+                                            <td style="color:lightpink;"><i class="bi bi-controller"></i></td>
+                                            <td style="color:lightpink;">
+                                                {{ if ne $dtl.Hour 0 }} {{ $dtl.Hour }}h {{ end }}
+                                                {{ if ne $dtl.Min 0 }} {{ $dtl.Min }}m {{ end }}
+                                            </td>
+                                            <td colspan="3" class="text-start" style="color:lightpink;">{{ (index $dtl.Game 0).Title }}</td>
+                                        {{ else }}
+                                            <td style="color:mediumpurple;"><i class="bi bi-code-slash"></i></td>
+                                            <td style="color:mediumpurple;">
+                                                {{ if ne $dtl.Hour 0 }} {{ $dtl.Hour }}h {{ end }}
+                                                {{ if ne $dtl.Min 0 }} {{ $dtl.Min }}m {{ end }}
+                                            </td>
+                                            <td colspan="3" style="color:mediumpurple;"></td>
+                                        {{ end }}
+                                    </tr>
+                                {{ end }}
+
+                                <!-- Daily footer -->
+                                <tr>
+                                    <td colspan="4" class="text-end">🎮</td>
+                                    <td class="text-end" style="color:lightpink;">
+                                        {{ if ne .day_sum.GameHour 0 }} {{ .day_sum.GameHour }}h {{ end }}
+                                        {{ if ne .day_sum.GameMin 0 }} {{ .day_sum.GameMin }}m {{ end }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-end">💻</td>
+                                    <td class="text-end" style="color:mediumpurple;">
+                                        {{ if ne .day_sum.PgmHour 0 }} {{ .day_sum.PgmHour }}h {{ end }}
+                                        {{ if ne .day_sum.PgmMin 0 }} {{ .day_sum.PgmMin }}m {{ end }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <!-- Monthly header -->
+                                <tr>
+                                    <th colspan="5">📅Monthly</th>
+                                </tr>
+
+                                 <!-- Monthly body -->
+                                {{ range $dtl := .monthly_acts }}
+                                    <tr>
+                                        {{ if $dtl.Game }}
+                                            <td style="color:lightpink;"><i class="bi bi-controller"></i></td>
+                                            <td style="color:lightpink;">
+                                                {{ if ne $dtl.Hour 0 }} {{ $dtl.Hour }}h {{ end }}
+                                                {{ if ne $dtl.Min 0 }} {{ $dtl.Min }}m {{ end }}
+                                            </td>
+                                            <td colspan="3" class="text-start" style="color:lightpink;">{{ (index $dtl.Game 0).Title }}</td>
+                                        {{ else }}
+                                            <td style="color:mediumpurple;"><i class="bi bi-code-slash"></i></td>
+                                            <td style="color:mediumpurple;">
+                                                {{ if ne $dtl.Hour 0 }} {{ $dtl.Hour }}h {{ end }}
+                                                {{ if ne $dtl.Min 0 }} {{ $dtl.Min }}m {{ end }}
+                                            </td>
+                                            <td colspan="3" style="color:mediumpurple;"></td>
+                                        {{ end }}
+                                    </tr>
+                                {{ end }}
+
+                                 <!-- Monthly footer -->
+                                <tr>
+                                    <td colspan="4" class="text-end">🎮</td>
+                                    <td class="text-end font-weight-bold" style="color:lightpink;">
+                                        {{ if ne .month_sum.GameHour 0 }} {{ .month_sum.GameHour }}h {{ end }}
+                                        {{ if ne .month_sum.GameMin 0 }} {{ .month_sum.GameMin }}m {{ end }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-end">💻</td>
+                                    <td class="text-end font-weight-bold" style="color:mediumpurple;">
+                                        {{ if ne .month_sum.PgmHour 0 }} {{ .month_sum.PgmHour }}h {{ end }}
+                                        {{ if ne .month_sum.PgmMin 0 }} {{ .month_sum.PgmMin }}m {{ end }}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stopwatch modal -->
+            <div class="modal fade" id="modal_stopwatch" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content bg-dark text-light">
+                        <div class="modal-header">
+                            <h5 class="modal-title mx-auto">Stopwatch</h5>
+                        </div>
+                        <div class="modal-body bg-dark text-light">
+                            <form class="needs-validation" id="form_create_media" method="post" action="/act/watch/start" novalidate>
+                                <div class="mb-3">
+                                    <label for="type" class="form-label">Type</label>
+                                    <select class="form-select bg-dark text-light" id="type" name="type">
+                                        <option value="Gaming">Gaming</option>
+                                        <option value="Programming">Programming</option>
+                                        {{if eq .is_stopwatch_started true}}<option value="Recover">Recover</option>{{end}}
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="media_id" class="form-label">Title</label>
+                                    <select class="form-select bg-dark text-light" id="game_id" name="game_id" required>
+                                        <option value=""></option>
+                                        {{ range $g := .playing_games }}
+                                            <option value="{{$g.ID.Hex}}">{{$g.Title}}</option>
+                                        {{ end }}
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Valid game title required.
+                                    </div>
+                                </div>
+                                <input type="hidden" id="game_title" name="game_title" value="">
+                                <hr>
+                                <div class="float-end">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+                                    <button type="submit" class="btn btn-success">START</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date modal -->
+            <div class="modal fade" id="modal_date" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content bg-dark text-light">
+                        <div class="modal-header">
+                            <h5 class="modal-title mx-auto">Activity Date</h5>
+                        </div>
+                        <div class="modal-body bg-dark text-light">
+                            <form class="needs-validation" novalidate>
+                                <div class="mb-3">
+                                    <label for="date" class="form-label">Date</label>
+                                    <input type="date" class="form-control bg-dark text-light" id="date" name="date" required>
+                                </div>
+                                <hr>
+                                <div class="float-end">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+                                    <button type="button" class="btn btn-success" onclick="search();">SEARCH</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="mt-auto text-white-50 text-center text-small"></footer>
+    </div>
+    <script>
+        function search() {
+            var date = document.getElementById("date").value;
+            window.location.replace("/act?date="+date);
+        }
+    </script>
+    {{ template "js" }}
+</body>
+{{ end }}
