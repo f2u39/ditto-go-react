@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Route, Routes } from 'react-router-dom';
@@ -12,16 +12,13 @@ import Stopwatch from './Components/Stopwatch/Stopwatch';
 import useToken from './useToken';
 
 import './App.css';
-import { Box, Grid } from '@mui/material';
-
-
 
 export default function App() {
-  // const { token, setToken } = useToken();
+  const { token, setToken } = useToken()
 
-  // if (!token) {
-  //   return <SignIn setToken={setToken} />
-  // }
+  if (!token) {
+    return <SignIn setToken={setToken} />
+  }
 
   return (
     // <ThemeProvider theme={darkTheme}>

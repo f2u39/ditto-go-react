@@ -17,9 +17,9 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 # ADD config /config ← OK
 # COPY /server/config/ ./ ← NG
-ADD config /config
-ADD asset /asset
-ADD views /views
+# ADD config /config ← TEST
+# ADD asset /asset ← TEST
+# ADD views /views ← TEST
 COPY --from=go_builder /main ./
 COPY --from=node_builder /build ./web
 RUN chmod +x ./main

@@ -16,7 +16,7 @@ import './SignIn.css';
 
 async function login(credentials: { username: string; password: string; }) {
   // console.log(credentials);
-  return fetch('http://127.0.0.1/api/user/login', {
+  return fetch('http://localhost:8080/api/user/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

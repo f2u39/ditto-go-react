@@ -1,6 +1,7 @@
 # extensions
 *.webp
 *.log
+*.exe
 
 # directory
 assets
