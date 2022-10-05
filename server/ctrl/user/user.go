@@ -10,35 +10,11 @@ import (
 )
 
 func Route(e *gin.Engine) {
-	e.Any("/user/login", login)
-	e.Any("/api/user/login", loginApi)
-	e.Use(mw.Auth).Any("/user/logout", logout)
+	e.Any("/api/user/login", login)
 }
 
 // Handle user login
 func login(c *gin.Context) {
-	switch c.Request.Method {
-	case "GET":
-		c.HTML(http.StatusOK, "user/login", gin.H{})
-
-	case "POST":
-		username := c.PostForm("username")
-		password := c.PostForm("password")
-
-		u, ok := h.UserService.Login(username, password)
-		if ok {
-			mw.SetAuth(c, u.ID.Hex())
-			c.Redirect(http.StatusSeeOther, "/")
-		} else {
-			c.JSON(http.StatusNotFound, gin.H{
-				"msg": "Login failed.",
-			})
-		}
-	}
-}
-
-// Handle api user login
-func loginApi(c *gin.Context) {
 	var u user.User
 	c.BindJSON(&u)
 

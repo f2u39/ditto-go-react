@@ -55,9 +55,7 @@ func NewCore() {
 
 func NewEngine() *gin.Engine {
 	r := gin.Default()
-	r.Static("/asset", "./asset")
-	r.Static("/assets", "../assets")
-	r.LoadHTMLGlob("views/**/*")
+	r.Static("/assets", "./assets")
 
 	// CORS
 	r.Use(cors.Default())

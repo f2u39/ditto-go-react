@@ -5,7 +5,6 @@ import (
 	"ditto/ctrl/game"
 	"ditto/ctrl/home"
 	"ditto/ctrl/inc"
-	"ditto/ctrl/line"
 
 	// "ditto/ctrl/todo"
 	"ditto/ctrl/user"
@@ -19,8 +18,6 @@ func Route(e *gin.Engine) {
 	game.Route(e)
 	home.Route(e)
 	inc.Route(e)
-	line.Route(e)
-	// todo.Route(e)
 	user.Route(e)
 	word.Route(e)
 }

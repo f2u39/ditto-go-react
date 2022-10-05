@@ -18,7 +18,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 
-import { Check2Square, Tablet, PcDisplay, NintendoSwitch, Playstation, Xbox, BatteryHalf } from 'react-bootstrap-icons';
+import { CheckAll, Tablet, PcDisplay, NintendoSwitch, Playstation, Xbox, BatteryHalf } from 'react-bootstrap-icons';
 import { Code, CodeSlash } from 'react-bootstrap-icons';
 import { Battery, BatteryCharging, BatteryFull } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
@@ -146,7 +146,7 @@ export default function Game() {
                                 value={platform}
                                 onChange={handlePlatformChange}
                             >
-                                <Tab icon={<Check2Square color="white" size={30} />} value="All" />
+                                <Tab icon={<CheckAll color="white" size={30} />} value="All" />
                                 <Tab icon={<PcDisplay color="orange" size={30} />} value="PC" />
                                 <Tab icon={<Playstation color="skyblue" size={30} />} value="PlayStation" />
                                 <Tab icon={<NintendoSwitch color="red" size={30} />} value="Nintendo Switch" />
