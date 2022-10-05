@@ -6,6 +6,10 @@
 assets
 server/assets/img/games
 
+asset
+config
+views
+
 # specific files
 **/app.json
 
