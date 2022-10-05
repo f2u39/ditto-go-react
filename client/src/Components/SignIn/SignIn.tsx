@@ -44,7 +44,6 @@ export default function SignIn({ setToken }: { setToken: any }) {
     const userToken = await login({
       username, password
     });
-    console.log(userToken);
     setToken(userToken);
   }
 
@@ -65,7 +64,7 @@ export default function SignIn({ setToken }: { setToken: any }) {
             direction="column"
             alignItems="center"
             justifyContent="center"
-            style={{ minHeight: '100vh' }}
+            style={{ minHeight: '80vh' }}
           >
             <Grid item xs={3}>
               <UsernameTextField
@@ -85,7 +84,7 @@ export default function SignIn({ setToken }: { setToken: any }) {
                       />
                     </InputAdornment>
                   ),
-                  style: { WebkitBoxShadow: '0 0 0px 1000px #333333 inset' },
+                  // style: { WebkitBoxShadow: '0 0 0px 1000px #333333 inset' },
                 }}
               />
               <PasswordTextField
@@ -145,6 +144,12 @@ const UsernameTextField = styled(TextField)(() => ({
     '&:hover fieldset': {
       borderColor: '#b9a3db',
     },
+    input: {
+      '&:-webkit-autofill': {
+        '-webkit-box-shadow': '0 0 0 100px #121212 inset',
+        '-webkit-text-fill-color': '#b9a3db'
+      }
+    }
     // '&.Mui-focused fieldset': {
     //   borderColor: '#3c005a',
     // },
@@ -166,6 +171,12 @@ const PasswordTextField = styled(TextField)(() => ({
     '&:hover fieldset': {
       borderColor: '#b9a3db',
     },
+    input: {
+      '&:-webkit-autofill': {
+        '-webkit-box-shadow': '0 0 0 100px #121212 inset',
+        '-webkit-text-fill-color': '#b9a3db'
+      }
+    }
     // '&.Mui-focused fieldset': {
     //   borderColor: '#3c005a',
     // },
