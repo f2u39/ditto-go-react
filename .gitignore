@@ -7,7 +7,7 @@ assets
 server/assets/img/games
 
 # specific files
-server/config/app.json
+**/app.json
 
 # dependencies
 */node_modules

@@ -1,0 +1,53 @@
+{{ define "inc/update" }}
+<head>
+    <title>Update Inc</title>
+    {{ template "head" }}
+</head>
+<body class="text-white bg-dark">
+  <div class="cover-container d-flex w-100 h-50 p-3 mx-auto flex-column">
+    {{ template "nav" }}
+    <main role="main" class="container">
+        <h4 class="mb-3 text-center">Update Inc</h4><hr>
+        <form class="needs-validation" novalidate method="post" action="/inc/update">
+            <input type="hidden" name="id" value="{{.inc.ID.Hex}}" />
+
+            <!-- Name -->
+            <div class="row g-3">
+                <div class="col-12">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control bg-dark" style="color:white;" name="name" value="{{.inc.Name}}" required>
+                    <div class="invalid-feedback">
+                        Valid name is required.
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+
+            <!-- Developer and Publisher -->
+            <div class="col-4">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="is_developer" name="is_developer" value=1 {{ if eq .inc.IsDeveloper 1 }} checked {{ end }}>
+                    <label class="form-check-label" for="is_developer">Developer</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="is_publisher" name="is_publisher" value=1 {{ if eq .inc.IsPublisher 1 }} checked {{ end }}>
+                    <label class="form-check-label" for="is_publisher">Publisher</label>
+                </div>
+            </div>
+            <hr class="my-4">
+
+            <div class="d-flex justify-content-between">
+                <button class="col-4 btn btn-outline-secondary btn-lg" onclick="window.history.go(-1); return false;">
+                    <i class="bi bi-arrow-left-circle" style="font-size:1.7rem;"></i>
+                </button>
+                <button class="col-4 btn btn-outline-success btn-lg" type="submit">
+                    <i class="bi bi-arrow-right-circle" style="font-size:1.7rem;"></i>
+                </button>
+            </div>
+        </form>
+    </main>
+    <footer class="mt-auto text-white-50 text-center text-small"></footer>
+  </div>
+  {{ template "js" }}
+</body>
+{{ end }}

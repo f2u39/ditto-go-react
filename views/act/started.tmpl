@@ -1,0 +1,56 @@
+{{ define "watch/started" }}
+<head>
+    <title>Stopwatch</title>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    {{ template "head" }}
+</head>
+<body class="d-flex h-100 text-center text-white bg-dark">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        {{ template "blank-nav" }}
+        <main>
+            <form id="form" class="form" method="post" action="/act/watch/stop">
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                    <div class="btn-group dark" role="group">
+                        <button id="startedAt" type="button" class="btn btn-outline-light btn-lg text-light">{{ .watch.Type }}</button>
+                        <button id="type" type="button" class="btn btn-outline-light btn-lg text-light">{{ .watch.StartTime.Format "2006-01-02 15:04:05" }}</button> 
+                        {{ if .watch.GameTitle }}
+                            <button id="type" type="button" class="btn btn-outline-light btn-lg text-light">{{ .watch.GameTitle }}</button>
+                        {{ end }}
+                    </div>
+                    <button type="button" id="stop" class="btn btn-outline-light btn-lg text-danger" onclick="submit();">STOP</button>
+                </div>
+            </form>            
+        </main>
+        <footer class="mt-auto text-white-50 text-center text-small"></footer>
+    </div>
+    <script>
+        /*
+        $(document).submit(function()　{
+            warnBeforeUnload = false;
+        });
+
+        window.onbeforeunload = function(e) {
+            return 'Watch is counting...';
+        };
+        */
+        function submit() {
+            warnBeforeUnload = false;
+            var form = document.getElementById("form");
+            form.submit();
+        }
+    </script>
+</body>
+{{ end }}
