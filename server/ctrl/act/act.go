@@ -15,22 +15,21 @@ import (
 var sw *act.StopWatch
 
 func Route(e *gin.Engine) {
-	act := e.Group("/act").Use(mw.Auth)
+	auth := e.Group("/act").Use(mw.Auth)
 	{
-		act.GET("/", index)
-		act.Any("/create", create)
-		act.Any("/watch/start", start)
-		act.Any("/watch/started", started)
-		act.POST("/watch/stop", stop)
-		act.GET("/delete", delete)
-		act.DELETE("/delete", delete)
+		// auth.GET("/", index)
+		auth.Any("/create", create)
+		auth.Any("/watch/start", start)
+		auth.Any("/watch/started", started)
+		auth.POST("/watch/stop", stop)
+		auth.GET("/delete", delete)
+		auth.DELETE("/delete", delete)
+		auth.GET("/stopwatch", stopwatch)
 	}
 
-	api := e.Group("/api/act")
+	anon := e.Group("/act")
 	{
-		api.GET("/", index)
-		api.GET("/stopwatch", stopwatch)
-		api.DELETE("/delete", delete).Use(mw.Auth)
+		anon.GET("/", index)
 	}
 }
 
@@ -57,7 +56,6 @@ func create(c *gin.Context) {
 }
 
 func delete(c *gin.Context) {
-
 	id := c.PostForm("id")
 	err := h.ActService.Delete(id)
 	if err != nil {
@@ -93,18 +91,18 @@ func index(c *gin.Context) {
 		"is_stopwatch_started": sw != nil,
 	}
 
-	h.RESP(c, http.StatusOK, "act/index", data)
+	c.JSON(200, data)
 }
 
 func start(c *gin.Context) {
 	switch c.Request.Method {
 	case "GET":
-		// GET is from game index page
 		sw = act.NewStopWatch()
 		typ := c.Query("type")
 		gid := c.Query("game_id")
 		g := h.GameService.ByID(gid)
 		sw.Start(typ, gid, g.Title)
+
 	case "POST":
 		// POST is from act index page
 		typ := c.PostForm("type")
@@ -122,7 +120,6 @@ func started(c *gin.Context) {
 	c.HTML(http.StatusOK, "watch/started", gin.H{
 		"watch": sw,
 	})
-	// c.Redirect(http.StatusSeeOther, "/watch/started")
 }
 
 func stop(c *gin.Context) {

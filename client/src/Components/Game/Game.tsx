@@ -40,7 +40,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 export default function Game() {
     const [details, setDetails] = useState<Detail[]>([]);
-    const [platform, setPlatform] = useState('PC');
+    const [platform, setPlatform] = useState('All');
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [expandedId, setExpandedId] = useState(-1)

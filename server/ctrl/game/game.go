@@ -20,19 +20,19 @@ const (
 )
 
 func Route(e *gin.Engine) {
-	game := e.Group("/game").Use(mw.Auth)
+	auth := e.Group("/game").Use(mw.Auth)
 	{
-		game.GET("/", index)
-		game.Any("/create", create)
-		game.Any("/update", update)
-		game.Any("/delete", delete)
+		auth.GET("/", index)
+		auth.Any("/create", create)
+		auth.Any("/update", update)
+		auth.Any("/delete", delete)
 	}
 
-	api := e.Group("/api/game")
+	anon := e.Group("/api/game")
 	{
-		api.GET("/counts", counts)
-		api.GET("/", index)
-		api.GET("/status/:status/:platform/:page", status)
+		anon.GET("/counts", counts)
+		anon.GET("/", index)
+		anon.GET("/status/:status/:platform/:page", status)
 	}
 }
 
@@ -79,7 +79,7 @@ func index(c *gin.Context) {
 		"details": h.GameService.ByStatus(status),
 	}
 
-	h.RESP(c, http.StatusOK, "game/index", data)
+	c.JSON(http.StatusOK, data)
 }
 
 func update(c *gin.Context) {
@@ -98,6 +98,7 @@ func update(c *gin.Context) {
 			"play_time_hour": g.PlayTime / 60,
 			"play_time_min":  g.PlayTime % 60,
 		})
+
 	case "POST":
 		gId := c.PostForm("id")
 		dId := c.PostForm("developer_id")
@@ -182,10 +183,10 @@ func status(c *gin.Context) {
 	}
 
 	details, totalPages := h.GameService.PageByStatus(status, platform, page, PAGE_LIMIT)
-	resp := gin.H{
+	data := gin.H{
 		"details":     details,
 		"total_pages": totalPages,
 	}
 
-	h.RESP(c, http.StatusOK, "game/index", resp)
+	c.JSON(http.StatusOK, data)
 }

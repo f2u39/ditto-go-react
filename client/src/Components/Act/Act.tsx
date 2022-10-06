@@ -255,7 +255,7 @@ export default function Act() {
 
     async function fetchActs() {
         try {
-            let resp = await fetch('/api/act');
+            let resp = await fetch('/act');
             let json = await resp.json();
             console.log(json);
             setActs(json);
