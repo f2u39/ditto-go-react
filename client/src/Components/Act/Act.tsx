@@ -38,8 +38,6 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 
-import { Calendar, Calendar2, Calendar3 } from 'react-bootstrap-icons';
-
 export default function Act() {
     const [period, setPeriod] = useState("Daily")
     const handlePeriodChange = (event: React.SyntheticEvent, newPeriod: string) => {
@@ -65,10 +63,8 @@ export default function Act() {
     };
 
     const [acts, setActs] = useState({
-        daily_acts: [],
-        day_sum: null,
-        monthly_acts: [],
-        month_sum: []
+        details: [],
+        summary: [],
     });
 
     useEffect(() => {
@@ -83,84 +79,84 @@ export default function Act() {
             })
     }, [period]);
 
-    const dailyActs = Array.isArray(acts.daily_acts) ? acts.daily_acts : [];
-    const DailyTableRows = (dailyActs).map(
-        (detail: any) => {
-            return (
-                <TableRow key={detail.id} sx={{ '&:last-child td, &:last-child th': { border: 0, fontSize: 15 } }}>
-                    {
-                        detail.act.type === 'Gaming' ?
-                            <TableCell align="center"><SportsEsportsIcon /></TableCell> :
-                            <TableCell align="center"><GitHubIcon /></TableCell>
-                    }
-                    <TableCell align="center">{detail.act.duration}</TableCell>
-                    {
-                        detail.game.length === 1 ?
-                            <TableCell align="left">{detail.game[0].title}</TableCell> :
-                            <TableCell></TableCell>
-                    }
-                </TableRow>
-            )
-        }
-    );
+    // const dailyActs = Array.isArray(acts.daily_acts) ? acts.daily_acts : [];
+    // const DailyTableRows = (dailyActs).map(
+    //     (detail: any) => {
+    //         return (
+    //             <TableRow key={detail.id} sx={{ '&:last-child td, &:last-child th': { border: 0, fontSize: 15 } }}>
+    //                 {
+    //                     detail.act.type === 'Gaming' ?
+    //                         <TableCell align="center"><SportsEsportsIcon /></TableCell> :
+    //                         <TableCell align="center"><GitHubIcon /></TableCell>
+    //                 }
+    //                 <TableCell align="center">{detail.act.duration}</TableCell>
+    //                 {
+    //                     detail.game.length === 1 ?
+    //                         <TableCell align="left">{detail.game[0].title}</TableCell> :
+    //                         <TableCell></TableCell>
+    //                 }
+    //             </TableRow>
+    //         )
+    //     }
+    // );
 
-    const daySum: any = acts.day_sum != null ? acts.day_sum : [];
-    const DaySumTableRows =
-        <>
-            <TableRow>
-                <TableCell align="right" colSpan={2}><SportsEsportsIcon sx={{ color: "cadetblue" }} /></TableCell>
-                {daySum.length === 0 ?
-                    <TableCell></TableCell> :
-                    <TableCell align="left">{daySum.game_hour}h {daySum.game_min}m</TableCell>
-                }
-            </TableRow>
-            <TableRow>
-                <TableCell align="right" colSpan={2}><GitHubIcon sx={{ color: "cadetblue" }} /></TableCell>
-                {daySum.length === 0 ?
-                    <TableCell></TableCell> :
-                    <TableCell align="left">{daySum.pgm_hour}h {daySum.pgm_min}m</TableCell>
-                }
-            </TableRow>
-        </>;
+    // const daySum: any = acts.day_sum != null ? acts.day_sum : [];
+    // const DaySumTableRows =
+    //     <>
+    //         <TableRow>
+    //             <TableCell align="right" colSpan={2}><SportsEsportsIcon sx={{ color: "cadetblue" }} /></TableCell>
+    //             {daySum.length === 0 ?
+    //                 <TableCell></TableCell> :
+    //                 <TableCell align="left">{daySum.game_hour}h {daySum.game_min}m</TableCell>
+    //             }
+    //         </TableRow>
+    //         <TableRow>
+    //             <TableCell align="right" colSpan={2}><GitHubIcon sx={{ color: "cadetblue" }} /></TableCell>
+    //             {daySum.length === 0 ?
+    //                 <TableCell></TableCell> :
+    //                 <TableCell align="left">{daySum.pgm_hour}h {daySum.pgm_min}m</TableCell>
+    //             }
+    //         </TableRow>
+    //     </>;
 
-    const monthlyActs = Array.isArray(acts.monthly_acts) ? acts.monthly_acts : [];
-    const MonthlyTableRows = (monthlyActs).map(
-        (detail: any) => {
-            return (
-                <TableRow key={detail.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    {
-                        detail.act.type === 'Gaming' ?
-                            <TableCell align="left"><SportsEsportsIcon /></TableCell> :
-                            <TableCell><GitHubIcon /></TableCell>
-                    }
-                    <TableCell align="center">{detail.act.duration}</TableCell>
-                    {
-                        detail.game.length === 1 ?
-                            <TableCell align="left">{detail.game[0].title}</TableCell> :
-                            <TableCell></TableCell>
-                    }
-                </TableRow>
-            )
-        }
-    );
-    const monthSum: any = acts.month_sum != null ? acts.month_sum : [];
-    const MonthSumTableRows =
-        <>
-            <TableRow>
-                <TableCell align="right" colSpan={2}><SportsEsportsIcon sx={{ color: "cadetblue" }} /></TableCell>
-                {monthSum.length === 0 ?
-                    <TableCell></TableCell> :
-                    <TableCell align="left">{monthSum.game_hour}h {monthSum.game_min}m</TableCell>
-                }
-            </TableRow>
-            <TableRow>
-                <TableCell align="right" colSpan={2}><GitHubIcon sx={{ color: "cadetblue" }} /></TableCell>
-                {monthSum.length === 0 ?
-                    <TableCell></TableCell> :
-                    <TableCell align="left">{monthSum.pgm_hour}h {monthSum.pgm_min}m</TableCell>
-                }
-            </TableRow>
-        </>;
+    // const monthlyActs = Array.isArray(acts.monthly_acts) ? acts.monthly_acts : [];
+    // const MonthlyTableRows = (monthlyActs).map(
+    //     (detail: any) => {
+    //         return (
+    //             <TableRow key={detail.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+    //                 {
+    //                     detail.act.type === 'Gaming' ?
+    //                         <TableCell align="left"><SportsEsportsIcon /></TableCell> :
+    //                         <TableCell><GitHubIcon /></TableCell>
+    //                 }
+    //                 <TableCell align="center">{detail.act.duration}</TableCell>
+    //                 {
+    //                     detail.game.length === 1 ?
+    //                         <TableCell align="left">{detail.game[0].title}</TableCell> :
+    //                         <TableCell></TableCell>
+    //                 }
+    //             </TableRow>
+    //         )
+    //     }
+    // );
+    // const monthSum: any = acts.month_sum != null ? acts.month_sum : [];
+    // const MonthSumTableRows =
+    //     <>
+    //         <TableRow>
+    //             <TableCell align="right" colSpan={2}><SportsEsportsIcon sx={{ color: "cadetblue" }} /></TableCell>
+    //             {monthSum.length === 0 ?
+    //                 <TableCell></TableCell> :
+    //                 <TableCell align="left">{monthSum.game_hour}h {monthSum.game_min}m</TableCell>
+    //             }
+    //         </TableRow>
+    //         <TableRow>
+    //             <TableCell align="right" colSpan={2}><GitHubIcon sx={{ color: "cadetblue" }} /></TableCell>
+    //             {monthSum.length === 0 ?
+    //                 <TableCell></TableCell> :
+    //                 <TableCell align="left">{monthSum.pgm_hour}h {monthSum.pgm_min}m</TableCell>
+    //             }
+    //         </TableRow>
+    //     </>;
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -169,21 +165,14 @@ export default function Act() {
                     <TabList indicatorColor="secondary" onChange={handlePeriodChange} centered>
                         <Tab
                             icon={
-                                <Calendar fontSize="30" color="white" />
+                                <TodayIcon fontSize="large" />
                             }
                             value="Daily"
                         />
 
                         <Tab
                             icon={
-                                <Calendar2 fontSize="30" color="white" />
-                            }
-                            value="Weekly"
-                        />
-
-                        <Tab
-                            icon={
-                                <Calendar3 fontSize="30" color="white" />
+                                <CalendarMonthIcon fontSize="large" />
                             }
                             value="Monthly"
                         />
@@ -259,12 +248,6 @@ export default function Act() {
                             <TableContainer sx={{ borderRadius: 1, border: 2 }}>
                                 <Table>
                                     <TableHead>
-                                        {/* <TableRow>
-                            <TableCell align="center"><FormatListBulletedIcon /></TableCell>
-                            <TableCell align="center"><AccessTimeIcon /></TableCell>
-                            <TableCell></TableCell>
-                        </TableRow> */}
-
                                         <TableRow>
                                             <TableCell colSpan={3}>
                                                 <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -274,27 +257,6 @@ export default function Act() {
                                             </TableCell>
                                         </TableRow>
                                     </TableHead>
-
-                                    <TableBody>
-                                        {DailyTableRows}
-                                        {DaySumTableRows}
-                                    </TableBody>
-
-                                    <TableHead sx={{ borderRadius: 1, borderTop: 2 }}>
-                                        <TableRow>
-                                            <TableCell colSpan={3}>
-                                                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
-                                                    <CalendarMonthIcon />
-                                                    <span>Monthly</span>
-                                                </div>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-
-                                    <TableBody>
-                                        {MonthlyTableRows}
-                                        {MonthSumTableRows}
-                                    </TableBody>
                                 </Table>
                             </TableContainer>
                         </Grid>
@@ -303,16 +265,5 @@ export default function Act() {
             </TabContext>
         </Box>
     )
-
-    async function fetchActs() {
-        try {
-            let resp = await fetch('/act');
-            let json = await resp.json();
-            console.log(json);
-            setActs(json);
-        } catch (error) {
-            console.log(error);
-        }
-    }
 }
 
