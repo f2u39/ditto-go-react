@@ -33,7 +33,19 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from "@mui/x-date-pickers";
 
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+
+import { Calendar, Calendar2, Calendar3 } from 'react-bootstrap-icons';
+
 export default function Act() {
+    const [period, setPeriod] = useState("Daily")
+    const handlePeriodChange = (event: React.SyntheticEvent, newPeriod: string) => {
+        setPeriod(newPeriod)
+    }
+
     const [date, setDate] = useState<Dayjs | null>(
         dayjs(new Date()),
     );
@@ -60,8 +72,16 @@ export default function Act() {
     });
 
     useEffect(() => {
-        fetchActs();
-    }, []);
+        // fetchActs();
+        fetch(`/act?period=${period}`)
+            .then(resp => resp.json())
+            .then(data => {
+                // console.log(data)
+                if (data != null) {
+                    setActs(data)
+                }
+            })
+    }, [period]);
 
     const dailyActs = Array.isArray(acts.daily_acts) ? acts.daily_acts : [];
     const DailyTableRows = (dailyActs).map(
@@ -143,114 +163,145 @@ export default function Act() {
         </>;
 
     return (
-        <Grid
-            container
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            sx={{ pt: 5 }}
-            xs={12}
-        >
-            <Grid item xs={8}>
-                <Box sx={{ flexGrow: 1 }}>
-                    <AppBar position="static" style={{ background: 'transparent', boxShadow: 'none' }}>
-                        <Toolbar>
-                            <Typography sx={{ flexGrow: 1 }} />
+        <Box sx={{ width: '100%' }}>
+            <TabContext value={period}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <TabList indicatorColor="secondary" onChange={handlePeriodChange} centered>
+                        <Tab
+                            icon={
+                                <Calendar fontSize="30" color="white" />
+                            }
+                            value="Daily"
+                        />
 
-                            <IconButton
-                                size="large"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                color="inherit"
-                            >
-                                <PostAddIcon sx={{ fontSize: 30, color: "#F8C8DC" }} />
-                            </IconButton>
+                        <Tab
+                            icon={
+                                <Calendar2 fontSize="30" color="white" />
+                            }
+                            value="Weekly"
+                        />
 
-                            <IconButton
-                                size="large"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                color="inherit"
-                            >
-                                <TimerIcon sx={{ fontSize: 30, color: "#F8C8DC" }} />
-                            </IconButton>
-
-                            <IconButton
-                                size="large"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                color="inherit"
-                                onClick={handleCalendarOpen}
-                            >
-                                <DateRangeIcon sx={{ fontSize: 30, color: "#F8C8DC" }} />
-                            </IconButton>
-                            <Dialog open={openCalendar} onClose={handleCalendarClose}>
-                                <DialogTitle>Select a date</DialogTitle>
-                                <DialogContent>
-                                    {/* <DialogContentText></DialogContentText> */}
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DesktopDatePicker
-                                            // autoFocus
-                                            inputFormat="MM/DD/YYYY"
-                                            value={tempDate}
-                                            onChange={handleChangeTempDate}
-                                            renderInput={(params) => <TextField {...params} />}
-                                        />
-                                    </LocalizationProvider>
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={handleCalendarClose}>Cancel</Button>
-                                    <Button onClick={handleUpdateDate}>Search</Button>
-                                </DialogActions>
-                            </Dialog>
-
-                            <Typography sx={{ flexGrow: 1 }} />
-                        </Toolbar>
-                    </AppBar>
+                        <Tab
+                            icon={
+                                <Calendar3 fontSize="30" color="white" />
+                            }
+                            value="Monthly"
+                        />
+                    </TabList>
                 </Box>
-                <TableContainer sx={{ borderRadius: 1, border: 2 }}>
-                    <Table>
-                        <TableHead>
-                            {/* <TableRow>
-                                <TableCell align="center"><FormatListBulletedIcon /></TableCell>
-                                <TableCell align="center"><AccessTimeIcon /></TableCell>
-                                <TableCell></TableCell>
-                            </TableRow> */}
 
-                            <TableRow>
-                                <TableCell colSpan={3}>
-                                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
-                                        <TodayIcon />
-                                        <span>Daily</span>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
+                <TabPanel value={period}>
+                    <Grid
+                        container
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        sx={{ pt: 5 }}
+                        xs={12}
+                    >
+                        <Grid item xs={8}>
+                            <Box sx={{ flexGrow: 1 }}>
+                                <AppBar position="static" style={{ background: 'transparent', boxShadow: 'none' }}>
+                                    <Toolbar>
+                                        <Typography sx={{ flexGrow: 1 }} />
 
-                        <TableBody>
-                            {DailyTableRows}
-                            {DaySumTableRows}
-                        </TableBody>
+                                        <IconButton
+                                            size="large"
+                                            aria-controls="menu-appbar"
+                                            aria-haspopup="true"
+                                            color="inherit"
+                                        >
+                                            <PostAddIcon sx={{ fontSize: 30, color: "#F8C8DC" }} />
+                                        </IconButton>
 
-                        <TableHead sx={{ borderRadius: 1, borderTop: 2 }}>
-                            <TableRow>
-                                <TableCell colSpan={3}>
-                                    <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
-                                        <CalendarMonthIcon />
-                                        <span>Monthly</span>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
+                                        <IconButton
+                                            size="large"
+                                            aria-controls="menu-appbar"
+                                            aria-haspopup="true"
+                                            color="inherit"
+                                        >
+                                            <TimerIcon sx={{ fontSize: 30, color: "#F8C8DC" }} />
+                                        </IconButton>
 
-                        <TableBody>
-                            {MonthlyTableRows}
-                            {MonthSumTableRows}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Grid>
-        </Grid>
+                                        <IconButton
+                                            size="large"
+                                            aria-controls="menu-appbar"
+                                            aria-haspopup="true"
+                                            color="inherit"
+                                            onClick={handleCalendarOpen}
+                                        >
+                                            <DateRangeIcon sx={{ fontSize: 30, color: "#F8C8DC" }} />
+                                        </IconButton>
+                                        <Dialog open={openCalendar} onClose={handleCalendarClose}>
+                                            <DialogTitle>Select a date</DialogTitle>
+                                            <DialogContent>
+                                                {/* <DialogContentText></DialogContentText> */}
+                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                    <DesktopDatePicker
+                                                        // autoFocus
+                                                        inputFormat="MM/DD/YYYY"
+                                                        value={tempDate}
+                                                        onChange={handleChangeTempDate}
+                                                        renderInput={(params) => <TextField {...params} />}
+                                                    />
+                                                </LocalizationProvider>
+                                            </DialogContent>
+                                            <DialogActions>
+                                                <Button onClick={handleCalendarClose}>Cancel</Button>
+                                                <Button onClick={handleUpdateDate}>Search</Button>
+                                            </DialogActions>
+                                        </Dialog>
+
+                                        <Typography sx={{ flexGrow: 1 }} />
+                                    </Toolbar>
+                                </AppBar>
+                            </Box>
+                            <TableContainer sx={{ borderRadius: 1, border: 2 }}>
+                                <Table>
+                                    <TableHead>
+                                        {/* <TableRow>
+                            <TableCell align="center"><FormatListBulletedIcon /></TableCell>
+                            <TableCell align="center"><AccessTimeIcon /></TableCell>
+                            <TableCell></TableCell>
+                        </TableRow> */}
+
+                                        <TableRow>
+                                            <TableCell colSpan={3}>
+                                                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+                                                    <TodayIcon />
+                                                    <span>Daily</span>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableHead>
+
+                                    <TableBody>
+                                        {DailyTableRows}
+                                        {DaySumTableRows}
+                                    </TableBody>
+
+                                    <TableHead sx={{ borderRadius: 1, borderTop: 2 }}>
+                                        <TableRow>
+                                            <TableCell colSpan={3}>
+                                                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+                                                    <CalendarMonthIcon />
+                                                    <span>Monthly</span>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableHead>
+
+                                    <TableBody>
+                                        {MonthlyTableRows}
+                                        {MonthSumTableRows}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Grid>
+                    </Grid>
+                </TabPanel>
+            </TabContext>
+        </Box>
     )
 
     async function fetchActs() {

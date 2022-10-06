@@ -68,27 +68,40 @@ func delete(c *gin.Context) {
 func index(c *gin.Context) {
 	// Date format is yyyy-MM-dd
 	date := c.Query("date")
+	period := c.Query("period")
 
+	// If date is nil then set it today
 	if len(date) == 0 {
 		date = datetime.Today(datetime.DEFAULT)
 	} else if len(date) > 6 {
 		date = datetime.FormatDate(date, datetime.DEFAULT)
 	}
 
-	dailies, _ := h.ActService.ByDate(datetime.FormatDate(date, datetime.DEFAULT))
-	monthlies, _ := h.ActService.ByMonth(datetime.FormatDate(date, datetime.DEFAULT))
+	// If period is nil then set it "Daily"
+	if len(period) == 0 {
+		period = "Daily"
+	}
 
-	daySum := h.ActService.DaySum(datetime.FormatDate(date, datetime.DEFAULT))
-	monthSum := h.ActService.MonthSum(date[0:6])
+	var details []act.Detail
+	var summary act.Summary
+
+	switch period {
+	case "Daily":
+		details, _ = h.ActService.ByDate(datetime.FormatDate(date, datetime.DEFAULT))
+		summary = h.ActService.DaySum(datetime.FormatDate(date, datetime.DEFAULT))
+
+	case "Monthly":
+		details, _ = h.ActService.ByMonth(datetime.FormatDate(date, datetime.DEFAULT))
+		summary = h.ActService.MonthSum(date[0:6])
+	}
 
 	data := gin.H{
-		"date":                 datetime.FormatDate(date, datetime.HYPHEN),
-		"daily_acts":           dailies,
-		"day_sum":              daySum,
-		"monthly_acts":         monthlies,
-		"month_sum":            monthSum,
-		"playing_games":        h.GameService.ByPlaying(),
-		"is_stopwatch_started": sw != nil,
+		"date":    datetime.FormatDate(date, datetime.HYPHEN),
+		"details": details,
+		"summary": summary,
+
+		// "playing_games":        h.GameService.ByPlaying(),
+		// "is_stopwatch_started": sw != nil,
 	}
 
 	c.JSON(200, data)

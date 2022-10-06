@@ -51,9 +51,9 @@ export default function Game() {
 
     useEffect(() => {
         fetch(`/api/game/status/${status}/${platform}/${page}`)
-            .then(response => response.json())
+            .then(resp => resp.json())
             .then(data => {
-                console.log(data["details"])
+                // console.log(data["details"])
                 if (data["details"] != null) {
                     setDetails(data["details"])
                 } else {
