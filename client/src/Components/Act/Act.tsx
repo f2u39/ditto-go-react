@@ -70,7 +70,6 @@ export default function Act() {
     });
 
     useEffect(() => {
-        // fetchActs();
         fetch(`/act?period=${period}`)
             .then(resp => resp.json())
             .then(data => {
@@ -82,64 +81,6 @@ export default function Act() {
     }, [period]);
 
     const details = Array.isArray(acts.details) ? acts.details : [];
-
-    // const daySum: any = acts.day_sum != null ? acts.day_sum : [];
-    // const DaySumTableRows =
-    //     <>
-    //         <TableRow>
-    //             <TableCell align="right" colSpan={2}><SportsEsportsIcon sx={{ color: "cadetblue" }} /></TableCell>
-    //             {daySum.length === 0 ?
-    //                 <TableCell></TableCell> :
-    //                 <TableCell align="left">{daySum.game_hour}h {daySum.game_min}m</TableCell>
-    //             }
-    //         </TableRow>
-    //         <TableRow>
-    //             <TableCell align="right" colSpan={2}><GitHubIcon sx={{ color: "cadetblue" }} /></TableCell>
-    //             {daySum.length === 0 ?
-    //                 <TableCell></TableCell> :
-    //                 <TableCell align="left">{daySum.pgm_hour}h {daySum.pgm_min}m</TableCell>
-    //             }
-    //         </TableRow>
-    //     </>;
-
-    // const monthlyActs = Array.isArray(acts.monthly_acts) ? acts.monthly_acts : [];
-    // const MonthlyTableRows = (monthlyActs).map(
-    //     (detail: any) => {
-    //         return (
-    //             <TableRow key={detail.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-    //                 {
-    //                     detail.act.type === 'Gaming' ?
-    //                         <TableCell align="left"><SportsEsportsIcon /></TableCell> :
-    //                         <TableCell><GitHubIcon /></TableCell>
-    //                 }
-    //                 <TableCell align="center">{detail.act.duration}</TableCell>
-    //                 {
-    //                     detail.game.length === 1 ?
-    //                         <TableCell align="left">{detail.game[0].title}</TableCell> :
-    //                         <TableCell></TableCell>
-    //                 }
-    //             </TableRow>
-    //         )
-    //     }
-    // );
-    // const monthSum: any = acts.month_sum != null ? acts.month_sum : [];
-    // const MonthSumTableRows =
-    //     <>
-    //         <TableRow>
-    //             <TableCell align="right" colSpan={2}><SportsEsportsIcon sx={{ color: "cadetblue" }} /></TableCell>
-    //             {monthSum.length === 0 ?
-    //                 <TableCell></TableCell> :
-    //                 <TableCell align="left">{monthSum.game_hour}h {monthSum.game_min}m</TableCell>
-    //             }
-    //         </TableRow>
-    //         <TableRow>
-    //             <TableCell align="right" colSpan={2}><GitHubIcon sx={{ color: "cadetblue" }} /></TableCell>
-    //             {monthSum.length === 0 ?
-    //                 <TableCell></TableCell> :
-    //                 <TableCell align="left">{monthSum.pgm_hour}h {monthSum.pgm_min}m</TableCell>
-    //             }
-    //         </TableRow>
-    //     </>;
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -232,12 +173,6 @@ export default function Act() {
                                 <Table>
                                     <TableHead>
                                         <TableRow>
-                                            {/* <TableCell colSpan={3}>
-                                                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
-                                                    <TodayIcon />
-                                                    <span>Daily</span>
-                                                </div>
-                                            </TableCell> */}
                                             <TableCell align="center" style={{ width: 50 }}><FormatListNumberedRtlIcon /></TableCell>
                                             <TableCell align="center" style={{ width: 80 }}><AccessTimeIcon /></TableCell>
                                             <TableCell align="left"><TitleIcon /></TableCell>
