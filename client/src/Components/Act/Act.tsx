@@ -13,14 +13,16 @@ import TimerIcon from '@mui/icons-material/Timer';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ReorderIcon from '@mui/icons-material/Reorder';
 
 import TodayIcon from '@mui/icons-material/Today';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import GitHubIcon from '@mui/icons-material/GitHub';
+
+import FormatListNumberedRtlIcon from '@mui/icons-material/FormatListNumberedRtl';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import TitleIcon from '@mui/icons-material/Title';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -79,26 +81,7 @@ export default function Act() {
             })
     }, [period]);
 
-    // const dailyActs = Array.isArray(acts.daily_acts) ? acts.daily_acts : [];
-    // const DailyTableRows = (dailyActs).map(
-    //     (detail: any) => {
-    //         return (
-    //             <TableRow key={detail.id} sx={{ '&:last-child td, &:last-child th': { border: 0, fontSize: 15 } }}>
-    //                 {
-    //                     detail.act.type === 'Gaming' ?
-    //                         <TableCell align="center"><SportsEsportsIcon /></TableCell> :
-    //                         <TableCell align="center"><GitHubIcon /></TableCell>
-    //                 }
-    //                 <TableCell align="center">{detail.act.duration}</TableCell>
-    //                 {
-    //                     detail.game.length === 1 ?
-    //                         <TableCell align="left">{detail.game[0].title}</TableCell> :
-    //                         <TableCell></TableCell>
-    //                 }
-    //             </TableRow>
-    //         )
-    //     }
-    // );
+    const details = Array.isArray(acts.details) ? acts.details : [];
 
     // const daySum: any = acts.day_sum != null ? acts.day_sum : [];
     // const DaySumTableRows =
@@ -249,14 +232,35 @@ export default function Act() {
                                 <Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell colSpan={3}>
+                                            {/* <TableCell colSpan={3}>
                                                 <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
                                                     <TodayIcon />
                                                     <span>Daily</span>
                                                 </div>
-                                            </TableCell>
+                                            </TableCell> */}
+                                            <TableCell align="center" style={{ width: 50 }}><FormatListNumberedRtlIcon /></TableCell>
+                                            <TableCell align="center" style={{ width: 80 }}><AccessTimeIcon /></TableCell>
+                                            <TableCell align="left"><TitleIcon /></TableCell>
                                         </TableRow>
                                     </TableHead>
+
+                                    <TableBody>
+                                        {(details).map(
+                                            (detail: any) => {
+                                                return (
+                                                    <TableRow key={detail.id} sx={{ '&:last-child td, &:last-child th': { border: 0, fontSize: 15 } }}>
+                                                        {detail.act.type === 'Gaming' ?
+                                                                <TableCell align="center"><SportsEsportsIcon /></TableCell> :
+                                                                <TableCell align="center"><GitHubIcon /></TableCell>}
+                                                        <TableCell align="center">{detail.act.duration}</TableCell>
+                                                        {detail.game.length === 1 ?
+                                                                <TableCell align="left">{detail.game[0].title}</TableCell> :
+                                                                <TableCell></TableCell>}
+                                                    </TableRow>
+                                                )
+                                            }
+                                        )}
+                                    </TableBody>
                                 </Table>
                             </TableContainer>
                         </Grid>
