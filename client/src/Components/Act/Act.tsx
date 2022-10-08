@@ -206,17 +206,29 @@ export default function Act() {
                                             </IconButton>
                                         </Stack> */}
 
-                                    <Typography
-                                        align="center"
-                                        sx={{ flex: '1 1 100%' }}
-                                        variant="h6"
-                                        component="div"
+                                    {/* <Box
+                                        sx={{ width: 1, textAlign: 'center' }}
                                     >
-                                        <Grid container xs={12} direction="row" alignItems="center">
+                                        <Grid container direction="row" alignItems="center">
                                             <DateRangeIcon /> example
                                         </Grid>
+                                    </Box> */}
 
-                                    </Typography>
+                                    <Grid
+                                        container
+                                        spacing={0}
+                                        direction="row"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                    >
+                                        <Grid item>
+                                            <Grid container direction="row" alignItems="center">
+                                                {dayjs(date).format('DD MMM (ddd) YYYY')} <DateRangeIcon />
+                                            </Grid>
+                                        </Grid>
+
+                                    </Grid>
+
 
                                     {/* </Typography> */}
 
