@@ -168,7 +168,7 @@ export default function Game() {
                                         <CardMedia
                                             component="img"
                                             height="300"
-                                            image={"static/images/games/" + element.game.id + ".webp"}
+                                            image={"/assets/images/games/" + element.game.id + ".webp"}
                                         />
                                         <CardContent>
                                             <Typography variant="body2" color="text.secondary">

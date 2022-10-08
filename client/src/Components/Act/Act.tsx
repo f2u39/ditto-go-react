@@ -6,14 +6,13 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { AppBar, Box, Divider, Grid, IconButton, Link, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Divider, Grid, IconButton, Link, Stack, Toolbar, Tooltip, Typography } from '@mui/material';
 
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import TimerIcon from '@mui/icons-material/Timer';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import ReorderIcon from '@mui/icons-material/Reorder';
+import { Git, Controller } from 'react-bootstrap-icons';
 
 import TodayIcon from '@mui/icons-material/Today';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -23,6 +22,9 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import FormatListNumberedRtlIcon from '@mui/icons-material/FormatListNumberedRtl';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import TitleIcon from '@mui/icons-material/Title';
+
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -47,7 +49,8 @@ export default function Act() {
     }
 
     const [date, setDate] = useState<Dayjs | null>(
-        dayjs(new Date()),
+        // dayjs(new Date()).format('YYYYMMDD'),
+        dayjs(new Date())
     );
     const [tempDate, setTempDate] = useState<Dayjs | null>(
         dayjs(new Date()),
@@ -70,17 +73,17 @@ export default function Act() {
     });
 
     useEffect(() => {
-        fetch(`/act?period=${period}`)
+        fetch(`/act?date=${date}&period=${period}`)
             .then(resp => resp.json())
             .then(data => {
-                // console.log(data)
                 if (data != null) {
                     setActs(data)
                 }
             })
-    }, [period]);
+    }, [date, period]);
 
     const details = Array.isArray(acts.details) ? acts.details : [];
+    const summary: any = acts.summary ? acts.summary : [];
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -124,7 +127,7 @@ export default function Act() {
                                             aria-haspopup="true"
                                             color="inherit"
                                         >
-                                            <PostAddIcon sx={{ fontSize: 30, color: "#F8C8DC" }} />
+                                            <PostAddIcon sx={{ fontSize: 30, color: "white" }} />
                                         </IconButton>
 
                                         <IconButton
@@ -133,7 +136,7 @@ export default function Act() {
                                             aria-haspopup="true"
                                             color="inherit"
                                         >
-                                            <TimerIcon sx={{ fontSize: 30, color: "#F8C8DC" }} />
+                                            <TimerIcon sx={{ fontSize: 30, color: "white" }} />
                                         </IconButton>
 
                                         <IconButton
@@ -143,12 +146,11 @@ export default function Act() {
                                             color="inherit"
                                             onClick={handleCalendarOpen}
                                         >
-                                            <DateRangeIcon sx={{ fontSize: 30, color: "#F8C8DC" }} />
+                                            <DateRangeIcon sx={{ fontSize: 30, color: "white" }} />
                                         </IconButton>
                                         <Dialog open={openCalendar} onClose={handleCalendarClose}>
                                             <DialogTitle>Select a date</DialogTitle>
                                             <DialogContent>
-                                                {/* <DialogContentText></DialogContentText> */}
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                     <DesktopDatePicker
                                                         // autoFocus
@@ -170,12 +172,68 @@ export default function Act() {
                                 </AppBar>
                             </Box>
                             <TableContainer sx={{ borderRadius: 1, border: 2 }}>
+                                <Toolbar>
+                                    <IconButton>
+                                        <ArrowCircleLeftIcon />
+                                    </IconButton>
+
+                                    {/* <Typography
+                                        align="center"
+                                        sx={{ flex: '1 1 100%' }}
+                                        variant="h6"
+                                        component="div"
+                                        onClick={handleCalendarOpen}
+                                    >
+                                        {dayjs(date).format('DD MMM (ddd) YYYY')}
+                                        <DateRangeIcon fontSize="large" />
+                                    </Typography> */}
+
+                                    {/* <Typography
+                                        align="center"
+                                        sx={{ flex: '1 1 100%' }}
+                                        variant="h6"
+                                        component="div"
+                                    > */}
+                                    {/* <Stack
+                                            direction="row"
+                                            alignItems="center"
+                                        >
+                                            <Typography>
+                                                {dayjs(date).format('DD MMM (ddd) YYYY')}
+                                            </Typography>
+                                            <IconButton>
+                                                <DateRangeIcon fontSize="large" onClick={handleCalendarOpen} />
+                                            </IconButton>
+                                        </Stack> */}
+
+                                    <Typography
+                                        align="center"
+                                        sx={{ flex: '1 1 100%' }}
+                                        variant="h6"
+                                        component="div"
+                                    >
+                                        <Grid container xs={12} direction="row" alignItems="center">
+                                            <DateRangeIcon /> example
+                                        </Grid>
+
+                                    </Typography>
+
+                                    {/* </Typography> */}
+
+
+                                    <Tooltip title="Date">
+                                        <IconButton>
+                                            <ArrowCircleRightIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Toolbar>
                                 <Table>
                                     <TableHead>
                                         <TableRow>
                                             <TableCell align="center" style={{ width: 50 }}><FormatListNumberedRtlIcon /></TableCell>
                                             <TableCell align="center" style={{ width: 80 }}><AccessTimeIcon /></TableCell>
                                             <TableCell align="left"><TitleIcon /></TableCell>
+                                            <TableCell style={{ width: 120 }}></TableCell>
                                         </TableRow>
                                     </TableHead>
 
@@ -183,18 +241,35 @@ export default function Act() {
                                         {(details).map(
                                             (detail: any) => {
                                                 return (
-                                                    <TableRow key={detail.id} sx={{ '&:last-child td, &:last-child th': { border: 0, fontSize: 15 } }}>
+                                                    <TableRow
+                                                        key={detail.id}
+                                                        sx={{ '&:last-child td, &:last-child th': { border: 0, fontSize: 15 } }}
+                                                    >
                                                         {detail.act.type === 'Gaming' ?
-                                                                <TableCell align="center"><SportsEsportsIcon /></TableCell> :
-                                                                <TableCell align="center"><GitHubIcon /></TableCell>}
-                                                        <TableCell align="center">{detail.act.duration}</TableCell>
-                                                        {detail.game.length === 1 ?
-                                                                <TableCell align="left">{detail.game[0].title}</TableCell> :
-                                                                <TableCell></TableCell>}
+                                                            <TableCell align="center"><Typography color="lightpink"><SportsEsportsIcon /></Typography></TableCell> :
+                                                            <TableCell align="center"><Typography color="mediumpurple"><GitHubIcon /></Typography></TableCell>}
+
+                                                        {detail.act.type === 'Gaming' ?
+                                                            <TableCell align="center"><Typography color="lightpink">{detail.act.duration}</Typography></TableCell> :
+                                                            <TableCell align="center"><Typography color="mediumpurple">{detail.act.duration}</Typography></TableCell>}
+
+                                                        {detail.act.type === 'Gaming' ?
+                                                            <TableCell colSpan={2} align="left"><Typography color="lightpink">{detail.game[0].title}</Typography></TableCell> :
+                                                            <TableCell colSpan={2}></TableCell>}
                                                     </TableRow>
                                                 )
                                             }
                                         )}
+                                        <TableRow>
+                                            <TableCell colSpan={2}></TableCell>
+                                            <TableCell align="right"><Typography color="mediumpurple"><Controller size={23} /></Typography></TableCell>
+                                            <TableCell align="right"><Typography color="mediumpurple">{summary.pgm_hour} h {summary.pgm_min} m</Typography></TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell colSpan={2}></TableCell>
+                                            <TableCell align="right"><Typography color="lightpink"><Git size={23} /></Typography></TableCell>
+                                            <TableCell align="right"><Typography color="lightpink">{summary.game_hour} h {summary.game_min} m</Typography></TableCell>
+                                        </TableRow>
                                     </TableBody>
                                 </Table>
                             </TableContainer>

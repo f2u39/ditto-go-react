@@ -66,8 +66,7 @@ func delete(c *gin.Context) {
 }
 
 func index(c *gin.Context) {
-	// Date format is yyyy-MM-dd
-	date := c.Query("date")
+	date := c.Query("date") // YYYYMMDD
 	period := c.Query("period")
 
 	// If date is nil then set it today
@@ -87,8 +86,8 @@ func index(c *gin.Context) {
 
 	switch period {
 	case "Daily":
-		details, _ = h.ActService.ByDate(datetime.FormatDate(date, datetime.DEFAULT))
-		summary = h.ActService.DaySum(datetime.FormatDate(date, datetime.DEFAULT))
+		details, _ = h.ActService.ByDate(date)
+		summary = h.ActService.DaySum(date)
 
 	case "Monthly":
 		details, _ = h.ActService.ByMonth(datetime.FormatDate(date, datetime.DEFAULT))
@@ -99,9 +98,6 @@ func index(c *gin.Context) {
 		"date":    datetime.FormatDate(date, datetime.HYPHEN),
 		"details": details,
 		"summary": summary,
-
-		// "playing_games":        h.GameService.ByPlaying(),
-		// "is_stopwatch_started": sw != nil,
 	}
 
 	c.JSON(200, data)
