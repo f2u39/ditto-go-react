@@ -107,8 +107,8 @@ func start(c *gin.Context) {
 	switch c.Request.Method {
 	case "GET":
 		sw = act.NewStopWatch()
-		typ := c.Query("type")
-		gid := c.Query("game_id")
+		typ := "Gaming"
+		gid := c.Query("id")
 		g := h.GameService.ByID(gid)
 		sw.Start(typ, gid, g.Title)
 

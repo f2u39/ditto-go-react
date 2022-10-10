@@ -63,9 +63,17 @@ export default function Act() {
     };
 
     const handleUpdateDate = () => {
-        setDate(tempDate);
-        setOpenCalendar(false);
+        setDate(tempDate)
+        setOpenCalendar(false)
     };
+
+    const handlePreviousDate = () => {
+        setDate(dayjs(date).add(-1, 'day'))
+    }
+
+    const handleNextDate = () => {
+        setDate(dayjs(date).add(1, 'day'))
+    }
 
     const [acts, setActs] = useState({
         details: [],
@@ -73,7 +81,7 @@ export default function Act() {
     });
 
     useEffect(() => {
-        fetch(`/act?date=${date}&period=${period}`)
+        fetch(`/act?date=${dayjs(date).format('YYYYMMDD')}&period=${period}`)
             .then(resp => resp.json())
             .then(data => {
                 if (data != null) {
@@ -127,7 +135,7 @@ export default function Act() {
                                             aria-haspopup="true"
                                             color="inherit"
                                         >
-                                            <PostAddIcon sx={{ fontSize: 30, color: "white" }} />
+                                            <PostAddIcon sx={{ fontSize: 35, color: "#0461B1" }} />
                                         </IconButton>
 
                                         <IconButton
@@ -136,18 +144,9 @@ export default function Act() {
                                             aria-haspopup="true"
                                             color="inherit"
                                         >
-                                            <TimerIcon sx={{ fontSize: 30, color: "white" }} />
+                                            <TimerIcon sx={{ fontSize: 35, color: "#0461B1" }} />
                                         </IconButton>
 
-                                        <IconButton
-                                            size="large"
-                                            aria-controls="menu-appbar"
-                                            aria-haspopup="true"
-                                            color="inherit"
-                                            onClick={handleCalendarOpen}
-                                        >
-                                            <DateRangeIcon sx={{ fontSize: 30, color: "white" }} />
-                                        </IconButton>
                                         <Dialog open={openCalendar} onClose={handleCalendarClose}>
                                             <DialogTitle>Select a date</DialogTitle>
                                             <DialogContent>
@@ -171,48 +170,13 @@ export default function Act() {
                                     </Toolbar>
                                 </AppBar>
                             </Box>
-                            <TableContainer sx={{ borderRadius: 1, border: 2 }}>
-                                <Toolbar>
-                                    <IconButton>
-                                        <ArrowCircleLeftIcon />
-                                    </IconButton>
-
-                                    {/* <Typography
-                                        align="center"
-                                        sx={{ flex: '1 1 100%' }}
-                                        variant="h6"
-                                        component="div"
-                                        onClick={handleCalendarOpen}
-                                    >
-                                        {dayjs(date).format('DD MMM (ddd) YYYY')}
-                                        <DateRangeIcon fontSize="large" />
-                                    </Typography> */}
-
-                                    {/* <Typography
-                                        align="center"
-                                        sx={{ flex: '1 1 100%' }}
-                                        variant="h6"
-                                        component="div"
-                                    > */}
-                                    {/* <Stack
-                                            direction="row"
-                                            alignItems="center"
-                                        >
-                                            <Typography>
-                                                {dayjs(date).format('DD MMM (ddd) YYYY')}
-                                            </Typography>
-                                            <IconButton>
-                                                <DateRangeIcon fontSize="large" onClick={handleCalendarOpen} />
-                                            </IconButton>
-                                        </Stack> */}
-
-                                    {/* <Box
-                                        sx={{ width: 1, textAlign: 'center' }}
-                                    >
-                                        <Grid container direction="row" alignItems="center">
-                                            <DateRangeIcon /> example
-                                        </Grid>
-                                    </Box> */}
+                            <TableContainer sx={{ border: 1, borderRadius: 1, borderColor: '#647C90' }}>
+                                <Toolbar sx={{ borderBottom: 1, borderColor: '#647C90' }}>
+                                    <Tooltip title="Previous date">
+                                        <IconButton onClick={handlePreviousDate}>
+                                            <ArrowCircleLeftIcon />
+                                        </IconButton>
+                                    </Tooltip>
 
                                     <Grid
                                         container
@@ -223,22 +187,21 @@ export default function Act() {
                                     >
                                         <Grid item>
                                             <Grid container direction="row" alignItems="center">
-                                                {dayjs(date).format('DD MMM (ddd) YYYY')} <DateRangeIcon />
+                                                {dayjs(date).format('DD MMM (ddd) YYYY')}
+                                                <Tooltip title="Pick date">
+                                                    <IconButton onClick={handleCalendarOpen}><DateRangeIcon fontSize="large" /></IconButton>
+                                                </Tooltip>
                                             </Grid>
                                         </Grid>
-
                                     </Grid>
 
-
-                                    {/* </Typography> */}
-
-
-                                    <Tooltip title="Date">
-                                        <IconButton>
+                                    <Tooltip title="Next date">
+                                        <IconButton onClick={handleNextDate}>
                                             <ArrowCircleRightIcon />
                                         </IconButton>
                                     </Tooltip>
                                 </Toolbar>
+
                                 <Table>
                                     <TableHead>
                                         <TableRow>
@@ -284,6 +247,7 @@ export default function Act() {
                                         </TableRow>
                                     </TableBody>
                                 </Table>
+
                             </TableContainer>
                         </Grid>
                     </Grid>

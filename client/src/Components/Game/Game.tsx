@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TuneIcon from '@mui/icons-material/Tune';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import { Badge, Box, Grid, InputAdornment, Tabs, TextField } from '@mui/material';
+import { Badge, Box, Grid, InputAdornment, Tabs, TextField, Tooltip } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 
 import Tab from '@mui/material/Tab';
@@ -18,7 +18,9 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 
-import { CheckAll, Tablet, PcDisplay, NintendoSwitch, Playstation, Xbox, BatteryHalf } from 'react-bootstrap-icons';
+import Switch from '@mui/material/Switch';
+
+import { Check2Square, Tablet, PcDisplay, NintendoSwitch, Playstation, Xbox, BatteryHalf } from 'react-bootstrap-icons';
 import { Code, CodeSlash } from 'react-bootstrap-icons';
 import { Battery, BatteryCharging, BatteryFull } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
@@ -93,6 +95,10 @@ export default function Game() {
         setPlatform(newValue);
     };
 
+    const handleStartGame = (id: string) => {
+        fetch(`/act/watch/start?id=${id}`)
+    }
+
     return (
         <Box sx={{ width: '100%' }}>
             <TabContext value={status}>
@@ -146,12 +152,12 @@ export default function Game() {
                                 value={platform}
                                 onChange={handlePlatformChange}
                             >
-                                <Tab icon={<CheckAll color="white" size={30} />} value="All" />
+                                <Tab icon={<Check2Square color="white" size={30} />} value="All" />
                                 <Tab icon={<PcDisplay color="orange" size={30} />} value="PC" />
-                                <Tab icon={<Playstation color="skyblue" size={30} />} value="PlayStation" />
-                                <Tab icon={<NintendoSwitch color="red" size={30} />} value="Nintendo Switch" />
-                                <Tab icon={<Xbox color="green" size={30} />} value="Xbox" />
-                                <Tab icon={<Tablet color="purple" size={30} />} value="Mobile" />
+                                <Tab icon={<Playstation color="#2E6DB4" size={30} />} value="PlayStation" />
+                                <Tab icon={<NintendoSwitch color="#E60012" size={30} />} value="Nintendo Switch" />
+                                <Tab icon={<Xbox color="#107C10" size={30} />} value="Xbox" />
+                                <Tab icon={<Tablet color="#730073" size={30} />} value="Mobile" />
                             </Tabs>
                         </Grid>
                         <Grid item xs={10}>
@@ -171,18 +177,23 @@ export default function Game() {
                                             image={"/assets/images/games/" + element.game.id + ".webp"}
                                         />
                                         <CardContent>
-                                            <Typography variant="body2" color="text.secondary">
+                                            <Typography variant="body2" align="center" color="text.secondary">
                                                 {element.game.title}
                                             </Typography>
                                         </CardContent>
                                         <CardActions disableSpacing>
-                                            <IconButton>
-                                                <TuneIcon />
-                                            </IconButton>
+                                            <Tooltip title="Property">
+                                                <IconButton>
+                                                    <TuneIcon />
+                                                </IconButton>
+                                            </Tooltip>
 
-                                            <IconButton>
-                                                <PlayCircleOutlineIcon />
-                                            </IconButton>
+                                            <Tooltip title="Start">
+                                                <IconButton onClick={e => handleStartGame(element.game.id)}>
+                                                    <PlayCircleOutlineIcon />
+                                                </IconButton>
+                                            </Tooltip>
+
                                             <ExpandMore
                                                 expand={expandedId === i}
                                                 onClick={() => handleExpandClick(i)}

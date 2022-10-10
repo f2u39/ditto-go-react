@@ -10,7 +10,7 @@ import (
 )
 
 func Route(e *gin.Engine) {
-	e.Any("/api/user/login", login)
+	e.Any("/user/login", login)
 }
 
 // Handle user login

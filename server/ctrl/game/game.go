@@ -26,6 +26,7 @@ func Route(e *gin.Engine) {
 		auth.Any("/create", create)
 		auth.Any("/update", update)
 		auth.Any("/delete", delete)
+		auth.POST("/update_status", updateStatus)
 	}
 
 	anon := e.Group("/api/game")
@@ -34,6 +35,18 @@ func Route(e *gin.Engine) {
 		anon.GET("/", index)
 		anon.GET("/status/:status/:platform/:page", status)
 	}
+}
+
+func updateStatus(c *gin.Context) {
+	// json, _ := ioutil.ReadAll(c.Request.Body)
+
+	gameId := c.PostForm("id")
+	newStatus := c.PostForm("newStatus")
+
+	targetGame := h.GameService.ByID(gameId)
+	targetGame.Status = game.Status(newStatus)
+
+	h.GameService.Update(targetGame)
 }
 
 func counts(c *gin.Context) {
