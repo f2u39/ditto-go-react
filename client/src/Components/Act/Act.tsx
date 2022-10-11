@@ -6,7 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { AppBar, Box, Divider, FormControl, FormGroup, Grid, IconButton, InputLabel, Link, MenuItem, Select, Stack, Toolbar, Tooltip, Typography } from '@mui/material';
+import { AppBar, Box, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, IconButton, InputLabel, Link, MenuItem, Select, Stack, Switch, Toolbar, Tooltip, Typography } from '@mui/material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import TimerIcon from '@mui/icons-material/Timer';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -111,7 +111,7 @@ export default function Act() {
                                     aria-haspopup="true"
                                     color="inherit"
                                 >
-                                    <PostAddIcon  onClick={handleNewActivityOpen} sx={{ fontSize: 35, color: "#0461B1" }} />
+                                    <PostAddIcon onClick={handleNewActivityOpen} sx={{ fontSize: 35, color: "#0461B1" }} />
                                 </IconButton>
 
                                 <IconButton
@@ -265,8 +265,13 @@ export default function Act() {
                 </DialogContent>
             </Dialog>
 
-            <Dialog open={openNewActivity} onClose={handleNewActivityClose}>
-                <DialogTitle>New Activity</DialogTitle>
+            <Dialog
+                // fullWidth={fullWidth}
+                // maxWidth={maxWidth}
+                open={openNewActivity}
+                onClose={handleNewActivityClose}
+            >
+                <DialogTitle align="center">New Activity</DialogTitle>
                 <DialogContent>
                     {/* <FormGroup>
                         <Select label="Type">
@@ -284,7 +289,39 @@ export default function Act() {
                         </LocalizationProvider>
                     </FormGroup> */}
 
-                    <form>
+                    <Box
+                        noValidate
+                        component="form"
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            m: 'auto',
+                            width: 'fit-content',
+                        }}
+                    >
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            <InputLabel htmlFor="max-width">maxWidth</InputLabel>
+                            <Select
+                                autoFocus
+                                // value={maxWidth}
+                                // onChange={handleMaxWidthChange}
+                                label="maxWidth"
+                                inputProps={{
+                                    name: 'max-width',
+                                    id: 'max-width',
+                                }}
+                            >
+                                <MenuItem value={false as any}>false</MenuItem>
+                                <MenuItem value="xs">xs</MenuItem>
+                                <MenuItem value="sm">sm</MenuItem>
+                                <MenuItem value="md">md</MenuItem>
+                                <MenuItem value="lg">lg</MenuItem>
+                                <MenuItem value="xl">xl</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+
+                    {/* <form>
                         <Controller
                             name={"textValue"}
                             control={control}
@@ -294,7 +331,7 @@ export default function Act() {
                         />
                         <Button onClick={handleSubmit(onSubmitActivity)}>Submit</Button>
                         <Button onClick={() => reset()} variant={"outlined"}>Reset</Button>
-                    </form>
+                    </form> */}
                 </DialogContent>
             </Dialog>
         </Box>
