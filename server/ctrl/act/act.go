@@ -67,39 +67,25 @@ func delete(c *gin.Context) {
 
 func index(c *gin.Context) {
 	date := c.Query("date") // YYYYMMDD
-	period := c.Query("period")
 
-	// If date is nil then set it today
 	if len(date) == 0 {
 		date = datetime.Today(datetime.DEFAULT)
 	} else if len(date) > 6 {
 		date = datetime.FormatDate(date, datetime.DEFAULT)
 	}
 
-	// If period is nil then set it "Daily"
-	if len(period) == 0 {
-		period = "Daily"
-	}
-
-	var details []act.Detail
-	var summary act.Summary
-
-	switch period {
-	case "Daily":
-		details, _ = h.ActService.ByDate(date)
-		summary = h.ActService.DaySum(date)
-
-	case "Monthly":
-		details, _ = h.ActService.ByMonth(datetime.FormatDate(date, datetime.DEFAULT))
-		summary = h.ActService.MonthSum(date[0:6])
-	}
+	dayDetails, _ := h.ActService.ByDate(date)
+	daySummary := h.ActService.DaySum(date)
+	monDetails, _ := h.ActService.ByMonth(datetime.FormatDate(date, datetime.DEFAULT))
+	monSummary := h.ActService.MonthSum(date[0:6])
 
 	data := gin.H{
-		"date":    datetime.FormatDate(date, datetime.HYPHEN),
-		"details": details,
-		"summary": summary,
+		"date":          datetime.FormatDate(date, datetime.HYPHEN),
+		"day_details":   dayDetails,
+		"day_summary":   daySummary,
+		"month_details": monDetails,
+		"month_summary": monSummary,
 	}
-
 	c.JSON(200, data)
 }
 
