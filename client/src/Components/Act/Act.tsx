@@ -6,7 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { AppBar, Box, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, IconButton, InputLabel, Link, MenuItem, Select, Stack, Switch, Toolbar, Tooltip, Typography } from '@mui/material';
+import { AppBar, Box, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, IconButton, InputLabel, Link, MenuItem, Select, Stack, Switch, Toolbar, Tooltip, Typography } from '@mui/material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import TimerIcon from '@mui/icons-material/Timer';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -300,38 +300,33 @@ export default function Act() {
                         }}
                     >
                         <FormControl sx={{ mt: 2, minWidth: 500 }}>
-                            <InputLabel htmlFor="max-width">maxWidth</InputLabel>
+                            <InputLabel htmlFor="type">Type</InputLabel>
                             <Select
                                 autoFocus
                                 // value={maxWidth}
                                 // onChange={handleMaxWidthChange}
-                                label="maxWidth"
+                                label="Type"
                                 inputProps={{
-                                    name: 'max-width',
-                                    id: 'max-width',
+                                    name: 'type',
+                                    // id: 'max-width',
                                 }}
                             >
-                                <MenuItem value={false as any}>false</MenuItem>
-                                <MenuItem value="xs">xs</MenuItem>
-                                <MenuItem value="sm">sm</MenuItem>
-                                <MenuItem value="md">md</MenuItem>
-                                <MenuItem value="lg">lg</MenuItem>
-                                <MenuItem value="xl">xl</MenuItem>
+                                <MenuItem value="Gaming">Gaming</MenuItem>
+                                <MenuItem value="Programming">Programming</MenuItem>
                             </Select>
                         </FormControl>
-                    </Box>
 
-                    {/* <form>
-                        <Controller
-                            name={"textValue"}
-                            control={control}
-                            render={({ field: { onChange, value } }) => (
-                            <TextField onChange={onChange} value={value} label={"Text Value"} />
-                            )}
-                        />
-                        <Button onClick={handleSubmit(onSubmitActivity)}>Submit</Button>
-                        <Button onClick={() => reset()} variant={"outlined"}>Reset</Button>
-                    </form> */}
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DesktopDatePicker
+                                    inputFormat={"MM/DD/YYYY"}
+                                    value={tempDate}
+                                    onChange={handleUpdateDate}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
+                        </FormControl>
+                    </Box>
                 </DialogContent>
             </Dialog>
         </Box>
