@@ -336,6 +336,22 @@ export default function Act() {
                                 }}
                             />
                         </FormControl>
+
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            <InputLabel htmlFor="type">Game</InputLabel>
+                            <Select
+                                autoFocus
+                                defaultValue=""
+                                // onChange={handleMaxWidthChange}
+                                label="Game"
+                                inputProps={{
+                                    name: 'game',
+                                }}
+                            >
+                                <MenuItem value="1">1</MenuItem>
+                                <MenuItem value="2">2</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Box>
                 </DialogContent>
             </Dialog>
