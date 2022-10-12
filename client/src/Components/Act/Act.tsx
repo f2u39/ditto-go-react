@@ -30,7 +30,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -303,12 +303,11 @@ export default function Act() {
                             <InputLabel htmlFor="type">Type</InputLabel>
                             <Select
                                 autoFocus
-                                // value={maxWidth}
+                                defaultValue="Gaming"
                                 // onChange={handleMaxWidthChange}
                                 label="Type"
                                 inputProps={{
                                     name: 'type',
-                                    // id: 'max-width',
                                 }}
                             >
                                 <MenuItem value="Gaming">Gaming</MenuItem>
@@ -318,13 +317,24 @@ export default function Act() {
 
                         <FormControl sx={{ mt: 2, minWidth: 500 }}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DesktopDatePicker
+                                <DatePicker
+                                    label="Date"
                                     inputFormat={"MM/DD/YYYY"}
                                     value={tempDate}
                                     onChange={handleUpdateDate}
                                     renderInput={(params) => <TextField {...params} />}
                                 />
                             </LocalizationProvider>
+                        </FormControl>
+
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            <TextField
+                                label="Duration"
+                                type="number"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
                         </FormControl>
                     </Box>
                 </DialogContent>
