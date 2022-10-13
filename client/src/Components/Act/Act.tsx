@@ -302,7 +302,6 @@ export default function Act() {
                         <FormControl sx={{ mt: 2, minWidth: 500 }}>
                             <InputLabel htmlFor="type">Type</InputLabel>
                             <Select
-                                autoFocus
                                 defaultValue="Gaming"
                                 // onChange={handleMaxWidthChange}
                                 label="Type"
@@ -334,13 +333,16 @@ export default function Act() {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                InputProps={{
+                                    inputProps: { min: 0 }
+                                }}
+                                autoFocus
                             />
                         </FormControl>
 
                         <FormControl sx={{ mt: 2, minWidth: 500 }}>
                             <InputLabel htmlFor="type">Game</InputLabel>
                             <Select
-                                autoFocus
                                 defaultValue=""
                                 // onChange={handleMaxWidthChange}
                                 label="Game"
@@ -351,6 +353,13 @@ export default function Act() {
                                 <MenuItem value="1">1</MenuItem>
                                 <MenuItem value="2">2</MenuItem>
                             </Select>
+                        </FormControl>
+
+                        <FormControl sx={{ mt: 2 }}>
+                            <Stack direction="row" spacing={2} justifyContent="flex-end">
+                                <Button>Cancel</Button>
+                                <Button>Submit</Button>
+                            </Stack>
                         </FormControl>
                     </Box>
                 </DialogContent>
