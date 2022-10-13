@@ -85,6 +85,7 @@ func index(c *gin.Context) {
 		"day_summary":   daySummary,
 		"month_details": monDetails,
 		"month_summary": monSummary,
+		"playing_games": h.GameService.ByPlaying(),
 	}
 	c.JSON(200, data)
 }

@@ -69,7 +69,8 @@ export default function Act() {
         day_details: [],
         day_summary: [],
         month_details: [],
-        month_summary: []
+        month_summary: [],
+        playing_games: [],
     })
 
     useEffect(() => {
@@ -86,6 +87,7 @@ export default function Act() {
     const daySummary: any = acts.day_summary ? acts.day_summary : []
     const monDetails = Array.isArray(acts.month_details) ? acts.month_details : []
     const monSummary: any = acts.month_summary ? acts.month_summary : []
+    const playingGames = Array.isArray(acts.playing_games) ? acts.playing_games : []
 
     const onSubmitActivity = (data: any) => console.Console
 
@@ -266,29 +268,11 @@ export default function Act() {
             </Dialog>
 
             <Dialog
-                // fullWidth={fullWidth}
-                // maxWidth={maxWidth}
                 open={openNewActivity}
                 onClose={handleNewActivityClose}
             >
                 <DialogTitle align="center">New Activity</DialogTitle>
                 <DialogContent>
-                    {/* <FormGroup>
-                        <Select label="Type">
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                        </Select>
-
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DesktopDatePicker
-                                inputFormat={"MM/DD/YYYY"}
-                                value={tempDate}
-                                onChange={handleUpdateDate}
-                                renderInput={(params) => <TextField {...params} />}
-                            />
-                        </LocalizationProvider>
-                    </FormGroup> */}
-
                     <Box
                         noValidate
                         component="form"
@@ -350,14 +334,17 @@ export default function Act() {
                                     name: 'game',
                                 }}
                             >
-                                <MenuItem value="1">1</MenuItem>
-                                <MenuItem value="2">2</MenuItem>
+                                {playingGames.map((game: any, index) => {
+                                    return (
+                                        <MenuItem key={index} value={game.id}>{game.title}</MenuItem>
+                                    )
+                                })}
                             </Select>
                         </FormControl>
 
                         <FormControl sx={{ mt: 2 }}>
                             <Stack direction="row" spacing={2} justifyContent="flex-end">
-                                <Button>Cancel</Button>
+                                <Button onClick={handleNewActivityClose}>Cancel</Button>
                                 <Button>Submit</Button>
                             </Stack>
                         </FormControl>
