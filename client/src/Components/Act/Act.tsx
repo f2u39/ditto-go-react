@@ -89,8 +89,6 @@ export default function Act() {
     const monSummary: any = acts.month_summary ? acts.month_summary : []
     const playingGames = Array.isArray(acts.playing_games) ? acts.playing_games : []
 
-    const onSubmitActivity = (data: any) => console.Console
-
     return (
         <Box sx={{ width: '100%' }}>
             <Grid
@@ -328,7 +326,6 @@ export default function Act() {
                             <InputLabel htmlFor="type">Game</InputLabel>
                             <Select
                                 defaultValue=""
-                                // onChange={handleMaxWidthChange}
                                 label="Game"
                                 inputProps={{
                                     name: 'game',
