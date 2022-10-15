@@ -38,8 +38,6 @@ import TabPanel from '@mui/lab/TabPanel';
 import { useForm, Controller } from "react-hook-form";
 
 export default function Act() {
-    const { handleSubmit, reset, control } = useForm();
-
     const [date, setDate] = useState<Dayjs | null>(dayjs(new Date()));
     const handleUpdateDate = (newValue: Dayjs | null) => {
         setDate(newValue)
