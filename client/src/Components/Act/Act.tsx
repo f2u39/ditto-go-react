@@ -87,6 +87,11 @@ export default function Act() {
     const monSummary: any = acts.month_summary ? acts.month_summary : []
     const playingGames = Array.isArray(acts.playing_games) ? acts.playing_games : []
 
+    const [newType, setNewType] = useState('')
+    const [newDate, setNewDate] = useState('')
+    const [newDuration, setNewDuration] = useState('')
+    const [newGameId, setNewGameId] = useState('')
+
     return (
         <Box sx={{ width: '100%' }}>
             <Grid
