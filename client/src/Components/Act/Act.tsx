@@ -87,11 +87,6 @@ export default function Act() {
     const monSummary: any = acts.month_summary ? acts.month_summary : []
     const playingGames = Array.isArray(acts.playing_games) ? acts.playing_games : []
 
-    const [newType, setNewType] = useState('')
-    const [newDate, setNewDate] = useState('')
-    const [newDuration, setNewDuration] = useState('')
-    const [newGameId, setNewGameId] = useState('')
-
     const [formInput, setFormInput] = useReducer(
         (state: any, newState: any) => ({ ...state, ...newState }),
         {
@@ -99,8 +94,12 @@ export default function Act() {
         }
     )
 
+    const { control, handleSubmit } = useForm({
+        reValidateMode: "onBlur"
+    })
+
     const handleNewActivityDateChange = (newValue: Dayjs | null) => {
-        setFormInput({'date': newValue})
+        setFormInput({ 'date': newValue })
     }
 
     const handleNewActivityChange = (e: { target: { name: any; value: any; } }) => {
@@ -109,12 +108,11 @@ export default function Act() {
         setFormInput({ [name]: newValue })
     }
 
-    const handleNewActivitySubmit = (e: React.SyntheticEvent) => {
-        let data = { formInput }
-        console.log(data)
+    const handleNewActivitySubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
 
+        alert("nannde")
 
-        // e.preventDefault()
         // let data = { formInput }
         // console.log(data)
         // fetch("/act/create", {
@@ -311,18 +309,41 @@ export default function Act() {
             >
                 <DialogTitle align="center">New Activity</DialogTitle>
                 <DialogContent>
-                    <form onSubmit={handleNewActivitySubmit}>
-                        <Box
-                            noValidate
-                            component="form"
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                m: 'auto',
-                                width: 'fit-content',
-                            }}
-                        >
-                            <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                    <Box
+                        noValidate
+                        component="form"
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            m: 'auto',
+                            width: 'fit-content',
+                        }}
+                        onSubmit={handleNewActivitySubmit}
+                    >
+                        <Controller
+                            control={control}
+                            name="type"
+                            defaultValue="Gaming"
+                            render={({ field }) => (
+                                // <Select {...field}>
+                                //     <MenuItem value="user">Member</MenuItem>
+                                //     <MenuItem value="admin">Admin</MenuItem>
+                                // </Select>
+
+                                <Select
+                                    {...field}
+                                    fullWidth
+
+                                    // onChange={handleMaxWidthChange}
+                                    label="Type"
+                                // onChange={handleNewActivityChange}
+                                >
+                                    <MenuItem value="Gaming">Gaming</MenuItem>
+                                    <MenuItem value="Programming">Programming</MenuItem>
+                                </Select>
+                            )}
+                        />
+                        {/* <FormControl sx={{ mt: 2, minWidth: 500 }}>
                                 <InputLabel htmlFor="type">Type</InputLabel>
                                 <Select
                                     name="type"
@@ -337,63 +358,76 @@ export default function Act() {
                                     <MenuItem value="Gaming">Gaming</MenuItem>
                                     <MenuItem value="Programming">Programming</MenuItem>
                                 </Select>
-                            </FormControl>
+                            </FormControl> */}
 
-                            <FormControl sx={{ mt: 2, minWidth: 500 }}>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                        label="Date"
-                                        inputFormat={"MM/DD/YYYY"}
-                                        value={tempDate}
-                                        onChange={handleNewActivityDateChange}
-                                        renderInput={(params) => <TextField {...params} />}
-                                    />
-                                </LocalizationProvider>
-                            </FormControl>
+                        <Select
+                            name="type"
+                            defaultValue="Gaming"
+                            // onChange={handleMaxWidthChange}
+                            label="Type"
+                            inputProps={{
+                                name: 'type',
+                            }}
+                            onChange={handleNewActivityChange}
+                        >
+                            <MenuItem value="Gaming">Gaming</MenuItem>
+                            <MenuItem value="Programming">Programming</MenuItem>
+                        </Select>
 
-                            <FormControl sx={{ mt: 2, minWidth: 500 }}>
-                                <TextField
-                                    autoFocus
-                                    name="duration"
-                                    label="Duration"
-                                    type="number"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    InputProps={{
-                                        inputProps: { min: 0 }
-                                    }}
-                                    onChange={handleNewActivityChange}
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="Date"
+                                    inputFormat={"MM/DD/YYYY"}
+                                    value={tempDate}
+                                    onChange={handleNewActivityDateChange}
+                                    renderInput={(params) => <TextField {...params} />}
                                 />
-                            </FormControl>
+                            </LocalizationProvider>
+                        </FormControl>
 
-                            <FormControl sx={{ mt: 2, minWidth: 500 }}>
-                                <InputLabel htmlFor="type">Game</InputLabel>
-                                <Select
-                                    name="gameId"
-                                    defaultValue=""
-                                    label="Game"
-                                    inputProps={{
-                                        name: 'gameId',
-                                    }}
-                                    onChange={handleNewActivityChange}
-                                >
-                                    {playingGames.map((game: any, index) => {
-                                        return (
-                                            <MenuItem key={index} value={game.id}>{game.title}</MenuItem>
-                                        )
-                                    })}
-                                </Select>
-                            </FormControl>
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            <TextField
+                                autoFocus
+                                name="duration"
+                                label="Duration"
+                                type="number"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                InputProps={{
+                                    inputProps: { min: 0 }
+                                }}
+                                onChange={handleNewActivityChange}
+                            />
+                        </FormControl>
 
-                            <FormControl sx={{ mt: 2 }}>
-                                <Stack direction="row" spacing={2} justifyContent="flex-end">
-                                    <Button onClick={handleNewActivityClose}>Cancel</Button>
-                                    <Button type="submit">Submit</Button>
-                                </Stack>
-                            </FormControl>
-                        </Box>
-                    </form>
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            <InputLabel htmlFor="type">Game</InputLabel>
+                            <Select
+                                name="gameId"
+                                defaultValue=""
+                                label="Game"
+                                inputProps={{
+                                    name: 'gameId',
+                                }}
+                                onChange={handleNewActivityChange}
+                            >
+                                {playingGames.map((game: any, index) => {
+                                    return (
+                                        <MenuItem key={index} value={game.id}>{game.title}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl sx={{ mt: 2 }}>
+                            <Stack direction="row" spacing={2} justifyContent="flex-end">
+                                <Button onClick={handleNewActivityClose}>Cancel</Button>
+                                <Button type="submit">Submit</Button>
+                            </Stack>
+                        </FormControl>
+                    </Box>
                 </DialogContent>
             </Dialog>
         </Box>
