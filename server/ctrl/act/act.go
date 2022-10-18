@@ -18,7 +18,7 @@ func Route(e *gin.Engine) {
 	auth := e.Group("/act").Use(mw.Auth)
 	{
 		// auth.GET("/", index)
-		auth.Any("/create", create)
+		// auth.POST("/create", create)
 		auth.Any("/watch/start", start)
 		auth.Any("/watch/started", started)
 		auth.POST("/watch/stop", stop)
@@ -30,29 +30,22 @@ func Route(e *gin.Engine) {
 	anon := e.Group("/act")
 	{
 		anon.GET("/", index)
+		anon.POST("/create", create)
 	}
 }
 
 func create(c *gin.Context) {
-	switch c.Request.Method {
-	case "GET":
-		c.HTML(http.StatusOK, "act/create", gin.H{
-			"games": h.GameService.ByPlaying(),
-		})
-
-	case "POST":
-		t := act.Type(c.PostForm("type"))
-		date := datetime.FormatDate(c.PostForm("date"), datetime.DEFAULT)
-		dur, _ := strconv.Atoi(c.PostForm("duration"))
-		gId := format.ToObjId(c.PostForm("game_id"))
-		h.ActService.Create(act.Act{
-			Type:     t,
-			Date:     date,
-			Duration: dur,
-			GameID:   gId,
-		})
-		c.Redirect(http.StatusSeeOther, "/act")
-	}
+	t := act.Type(c.PostForm("type"))
+	date := datetime.FormatDate(c.PostForm("date"), datetime.DEFAULT)
+	dur, _ := strconv.Atoi(c.PostForm("duration"))
+	gId := format.ToObjId(c.PostForm("game_id"))
+	h.ActService.Create(act.Act{
+		Type:     t,
+		Date:     date,
+		Duration: dur,
+		GameID:   gId,
+	})
+	c.Redirect(http.StatusSeeOther, "/act")
 }
 
 func delete(c *gin.Context) {
