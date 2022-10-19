@@ -111,20 +111,20 @@ export default function Act() {
     const handleNewActivitySubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        alert("nannde")
+        let data = { formInput }
+        console.log(data)
+        fetch("/act/create", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())
+            // .then(response => console.log("Success:", JSON.stringify(response)))
+            .catch(error => console.error("Error:", error))
 
-        // let data = { formInput }
-        // console.log(data)
-        // fetch("/act/create", {
-        //     method: "POST",
-        //     body: JSON.stringify(data),
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     }
-        // })
-        //     .then(response => response.json())
-        //     .then(response => console.log("Success:", JSON.stringify(response)))
-        //     .catch(error => console.error("Error:", error))
+        // handleNewActivityClose()
     }
 
     return (
@@ -320,29 +320,28 @@ export default function Act() {
                         }}
                         onSubmit={handleNewActivitySubmit}
                     >
-                        <Controller
-                            control={control}
-                            name="type"
-                            defaultValue="Gaming"
-                            render={({ field }) => (
-                                // <Select {...field}>
-                                //     <MenuItem value="user">Member</MenuItem>
-                                //     <MenuItem value="admin">Admin</MenuItem>
-                                // </Select>
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            <InputLabel htmlFor="type">Type</InputLabel>
+                            <Controller
+                                control={control}
+                                name="type"
+                                defaultValue="Gaming"
+                                render={({ field }) => (
 
-                                <Select
-                                    {...field}
-                                    fullWidth
+                                    <Select
+                                        {...field}
+                                        fullWidth
 
-                                    // onChange={handleMaxWidthChange}
-                                    label="Type"
-                                // onChange={handleNewActivityChange}
-                                >
-                                    <MenuItem value="Gaming">Gaming</MenuItem>
-                                    <MenuItem value="Programming">Programming</MenuItem>
-                                </Select>
-                            )}
-                        />
+                                        // onChange={handleMaxWidthChange}
+                                        label="Type"
+                                        onChange={handleNewActivityChange}
+                                    >
+                                        <MenuItem value="Gaming">Gaming</MenuItem>
+                                        <MenuItem value="Programming">Programming</MenuItem>
+                                    </Select>
+                                )}
+                            />
+                        </FormControl>
                         {/* <FormControl sx={{ mt: 2, minWidth: 500 }}>
                                 <InputLabel htmlFor="type">Type</InputLabel>
                                 <Select
@@ -360,7 +359,7 @@ export default function Act() {
                                 </Select>
                             </FormControl> */}
 
-                        <Select
+                        {/* <Select
                             name="type"
                             defaultValue="Gaming"
                             // onChange={handleMaxWidthChange}
@@ -419,7 +418,7 @@ export default function Act() {
                                     )
                                 })}
                             </Select>
-                        </FormControl>
+                        </FormControl> */}
 
                         <FormControl sx={{ mt: 2 }}>
                             <Stack direction="row" spacing={2} justifyContent="flex-end">
