@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import dayjs, { Dayjs } from 'dayjs';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -94,10 +94,6 @@ export default function Act() {
         }
     )
 
-    const { control, handleSubmit } = useForm({
-        reValidateMode: "onBlur"
-    })
-
     const handleNewActivityDateChange = (newValue: Dayjs | null) => {
         setFormInput({ 'date': newValue })
     }
@@ -126,6 +122,13 @@ export default function Act() {
 
         // handleNewActivityClose()
     }
+
+    const { handleSubmit, control, reset, formState: { errors } } = useForm();
+​
+    const onSubmit = useCallback((values: any) => {
+        console.log(values);
+        reset();
+    }, []);
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -309,44 +312,26 @@ export default function Act() {
             >
                 <DialogTitle align="center">New Activity</DialogTitle>
                 <DialogContent>
-                    <Box
-                        noValidate
-                        component="form"
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            m: 'auto',
-                            width: 'fit-content',
-                        }}
-                        onSubmit={handleNewActivitySubmit}
-                    >
-                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
-                            <InputLabel htmlFor="type">Type</InputLabel>
-                            <Controller
-                                control={control}
-                                name="type"
-                                defaultValue="Gaming"
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        fullWidth
-                                        label="Type"
-                                        onChange={handleNewActivityChange}
-                                    >
-                                        <MenuItem value="Gaming">Gaming</MenuItem>
-                                        <MenuItem value="Programming">Programming</MenuItem>
-                                    </Select>
-                                )}
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <Controller
+                        render={({ field: { name, value, onChange } }) => (
+                            <TextField
+                                name={name}
+                                value={value}
+                                onChange={onChange}
+                                // or shorter {...field}
+                ​
+                                label={fields.firstName.label}
+                                error={Boolean(errors[fields.firstName.name])}
+                                helperText={errors[fields.firstName.name] ? errors[fields.firstName.name].message : ''}
                             />
-                        </FormControl>
-
-                        <FormControl sx={{ mt: 2 }}>
-                            <Stack direction="row" spacing={2} justifyContent="flex-end">
-                                <Button onClick={handleNewActivityClose}>Cancel</Button>
-                                <Button type="submit">Submit</Button>
-                            </Stack>
-                        </FormControl>
-                    </Box>
+                        )}
+                        control={control}
+                        name={fields.firstName.name}
+                        defaultValue=""
+                        rules={{ required: { value: true, message: 'Invalid input' } }}
+                    />
+                </form>
                 </DialogContent>
             </Dialog>
         </Box>
