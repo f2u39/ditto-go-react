@@ -7,7 +7,6 @@ import (
 	"ditto/model/act"
 	"ditto/mw"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,17 +34,30 @@ func Route(e *gin.Engine) {
 }
 
 func create(c *gin.Context) {
-	t := act.Type(c.PostForm("type"))
-	date := datetime.FormatDate(c.PostForm("date"), datetime.DEFAULT)
-	dur, _ := strconv.Atoi(c.PostForm("duration"))
-	gId := format.ToObjId(c.PostForm("game_id"))
+	type actJson struct {
+		Type     string `json:"type"`
+		Date     string `json:"date"`
+		Duration int    `json:"duration"`
+		GameId   string `json:"game_id"`
+	}
+
+	var json actJson
+	if err := c.BindJSON(&json); err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	t := act.Type(json.Type)
+	date := datetime.FormatDate(json.Date, datetime.DEFAULT)
+	dur := json.Duration
+	gId := format.ToObjId(json.GameId)
 	h.ActService.Create(act.Act{
 		Type:     t,
 		Date:     date,
 		Duration: dur,
 		GameID:   gId,
 	})
-	c.Redirect(http.StatusSeeOther, "/act")
+	c.JSON(http.StatusAccepted, "")
 }
 
 func delete(c *gin.Context) {
