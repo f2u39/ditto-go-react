@@ -6,6 +6,7 @@ import (
 	"ditto/lib/format"
 	"ditto/model/act"
 	"ditto/mw"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -51,6 +52,7 @@ func create(c *gin.Context) {
 	date := datetime.FormatDate(json.Date, datetime.DEFAULT)
 	dur := json.Duration
 	gId := format.ToObjId(json.GameId)
+	fmt.Println(json)
 	h.ActService.Create(act.Act{
 		Type:     t,
 		Date:     date,

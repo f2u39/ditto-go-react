@@ -52,7 +52,10 @@ export default function Act() {
 
     const [openNewActivity, setOpenNewActivity] = useState(false)
     const handleNewActivityOpen = () => { setOpenNewActivity(true) }
-    const handleNewActivityClose = () => { setOpenNewActivity(false) }
+    const handleNewActivityClose = () => {
+        setOpenNewActivity(false)
+        setFormValues(defaultValues)
+    }
 
     const [openCalendar, setOpenCalendar] = useState(false)
     const handleCalendarOpen = () => { setOpenCalendar(true) }
@@ -82,28 +85,38 @@ export default function Act() {
     const monSummary: any = acts.month_summary ? acts.month_summary : []
     const playingGames = Array.isArray(acts.playing_games) ? acts.playing_games : []
 
+    const defaultValues = {
+        type: "Gaming",
+        date: dayjs(new Date()),
+        duration: 0,
+        game_id: "",
+    }
+
+    const [formValues, setFormValues] = useState(defaultValues)
+
+    const handleInputChange = (e: { target: { name: any; value: any; } }) => {
+        const { name, value } = e.target;
+        setFormValues({
+            ...formValues,
+            [name]: value,
+        });
+    }
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        console.log(formValues);
 
-        const form = event.currentTarget
-        const formElements = form.elements as typeof form.elements & {
-            usernameInput: {value: string}
-        }
-        onSubmitUsername(formElements.usernameInput.value)
-
-        console.log(event.currentTarget.elements[0])
-
-        // fetch("/act/create", {
-        //     method: "POST",
-        //     body: JSON.stringify(data),
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     }
-        // })
-        //     .then(response => response.json())
-        //     // .then(response => console.log("Success:", JSON.stringify(response)))
-        //     .catch(error => console.error("Error:", error))
-    }
+        fetch("/act/create", {
+            method: "POST",
+            body: JSON.stringify(formValues),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())
+            // .then(response => console.log("Success:", JSON.stringify(response)))
+            .catch(error => console.error("Error:", error))
+    };
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -288,17 +301,36 @@ export default function Act() {
                 <DialogTitle align="center">New Activity</DialogTitle>
                 <DialogContent>
                     <form onSubmit={handleSubmit}>
-                    <Select
-                                    name="type"
-                                    defaultValue="Gaming"
-                                    label="Type"
-                                    inputProps={{
-                                        name: 'type',
-                                    }}
-                                >
-                                    <MenuItem value="Gaming">Gaming</MenuItem>
-                                    <MenuItem value="Programming">Programming</MenuItem>
-                                </Select>
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            <InputLabel htmlFor="type">Type</InputLabel>
+                            <Select
+                                name="type"
+                                label="Type"
+                                value={formValues.type}
+                                onChange={handleInputChange}
+                            >
+                                <MenuItem value="Gaming">Gaming</MenuItem>
+                                <MenuItem value="Programming">Programming</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="Date"
+                                    inputFormat={"MM/DD/YYYY"}
+                                    value={tempDate}
+                                    onChange={handleUpdateDate}
+                                    renderInput={(params) => 
+                                        <TextField {...params} 
+                                            name="date"
+                                            value={formValues.date}
+                                            onChange={handleInputChange}
+                                        />
+                                    }
+                                />
+                            </LocalizationProvider>
+                        </FormControl>
 
                         <Button
                             type="submit"
