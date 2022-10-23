@@ -82,48 +82,28 @@ export default function Act() {
     const monSummary: any = acts.month_summary ? acts.month_summary : []
     const playingGames = Array.isArray(acts.playing_games) ? acts.playing_games : []
 
-    const [formInput, setFormInput] = useReducer(
-        (state: any, newState: any) => ({ ...state, ...newState }),
-        {
-            type: '', date: '', duration: 0, gameId: ''
-        }
-    )
-
-    const handleNewActivityDateChange = (newValue: Dayjs | null) => {
-        setFormInput({ 'date': newValue })
-    }
-
-    const handleNewActivityChange = (e: { target: { name: any; value: any; } }) => {
-        const name = e.target.name
-        const newValue = e.target.value
-        setFormInput({ [name]: newValue })
-    }
-
-    const handleNewActivitySubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        let data = { formInput }
-        console.log(JSON.stringify(data))
-        fetch("/act/create", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(response => response.json())
-            // .then(response => console.log("Success:", JSON.stringify(response)))
-            .catch(error => console.error("Error:", error))
+        const form = event.currentTarget
+        const formElements = form.elements as typeof form.elements & {
+            usernameInput: {value: string}
+        }
+        onSubmitUsername(formElements.usernameInput.value)
 
-        // handleNewActivityClose()
+        console.log(event.currentTarget.elements[0])
+
+        // fetch("/act/create", {
+        //     method: "POST",
+        //     body: JSON.stringify(data),
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     }
+        // })
+        //     .then(response => response.json())
+        //     // .then(response => console.log("Success:", JSON.stringify(response)))
+        //     .catch(error => console.error("Error:", error))
     }
-
-    const { handleSubmit, control, reset, formState: { errors } } = useForm();
-​
-    const onSubmit = useCallback((values: any) => {
-        console.log(values);
-        reset();
-    }, []);
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -307,7 +287,27 @@ export default function Act() {
             >
                 <DialogTitle align="center">New Activity</DialogTitle>
                 <DialogContent>
+                    <form onSubmit={handleSubmit}>
+                    <Select
+                                    name="type"
+                                    defaultValue="Gaming"
+                                    label="Type"
+                                    inputProps={{
+                                        name: 'type',
+                                    }}
+                                >
+                                    <MenuItem value="Gaming">Gaming</MenuItem>
+                                    <MenuItem value="Programming">Programming</MenuItem>
+                                </Select>
 
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                        >
+                            Subscribe
+                        </Button>
+                    </form>
                 </DialogContent>
             </Dialog>
         </Box>
