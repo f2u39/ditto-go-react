@@ -8,6 +8,7 @@ import (
 	"ditto/mw"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -38,8 +39,8 @@ func create(c *gin.Context) {
 	type actJson struct {
 		Type     string `json:"type"`
 		Date     string `json:"date"`
-		Duration int    `json:"duration"`
-		GameId   string `json:"game_id"`
+		Duration string `json:"duration"`
+		GameId   string `json:"gameId"`
 	}
 
 	var json actJson
@@ -50,7 +51,7 @@ func create(c *gin.Context) {
 
 	t := act.Type(json.Type)
 	date := datetime.FormatDate(json.Date, datetime.DEFAULT)
-	dur := json.Duration
+	dur, _ := strconv.Atoi(json.Duration)
 	gId := format.ToObjId(json.GameId)
 	fmt.Println(json)
 	h.ActService.Create(act.Act{

@@ -70,6 +70,10 @@ export default function Act() {
     })
 
     useEffect(() => {
+        fetchActs()
+    }, [date])
+
+    function fetchActs() {
         fetch(`/act?date=${dayjs(date).format('YYYYMMDD')}`)
             .then(resp => resp.json())
             .then(data => {
@@ -77,7 +81,7 @@ export default function Act() {
                     setActs(data)
                 }
             })
-    }, [date]);
+    }
 
     const dayDetails = Array.isArray(acts.day_details) ? acts.day_details : []
     const daySummary: any = acts.day_summary ? acts.day_summary : []
@@ -86,10 +90,10 @@ export default function Act() {
     const playingGames = Array.isArray(acts.playing_games) ? acts.playing_games : []
 
     const defaultValues = {
-        type: "Gaming",
-        date: dayjs(new Date()),
-        duration: 0,
-        game_id: "",
+        type: 'Gaming',
+        date: dayjs(new Date()).format('YYYYMMDD'),
+        duration: '',
+        gameId: '',
     }
 
     const [formValues, setFormValues] = useState(defaultValues)
@@ -99,12 +103,12 @@ export default function Act() {
         setFormValues({
             ...formValues,
             [name]: value,
-        });
+        })
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        console.log(formValues);
+        // console.log(formValues)
 
         fetch("/act/create", {
             method: "POST",
@@ -115,8 +119,12 @@ export default function Act() {
         })
             .then(response => response.json())
             // .then(response => console.log("Success:", JSON.stringify(response)))
+            .then(() => {
+                handleNewActivityClose()
+                fetchActs()
+            })
             .catch(error => console.error("Error:", error))
-    };
+    }
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -156,8 +164,8 @@ export default function Act() {
                             </Toolbar>
                         </AppBar>
                     </Box>
-                    <TableContainer sx={{ border: 1, borderRadius: 1, borderColor: '#647C90' }}>
-                        <Toolbar sx={{ borderBottom: 1, borderColor: '#647C90' }}>
+                    <TableContainer sx={{ border: 1, borderRadius: 1, borderColor: 'gray' }}>
+                        <Toolbar sx={{ borderBottom: 1, borderColor: 'gray' }}>
                             <Tooltip title="Previous date">
                                 <IconButton onClick={handlePreviousDate}>
                                     <ArrowCircleLeftIcon />
@@ -199,8 +207,8 @@ export default function Act() {
                             </TableHead>
 
                             <TableBody>
-                                <TableRow sx={{ borderTop: 2, borderColor: '#647C90' }}>
-                                    <TableCell colSpan={4} align="left">📆Daily</TableCell>
+                                <TableRow sx={{ borderTop: 1, borderColor: 'gray' }}>
+                                    <TableCell colSpan={4} align="center">📆Daily</TableCell>
                                 </TableRow>
 
                                 {(dayDetails).map(
@@ -237,8 +245,8 @@ export default function Act() {
                                     <TableCell align="right"><Typography color="mediumpurple">{daySummary.pgm_hour} h {daySummary.pgm_min} m</Typography></TableCell>
                                 </TableRow>
 
-                                <TableRow sx={{ borderTop: 2, borderColor: '#647C90' }}>
-                                    <TableCell colSpan={4} align="left">📅Monthly</TableCell>
+                                <TableRow sx={{ borderTop: 1, borderColor: 'gray' }}>
+                                    <TableCell colSpan={4} align="center">📅Monthly</TableCell>
                                 </TableRow>
 
                                 {(monDetails).map(
@@ -321,8 +329,8 @@ export default function Act() {
                                     inputFormat={"MM/DD/YYYY"}
                                     value={tempDate}
                                     onChange={handleUpdateDate}
-                                    renderInput={(params) => 
-                                        <TextField {...params} 
+                                    renderInput={(params) =>
+                                        <TextField {...params}
                                             name="date"
                                             value={formValues.date}
                                             onChange={handleInputChange}
@@ -332,13 +340,45 @@ export default function Act() {
                             </LocalizationProvider>
                         </FormControl>
 
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                        >
-                            Subscribe
-                        </Button>
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            {/* <InputLabel htmlFor="duration">Duration</InputLabel> */}
+                            <TextField
+                                name="duration"
+                                label="Duration"
+                                type="number"
+                                value={formValues.duration}
+                                onChange={handleInputChange}
+                                InputProps={{
+                                    inputProps: { min: 0 }
+                                }}
+                            />
+                        </FormControl>
+
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            <InputLabel htmlFor="type">Game</InputLabel>
+                            <Select
+                                name="gameId"
+                                label="Game"
+                                value={formValues.gameId}
+                                inputProps={{
+                                    name: 'gameId',
+                                }}
+                                onChange={handleInputChange}
+                            >
+                                {playingGames.map((game: any, index) => {
+                                    return (
+                                        <MenuItem key={index} value={game.id}>{game.title}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl sx={{ mt: 2 }}>
+                            <Stack direction="row" spacing={2} justifyContent="flex-end">
+                                <Button onClick={handleNewActivityClose}>Cancel</Button>
+                                <Button type="submit">Submit</Button>
+                            </Stack>
+                        </FormControl>
                     </form>
                 </DialogContent>
             </Dialog>
