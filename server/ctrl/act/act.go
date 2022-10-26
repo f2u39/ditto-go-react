@@ -6,7 +6,6 @@ import (
 	"ditto/lib/format"
 	"ditto/model/act"
 	"ditto/mw"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -49,13 +48,20 @@ func create(c *gin.Context) {
 		return
 	}
 
-	t := act.Type(json.Type)
+	typ := act.Type(json.Type)
 	date := datetime.FormatDate(json.Date, datetime.DEFAULT)
 	dur, _ := strconv.Atoi(json.Duration)
 	gId := format.ToObjId(json.GameId)
-	fmt.Println(json)
+
+	if typ == act.GAMING {
+		if len(gId) == 0 {
+			c.JSON(http.StatusBadRequest, "")
+			return
+		}
+	}
+
 	h.ActService.Create(act.Act{
-		Type:     t,
+		Type:     typ,
 		Date:     date,
 		Duration: dur,
 		GameID:   gId,
@@ -116,8 +122,11 @@ func start(c *gin.Context) {
 			gtl := c.PostForm("game_title")
 			sw.Start(typ, gid, gtl)
 		}
+		data := gin.H{
+			"stop_watch": sw,
+		}
+		c.JSON(200, data)
 	}
-	c.Redirect(http.StatusSeeOther, "/act/watch/started")
 }
 
 func started(c *gin.Context) {

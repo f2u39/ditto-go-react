@@ -61,6 +61,10 @@ export default function Act() {
     const handleCalendarOpen = () => { setOpenCalendar(true) }
     const handleCalendarClose = () => { setOpenCalendar(false) }
 
+    const [openStopwatch, setOpenStopwatch] = useState(false)
+    const handleStopwatchOpen = () => { setOpenStopwatch(true) }
+    const handleStopwatchClose = () => { setOpenStopwatch(false) }
+
     const [acts, setActs] = useState({
         day_details: [],
         day_summary: [],
@@ -72,6 +76,25 @@ export default function Act() {
     useEffect(() => {
         fetchActs()
     }, [date])
+
+    const handleStartWatchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        fetch("/act/watch/start", {
+            method: "POST",
+            body: JSON.stringify(formValues),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())
+            // .then(response => console.log("Success:", JSON.stringify(response)))
+            .then(() => {
+                handleNewActivityClose()
+                fetchActs()
+            })
+            .catch(error => console.error("Error:", error))
+    }
 
     function fetchActs() {
         fetch(`/act?date=${dayjs(date).format('YYYYMMDD')}`)
@@ -96,7 +119,13 @@ export default function Act() {
         gameId: '',
     }
 
+    const defaultStartWatch = {
+        type: 'Gaming',
+        gameId: ''
+    }
+
     const [formValues, setFormValues] = useState(defaultValues)
+    const [formStartWatch, setFormStartWatch] = useState(defaultStartWatch)
 
     const handleInputChange = (e: { target: { name: any; value: any; } }) => {
         const { name, value } = e.target;
@@ -157,7 +186,7 @@ export default function Act() {
                                     aria-haspopup="true"
                                     color="inherit"
                                 >
-                                    <TimerIcon sx={{ fontSize: 35, color: "#0461B1" }} />
+                                    <TimerIcon onClick={handleStopwatchOpen} sx={{ fontSize: 35, color: "#0461B1" }} />
                                 </IconButton>
 
                                 <Typography sx={{ flexGrow: 1 }} />
@@ -377,6 +406,55 @@ export default function Act() {
                             <Stack direction="row" spacing={2} justifyContent="flex-end">
                                 <Button onClick={handleNewActivityClose}>Cancel</Button>
                                 <Button type="submit">Submit</Button>
+                            </Stack>
+                        </FormControl>
+                    </form>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog
+                open={openStopwatch}
+                onClose={handleStopwatchClose}
+            >
+                <DialogTitle align="center">Stopwatch</DialogTitle>
+                <DialogContent>
+                    <form onSubmit={handleStartWatchSubmit}>
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            <InputLabel htmlFor="type">Type</InputLabel>
+                            <Select
+                                name="type"
+                                label="Type"
+                                value={formStartWatch.type}
+                                onChange={handleInputChange}
+                            >
+                                <MenuItem value="Gaming">Gaming</MenuItem>
+                                <MenuItem value="Programming">Programming</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            <InputLabel htmlFor="type">Game</InputLabel>
+                            <Select
+                                name="gameId"
+                                label="Game"
+                                value={formStartWatch.gameId}
+                                inputProps={{
+                                    name: 'gameId',
+                                }}
+                                onChange={handleInputChange}
+                            >
+                                {playingGames.map((game: any, index) => {
+                                    return (
+                                        <MenuItem key={index} value={game.id}>{game.title}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl sx={{ mt: 2 }}>
+                            <Stack direction="row" spacing={2} justifyContent="flex-end">
+                                <Button onClick={handleStopwatchClose}>Cancel</Button>
+                                <Button type="submit">Start</Button>
                             </Stack>
                         </FormControl>
                     </form>
