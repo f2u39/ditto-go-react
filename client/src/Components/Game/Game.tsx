@@ -215,6 +215,7 @@ export default function Game() {
                                                 >
                                                     <TextField
                                                         disabled
+                                                        sx={{ pt: 1 }}
                                                         inputProps={{
                                                             style: { padding: '7px 5px', textAlign: 'right' },
                                                         }}
@@ -335,13 +336,6 @@ export default function Game() {
             console.log(error);
         }
     }
-}
-
-function a11yProps(index: number) {
-    return {
-        id: `vertical-tab-${index}`,
-        'aria-controls': `vertical-tabpanel-${index}`,
-    };
 }
 
 function GameTabPanel() {
