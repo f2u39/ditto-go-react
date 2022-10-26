@@ -114,8 +114,27 @@ func start(c *gin.Context) {
 		sw.Start(typ, gid, g.Title)
 
 	case "POST":
-		// POST is from act index page
-		typ := c.PostForm("type")
+		type swJson struct {
+			Type   string `json:"type"`
+			GameId string `json:"gameId"`
+		}
+
+		var json swJson
+		if err := c.BindJSON(&json); err != nil {
+			c.AbortWithError(http.StatusBadRequest, err)
+			return
+		}
+
+		typ := json.Type
+		gId := format.ToObjId(json.GameId)
+
+		if act.Type(typ) == act.GAMING {
+			if len(gId) == 0 {
+				c.JSON(http.StatusBadRequest, "")
+				return
+			}
+		}
+
 		if sw == nil && typ != "Recover" {
 			sw = act.NewStopWatch()
 			gid := c.PostForm("game_id")
@@ -125,7 +144,7 @@ func start(c *gin.Context) {
 		data := gin.H{
 			"stop_watch": sw,
 		}
-		c.JSON(200, data)
+		c.JSON(http.StatusOK, data)
 	}
 }
 

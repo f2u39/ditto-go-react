@@ -53,8 +53,8 @@ export default function Act() {
     const [openNewActivity, setOpenNewActivity] = useState(false)
     const handleNewActivityOpen = () => { setOpenNewActivity(true) }
     const handleNewActivityClose = () => {
-        setOpenNewActivity(false)
         setFormValues(defaultValues)
+        setOpenNewActivity(false)
     }
 
     const [openCalendar, setOpenCalendar] = useState(false)
@@ -63,7 +63,10 @@ export default function Act() {
 
     const [openStopwatch, setOpenStopwatch] = useState(false)
     const handleStopwatchOpen = () => { setOpenStopwatch(true) }
-    const handleStopwatchClose = () => { setOpenStopwatch(false) }
+    const handleStopwatchClose = () => { 
+        setFormStopwatch(defaultStopwatchValue)
+        setOpenStopwatch(false)
+    }
 
     const [acts, setActs] = useState({
         day_details: [],
@@ -77,12 +80,13 @@ export default function Act() {
         fetchActs()
     }, [date])
 
-    const handleStartWatchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleStopwatchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        // console.log(formStopwatch)
 
         fetch("/act/watch/start", {
             method: "POST",
-            body: JSON.stringify(formValues),
+            body: JSON.stringify(formStopwatch),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -119,18 +123,26 @@ export default function Act() {
         gameId: '',
     }
 
-    const defaultStartWatch = {
+    const defaultStopwatchValue = {
         type: 'Gaming',
         gameId: ''
     }
 
     const [formValues, setFormValues] = useState(defaultValues)
-    const [formStartWatch, setFormStartWatch] = useState(defaultStartWatch)
+    const [formStopwatch, setFormStopwatch] = useState(defaultStopwatchValue)
 
     const handleInputChange = (e: { target: { name: any; value: any; } }) => {
         const { name, value } = e.target;
         setFormValues({
             ...formValues,
+            [name]: value,
+        })
+    }
+
+    const handleStopwatchChange = (e: { target: { name: any; value: any; } }) => {
+        const { name, value } = e.target;
+        setFormStopwatch({
+            ...formStopwatch,
             [name]: value,
         })
     }
@@ -418,14 +430,14 @@ export default function Act() {
             >
                 <DialogTitle align="center">Stopwatch</DialogTitle>
                 <DialogContent>
-                    <form onSubmit={handleStartWatchSubmit}>
+                    <form onSubmit={handleStopwatchSubmit}>
                         <FormControl sx={{ mt: 2, minWidth: 500 }}>
                             <InputLabel htmlFor="type">Type</InputLabel>
                             <Select
                                 name="type"
                                 label="Type"
-                                value={formStartWatch.type}
-                                onChange={handleInputChange}
+                                value={formStopwatch.type}
+                                onChange={handleStopwatchChange}
                             >
                                 <MenuItem value="Gaming">Gaming</MenuItem>
                                 <MenuItem value="Programming">Programming</MenuItem>
@@ -437,11 +449,11 @@ export default function Act() {
                             <Select
                                 name="gameId"
                                 label="Game"
-                                value={formStartWatch.gameId}
+                                value={formStopwatch.gameId}
                                 inputProps={{
                                     name: 'gameId',
                                 }}
-                                onChange={handleInputChange}
+                                onChange={handleStopwatchChange}
                             >
                                 {playingGames.map((game: any, index) => {
                                     return (
