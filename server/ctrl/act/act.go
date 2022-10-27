@@ -17,8 +17,6 @@ var sw *act.StopWatch
 func Route(e *gin.Engine) {
 	auth := e.Group("/act").Use(mw.Auth)
 	{
-		// auth.GET("/", index)
-		// auth.POST("/create", create)
 		auth.Any("/watch/start", start)
 		auth.Any("/watch/started", started)
 		auth.POST("/watch/stop", stop)
@@ -100,6 +98,7 @@ func index(c *gin.Context) {
 		"month_details": monDetails,
 		"month_summary": monSummary,
 		"playing_games": h.GameService.ByPlaying(),
+		"stopwatch":     sw,
 	}
 	c.JSON(200, data)
 }

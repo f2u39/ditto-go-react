@@ -6,7 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { AppBar, Box, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, IconButton, InputLabel, Link, MenuItem, Select, Stack, Switch, Toolbar, Tooltip, Typography } from '@mui/material';
+import { AppBar, Badge, Box, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, IconButton, InputLabel, Link, MenuItem, Select, Stack, Switch, Toolbar, Tooltip, Typography } from '@mui/material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import TimerIcon from '@mui/icons-material/Timer';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -31,6 +31,14 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
 export default function Act() {
+    // const defaultStopwatch = {
+    //     is_counting: false,
+    //     start_time: '',
+    //     type: '',
+    //     game_title: '',
+    // }
+    // const [stopwatch, setStopwatch] = useState<any>()
+
     const [date, setDate] = useState<Dayjs | null>(dayjs(new Date()))
     const handleUpdateDate = (newValue: Dayjs | null) => {
         setDate(newValue)
@@ -61,7 +69,7 @@ export default function Act() {
 
     const [openStopwatch, setOpenStopwatch] = useState(false)
     const handleStopwatchOpen = () => { setOpenStopwatch(true) }
-    const handleStopwatchClose = () => { 
+    const handleStopwatchClose = () => {
         setFormStopwatch(defaultStopwatchValue)
         setOpenStopwatch(false)
     }
@@ -72,15 +80,15 @@ export default function Act() {
         month_details: [],
         month_summary: [],
         playing_games: [],
+        stopwatch: [],
     })
 
     useEffect(() => {
-        fetchActs()
+        fetchData()
     }, [date])
 
     const handleStopwatchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        // console.log(formStopwatch)
 
         fetch("/act/watch/start", {
             method: "POST",
@@ -89,21 +97,21 @@ export default function Act() {
                 "Content-Type": "application/json"
             }
         })
-            .then(response => response.json())
-            // .then(response => console.log("Success:", JSON.stringify(response)))
-            .then(() => {
+            .then(resp => resp.json())
+            .then(data => {
+                fetchData()
                 handleStopwatchClose()
-
             })
             .catch(error => console.error("Error:", error))
     }
 
-    function fetchActs() {
+    function fetchData() {
         fetch(`/act?date=${dayjs(date).format('YYYYMMDD')}`)
             .then(resp => resp.json())
             .then(data => {
                 if (data != null) {
                     setActs(data)
+                    console.log(acts)
                 }
             })
     }
@@ -113,6 +121,8 @@ export default function Act() {
     const monDetails = Array.isArray(acts.month_details) ? acts.month_details : []
     const monSummary: any = acts.month_summary ? acts.month_summary : []
     const playingGames = Array.isArray(acts.playing_games) ? acts.playing_games : []
+    const stopwatching: any = acts.stopwatch ? acts.stopwatch : []
+    console.log(stopwatching)
 
     const defaultValues = {
         type: 'Gaming',
@@ -160,7 +170,7 @@ export default function Act() {
             // .then(response => console.log("Success:", JSON.stringify(response)))
             .then(() => {
                 handleNewActivityClose()
-                fetchActs()
+                fetchData()
             })
             .catch(error => console.error("Error:", error))
     }
@@ -190,13 +200,16 @@ export default function Act() {
                                     <PostAddIcon onClick={handleNewActivityOpen} sx={{ fontSize: 35, color: "#0461B1" }} />
                                 </IconButton>
 
+
                                 <IconButton
                                     size="large"
                                     aria-controls="menu-appbar"
                                     aria-haspopup="true"
                                     color="inherit"
                                 >
-                                    <TimerIcon onClick={handleStopwatchOpen} sx={{ fontSize: 35, color: "#0461B1" }} />
+                                    <Badge color="secondary" badgeContent={1} invisible={acts.stopwatch === null}>
+                                        <TimerIcon onClick={handleStopwatchOpen} sx={{ fontSize: 35, color: "#0461B1" }} />
+                                    </Badge>
                                 </IconButton>
 
                                 <Typography sx={{ flexGrow: 1 }} />
@@ -428,46 +441,61 @@ export default function Act() {
             >
                 <DialogTitle align="center">Stopwatch</DialogTitle>
                 <DialogContent>
-                    <form onSubmit={handleStopwatchSubmit}>
-                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
-                            <InputLabel htmlFor="type">Type</InputLabel>
-                            <Select
-                                name="type"
-                                label="Type"
-                                value={formStopwatch.type}
-                                onChange={handleStopwatchChange}
-                            >
-                                <MenuItem value="Gaming">Gaming</MenuItem>
-                                <MenuItem value="Programming">Programming</MenuItem>
-                            </Select>
-                        </FormControl>
+                    {
+                        acts.stopwatch === null ?
+                            <form onSubmit={handleStopwatchSubmit}>
+                                <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                                    <InputLabel htmlFor="type">Type</InputLabel>
+                                    <Select
+                                        name="type"
+                                        label="Type"
+                                        value={formStopwatch.type}
+                                        onChange={handleStopwatchChange}
+                                    >
+                                        <MenuItem value="Gaming">Gaming</MenuItem>
+                                        <MenuItem value="Programming">Programming</MenuItem>
+                                    </Select>
+                                </FormControl>
 
-                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
-                            <InputLabel htmlFor="type">Game</InputLabel>
-                            <Select
-                                name="gameId"
-                                label="Game"
-                                value={formStopwatch.gameId}
-                                inputProps={{
-                                    name: 'gameId',
-                                }}
-                                onChange={handleStopwatchChange}
-                            >
-                                {playingGames.map((game: any, index) => {
-                                    return (
-                                        <MenuItem key={index} value={game.id}>{game.title}</MenuItem>
-                                    )
-                                })}
-                            </Select>
-                        </FormControl>
+                                <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                                    <InputLabel htmlFor="type">Game</InputLabel>
+                                    <Select
+                                        name="gameId"
+                                        label="Game"
+                                        value={formStopwatch.gameId}
+                                        inputProps={{
+                                            name: 'gameId',
+                                        }}
+                                        onChange={handleStopwatchChange}
+                                    >
+                                        {playingGames.map((game: any, index) => {
+                                            return (
+                                                <MenuItem key={index} value={game.id}>{game.title}</MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                </FormControl>
 
-                        <FormControl sx={{ mt: 2 }}>
-                            <Stack direction="row" spacing={2} justifyContent="flex-end">
-                                <Button onClick={handleStopwatchClose}>Cancel</Button>
-                                <Button type="submit">Start</Button>
-                            </Stack>
-                        </FormControl>
-                    </form>
+                                <FormControl sx={{ mt: 2 }}>
+                                    <Stack direction="row" spacing={2} justifyContent="flex-end">
+                                        <Button onClick={handleStopwatchClose}>Cancel</Button>
+                                        <Button type="submit">Start</Button>
+                                    </Stack>
+                                </FormControl>
+                            </form>
+                            :
+                            <>
+                                <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                                    <TextField label="Start At" value={stopwatching.start_time} disabled></TextField>
+                                </FormControl>
+                                <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                                    <TextField label="Type" value={stopwatching.type} disabled></TextField>
+                                </FormControl>
+                                <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                                    <TextField label="Title" value={stopwatching.game_title} disabled></TextField>
+                                </FormControl>
+                            </>
+                    }
                 </DialogContent>
             </Dialog>
         </Box>
