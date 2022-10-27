@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs, { Dayjs } from 'dayjs';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -29,11 +29,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import Tab from '@mui/material/Tab';
-import { useForm, Controller } from "react-hook-form";
 
 export default function Act() {
-    const [date, setDate] = useState<Dayjs | null>(dayjs(new Date()));
+    const [date, setDate] = useState<Dayjs | null>(dayjs(new Date()))
     const handleUpdateDate = (newValue: Dayjs | null) => {
         setDate(newValue)
         setOpenCalendar(false)
@@ -94,8 +92,8 @@ export default function Act() {
             .then(response => response.json())
             // .then(response => console.log("Success:", JSON.stringify(response)))
             .then(() => {
-                handleNewActivityClose()
-                fetchActs()
+                handleStopwatchClose()
+
             })
             .catch(error => console.error("Error:", error))
     }

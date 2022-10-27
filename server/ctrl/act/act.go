@@ -126,7 +126,7 @@ func start(c *gin.Context) {
 		}
 
 		typ := json.Type
-		gId := format.ToObjId(json.GameId)
+		gId := json.GameId
 
 		if act.Type(typ) == act.GAMING {
 			if len(gId) == 0 {
@@ -137,9 +137,9 @@ func start(c *gin.Context) {
 
 		if sw == nil && typ != "Recover" {
 			sw = act.NewStopWatch()
-			gid := c.PostForm("game_id")
-			gtl := c.PostForm("game_title")
-			sw.Start(typ, gid, gtl)
+			id := gId
+			title := h.GameService.ByID(gId).Title
+			sw.Start(typ, id, title)
 		}
 		data := gin.H{
 			"stop_watch": sw,
