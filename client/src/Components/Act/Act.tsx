@@ -295,12 +295,12 @@ export default function Act() {
                                 <TableRow>
                                     <TableCell colSpan={2}></TableCell>
                                     <TableCell align="right"><Typography color="lightpink"><ControllerIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right"><Typography color="lightpink">{daySummary.game_hour} h {daySummary.game_min} m</Typography></TableCell>
+                                    <TableCell align="right"><Typography color="lightpink">{daySummary.game_hour === 0 ? '' : daySummary.game_hour+'h'} {daySummary.game_min}m</Typography></TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell colSpan={2}></TableCell>
                                     <TableCell align="right"><Typography color="mediumpurple"><GitIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right"><Typography color="mediumpurple">{daySummary.pgm_hour} h {daySummary.pgm_min} m</Typography></TableCell>
+                                    <TableCell align="right"><Typography color="mediumpurple">{daySummary.pgm_hour === 0 ? '' : daySummary.pgm_hour+'h'} {daySummary.pgm_min}m</Typography></TableCell>
                                 </TableRow>
 
                                 <TableRow sx={{ borderTop: 1 }}>
@@ -319,8 +319,8 @@ export default function Act() {
                                                     <TableCell align="center"><Typography color="mediumpurple"><GitHubIcon /></Typography></TableCell>}
 
                                                 {detail.act.type === 'Gaming' ?
-                                                    <TableCell align="center"><Typography color="lightpink">{detail.act.duration}</Typography></TableCell> :
-                                                    <TableCell align="center"><Typography color="mediumpurple">{detail.act.duration}</Typography></TableCell>}
+                                                    <TableCell align="center"><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell> :
+                                                    <TableCell align="center"><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell>}
 
                                                 {detail.act.type === 'Gaming' ?
                                                     <TableCell colSpan={2} align="left"><Typography color="lightpink">{detail.game[0].title}</Typography></TableCell> :
@@ -333,12 +333,12 @@ export default function Act() {
                                 <TableRow>
                                     <TableCell colSpan={2}></TableCell>
                                     <TableCell align="right"><Typography color="lightpink"><ControllerIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right"><Typography color="lightpink">{monSummary.game_hour} h {monSummary.game_min} m</Typography></TableCell>
+                                    <TableCell align="right"><Typography color="lightpink">{monSummary.game_hour === 0 ? '' : monSummary.game_hour+'h'} {monSummary.game_min}m</Typography></TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell colSpan={2}></TableCell>
                                     <TableCell align="right"><Typography color="mediumpurple"><GitIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right"><Typography color="mediumpurple">{monSummary.pgm_hour} h {monSummary.pgm_min} m</Typography></TableCell>
+                                    <TableCell align="right"><Typography color="mediumpurple">{monSummary.pgm_hour === 0 ? '' : monSummary.pgm_hour+'h'} {monSummary.pgm_min}m</Typography></TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>
