@@ -22,13 +22,16 @@ func Route(e *gin.Engine) {
 		auth.GET("/delete", delete)
 		auth.DELETE("/delete", delete)
 		auth.GET("/stopwatch", stopwatch)
+
+		auth.GET("/", index)
+		auth.POST("/create", create)
 	}
 
-	anon := e.Group("/act")
-	{
-		anon.GET("/", index)
-		anon.POST("/create", create)
-	}
+	// anon := e.Group("/act")
+	// {
+	// 	anon.GET("/", index)
+	// 	anon.POST("/create", create)
+	// }
 }
 
 func create(c *gin.Context) {
