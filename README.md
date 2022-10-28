@@ -7,6 +7,15 @@
 
 ## Memo
 
+### Ubuntu install React
+
+``` cmd
+sudo apt install npm
+
+npm --version
+node --version
+```
+
 ### Ubuntu update Go version
 
 ``` cmd
@@ -14,8 +23,7 @@ sudo apt-get remove golang-go
 sudo apt-get remove --auto-remove golang-go
 
 
-which go
-sudo rm -rvf /usr/local/go/bin/go
+sudo rm -rvf /usr/local/go
 
 wget https://golang.org/dl/go1.19.2.linux-amd64.tar.gz
 sudo tar -C /usr/local -xvf go1.19.2.linux-amd64.tar.gz

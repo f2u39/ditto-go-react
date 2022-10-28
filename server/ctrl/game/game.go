@@ -29,7 +29,6 @@ func Route(e *gin.Engine) {
 		auth.POST("/update_status", updateStatus)
 
 		auth.GET("/counts", counts)
-		auth.GET("/", index)
 		auth.GET("/status/:status/:platform/:page", status)
 	}
 
