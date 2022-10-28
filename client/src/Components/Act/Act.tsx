@@ -31,14 +31,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
 export default function Act() {
-    // const defaultStopwatch = {
-    //     is_counting: false,
-    //     start_time: '',
-    //     type: '',
-    //     game_title: '',
-    // }
-    // const [stopwatch, setStopwatch] = useState<any>()
-
     const [date, setDate] = useState<Dayjs | null>(dayjs(new Date()))
     const handleUpdateDate = (newValue: Dayjs | null) => {
         setDate(newValue)
@@ -87,7 +79,7 @@ export default function Act() {
         fetchData()
     }, [date])
 
-    const handleStopwatchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleStartStopwatchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         fetch("/act/watch/start", {
@@ -103,6 +95,20 @@ export default function Act() {
                 handleStopwatchClose()
             })
             .catch(error => console.error("Error:", error))
+    }
+
+    const handleStopStopwatchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        fetch("/act/watch/stop", {
+            method: "POST",
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            fetchData()
+            handleStopwatchClose()
+            console.log(data)
+        })
     }
 
     function fetchData() {
@@ -197,7 +203,7 @@ export default function Act() {
                                     aria-haspopup="true"
                                     color="inherit"
                                 >
-                                    <PostAddIcon onClick={handleNewActivityOpen} sx={{ fontSize: 35, color: "#0461B1" }} />
+                                    <PostAddIcon onClick={handleNewActivityOpen} sx={{ fontSize: 35 }} />
                                 </IconButton>
 
 
@@ -208,7 +214,7 @@ export default function Act() {
                                     color="inherit"
                                 >
                                     <Badge color="secondary" badgeContent={1} invisible={acts.stopwatch === null}>
-                                        <TimerIcon onClick={handleStopwatchOpen} sx={{ fontSize: 35, color: "#0461B1" }} />
+                                        <TimerIcon onClick={handleStopwatchOpen} sx={{ fontSize: 35 }} />
                                     </Badge>
                                 </IconButton>
 
@@ -216,8 +222,8 @@ export default function Act() {
                             </Toolbar>
                         </AppBar>
                     </Box>
-                    <TableContainer sx={{ border: 1, borderRadius: 1, borderColor: 'gray' }}>
-                        <Toolbar sx={{ borderBottom: 1, borderColor: 'gray' }}>
+                    <TableContainer sx={{ border: 1, borderRadius: 1 }}>
+                        <Toolbar sx={{ borderBottom: 1 }}>
                             <Tooltip title="Previous date">
                                 <IconButton onClick={handlePreviousDate}>
                                     <ArrowCircleLeftIcon />
@@ -251,15 +257,15 @@ export default function Act() {
                         <Table size="small">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell align="center" style={{ width: 50 }}><FormatListNumberedRtlIcon /></TableCell>
-                                    <TableCell align="center" style={{ width: 80 }}><AccessTimeIcon /></TableCell>
+                                    <TableCell align="center" style={{ width: 40 }}><FormatListNumberedRtlIcon /></TableCell>
+                                    <TableCell align="center" style={{ width: 110 }}><AccessTimeIcon /></TableCell>
                                     <TableCell align="left"><TitleIcon /></TableCell>
                                     <TableCell style={{ width: 120 }}></TableCell>
                                 </TableRow>
                             </TableHead>
 
                             <TableBody>
-                                <TableRow sx={{ borderTop: 1, borderColor: 'gray' }}>
+                                <TableRow sx={{ borderTop: 1 }}>
                                     <TableCell colSpan={4} align="center">📆Daily</TableCell>
                                 </TableRow>
 
@@ -275,8 +281,8 @@ export default function Act() {
                                                     <TableCell align="center"><Typography color="mediumpurple"><GitHubIcon /></Typography></TableCell>}
 
                                                 {detail.act.type === 'Gaming' ?
-                                                    <TableCell align="center"><Typography color="lightpink">{detail.act.duration}</Typography></TableCell> :
-                                                    <TableCell align="center"><Typography color="mediumpurple">{detail.act.duration}</Typography></TableCell>}
+                                                    <TableCell align="center"><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell> :
+                                                    <TableCell align="center"><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell>}
 
                                                 {detail.act.type === 'Gaming' ?
                                                     <TableCell colSpan={2} align="left"><Typography color="lightpink">{detail.game[0].title}</Typography></TableCell> :
@@ -297,7 +303,7 @@ export default function Act() {
                                     <TableCell align="right"><Typography color="mediumpurple">{daySummary.pgm_hour} h {daySummary.pgm_min} m</Typography></TableCell>
                                 </TableRow>
 
-                                <TableRow sx={{ borderTop: 1, borderColor: 'gray' }}>
+                                <TableRow sx={{ borderTop: 1 }}>
                                     <TableCell colSpan={4} align="center">📅Monthly</TableCell>
                                 </TableRow>
 
@@ -443,7 +449,7 @@ export default function Act() {
                 <DialogContent>
                     {
                         acts.stopwatch === null ?
-                            <form onSubmit={handleStopwatchSubmit}>
+                            <form onSubmit={handleStartStopwatchSubmit}>
                                 <FormControl sx={{ mt: 2, minWidth: 500 }}>
                                     <InputLabel htmlFor="type">Type</InputLabel>
                                     <Select
@@ -484,7 +490,7 @@ export default function Act() {
                                 </FormControl>
                             </form>
                             :
-                            <>
+                            <form onSubmit={handleStopStopwatchSubmit}>
                                 <FormControl sx={{ mt: 2, minWidth: 500 }}>
                                     <TextField label="Start At" value={stopwatching.start_time} disabled></TextField>
                                 </FormControl>
@@ -494,7 +500,14 @@ export default function Act() {
                                 <FormControl sx={{ mt: 2, minWidth: 500 }}>
                                     <TextField label="Title" value={stopwatching.game_title} disabled></TextField>
                                 </FormControl>
-                            </>
+
+                                <FormControl sx={{ mt: 2 }}>
+                                    <Stack direction="row" spacing={2} justifyContent="flex-end">
+                                        <Button onClick={handleStopwatchClose}>Cancel</Button>
+                                        <Button type="submit">Stop</Button>
+                                    </Stack>
+                                </FormControl>
+                            </form>
                     }
                 </DialogContent>
             </Dialog>

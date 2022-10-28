@@ -18,7 +18,6 @@ func Route(e *gin.Engine) {
 	auth := e.Group("/act").Use(mw.Auth)
 	{
 		auth.Any("/watch/start", start)
-		auth.Any("/watch/started", started)
 		auth.POST("/watch/stop", stop)
 		auth.GET("/delete", delete)
 		auth.DELETE("/delete", delete)
@@ -147,14 +146,10 @@ func start(c *gin.Context) {
 	}
 }
 
-func started(c *gin.Context) {
-	c.HTML(http.StatusOK, "watch/started", gin.H{
-		"watch": sw,
-	})
-}
-
 func stop(c *gin.Context) {
 	sw.Stop()
+
+	// At least 5 minutes
 	if sw.Duration > 5 {
 		h.ActService.Create(act.Act{
 			StartTime: sw.StartTime,
@@ -166,7 +161,7 @@ func stop(c *gin.Context) {
 		})
 	}
 	sw = nil
-	c.Redirect(http.StatusSeeOther, "/act")
+	c.JSON(http.StatusOK, nil)
 }
 
 func stopwatch(c *gin.Context) {
