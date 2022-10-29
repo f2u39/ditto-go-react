@@ -80,7 +80,7 @@ export default function Act() {
     const handleStartStopwatchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        fetch("/act/watch/start", {
+        fetch("/api/act/watch/start", {
             method: "POST",
             body: JSON.stringify(formStopwatch),
             headers: {
@@ -98,7 +98,7 @@ export default function Act() {
     const handleStopStopwatchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        fetch("/act/watch/stop", {
+        fetch("/api/act/watch/stop", {
             method: "POST",
         })
         .then(resp => resp.json())
@@ -110,7 +110,7 @@ export default function Act() {
     }
 
     function fetchData() {
-        fetch(`/act?date=${dayjs(date).format('YYYYMMDD')}`)
+        fetch(`/api/act?date=${dayjs(date).format('YYYYMMDD')}`)
             .then(resp => resp.json())
             .then(data => {
                 if (data != null) {
@@ -163,7 +163,7 @@ export default function Act() {
         event.preventDefault()
         // console.log(formValues)
 
-        fetch("/act/create", {
+        fetch("/api/act/create", {
             method: "POST",
             body: JSON.stringify(formValues),
             headers: {
