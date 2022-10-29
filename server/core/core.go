@@ -10,6 +10,7 @@ import (
 	"os"
 
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
@@ -56,6 +57,7 @@ func NewCore() {
 func NewEngine() *gin.Engine {
 	r := gin.Default()
 	r.Static("/assets", "./assets")
+	r.Use(static.Serve("/", static.LocalFile("./web", true)))
 
 	// CORS
 	r.Use(cors.Default())

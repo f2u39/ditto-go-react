@@ -9,29 +9,29 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
 var sw *act.StopWatch
 
 func Route(e *gin.Engine) {
+	e.Use(static.Serve("/act", static.LocalFile("./web", true)))
 	auth := e.Group("/act").Use(mw.Auth)
 	{
+		auth.GET("/", index)
 		auth.Any("/watch/start", start)
 		auth.POST("/watch/stop", stop)
+		auth.POST("/create", create)
 		auth.GET("/delete", delete)
 		auth.DELETE("/delete", delete)
 		auth.GET("/stopwatch", stopwatch)
-
-		auth.GET("/", index)
-		auth.POST("/create", create)
 	}
 
-	// anon := e.Group("/act")
-	// {
-	// 	anon.GET("/", index)
-	// 	anon.POST("/create", create)
-	// }
+	api := e.Group("/act/api")
+	{
+		api.GET("/", index)
+	}
 }
 
 func create(c *gin.Context) {

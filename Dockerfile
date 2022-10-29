@@ -15,7 +15,7 @@ RUN npm run build
 # Production
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
-# ADD config /config ← OK
+ADD config /config
 # COPY /server/config/ ./ ← NG
 # ADD config /config ← TEST
 # ADD asset /asset ← TEST
@@ -27,4 +27,4 @@ EXPOSE 8080
 CMD ./main
 
 #$ docker build -t ditto-go-react .
-#$ docker run -p 3000:8080 -d ditto-go-react
+#$ docker run -p 80:8080 -d ditto-go-react

@@ -38,6 +38,12 @@ sudo docker exec 210 mongodump --db ditto --out /mongodump_20221028
 sudo docker cp 210:/mongodump_20221028 ~/mongodump_20221028
 ```
 
+### Docker deployment
+
+``` cmd
+docker build -t ditto-go-react .
+docker run -p 80:8080 -d ditto-go-react
+```
 
 ## References
 

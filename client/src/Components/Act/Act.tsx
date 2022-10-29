@@ -6,14 +6,12 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { AppBar, Badge, Box, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, IconButton, InputLabel, Link, MenuItem, Select, Stack, Switch, Toolbar, Tooltip, Typography } from '@mui/material';
+import { AppBar, Badge, Box, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Stack, Toolbar, Tooltip, Typography } from '@mui/material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import TimerIcon from '@mui/icons-material/Timer';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import { Git as GitIcon } from 'react-bootstrap-icons';
 import { Controller as ControllerIcon } from 'react-bootstrap-icons';
-import TodayIcon from '@mui/icons-material/Today';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import FormatListNumberedRtlIcon from '@mui/icons-material/FormatListNumberedRtl';
@@ -43,9 +41,9 @@ export default function Act() {
         setDate(dayjs(date).add(1, 'day'))
     }
 
-    const [tempDate, setTempDate] = useState<Dayjs | null>(dayjs(new Date()));
+    const [tempDate, setTempDate] = useState<Dayjs | null>(dayjs(new Date()))
     const handleChangeTempDate = (newValue: Dayjs | null) => {
-        setTempDate(newValue);
+        setTempDate(newValue)
     }
 
     const [openNewActivity, setOpenNewActivity] = useState(false)
@@ -107,7 +105,7 @@ export default function Act() {
         .then(data => {
             fetchData()
             handleStopwatchClose()
-            console.log(data)
+            // console.log(data)
         })
     }
 
