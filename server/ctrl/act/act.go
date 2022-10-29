@@ -16,10 +16,11 @@ import (
 var sw *act.StopWatch
 
 func Route(e *gin.Engine) {
+	// Use React as frontend
 	e.Use(static.Serve("/act", static.LocalFile("./web", true)))
-	auth := e.Group("/act").Use(mw.Auth)
+
+	auth := e.Group("/api/act").Use(mw.Auth)
 	{
-		auth.GET("/", index)
 		auth.Any("/watch/start", start)
 		auth.POST("/watch/stop", stop)
 		auth.POST("/create", create)
@@ -28,7 +29,7 @@ func Route(e *gin.Engine) {
 		auth.GET("/stopwatch", stopwatch)
 	}
 
-	api := e.Group("/act/api")
+	api := e.Group("/api/act")
 	{
 		api.GET("/", index)
 	}

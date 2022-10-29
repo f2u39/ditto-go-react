@@ -6,6 +6,8 @@
 # directory
 assets
 server/assets/img/games
+server/build
+server/web
 
 asset
 config

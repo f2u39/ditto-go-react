@@ -58,6 +58,8 @@ func NewEngine() *gin.Engine {
 	r := gin.Default()
 	r.Static("/assets", "./assets")
 	r.Use(static.Serve("/", static.LocalFile("./web", true)))
+	// r.Use(static.Serve("/", static.LocalFile("../client/build", true)))
+	// r.Use(static.Serve("/act", static.LocalFile("../client/build", true)))
 
 	// CORS
 	r.Use(cors.Default())

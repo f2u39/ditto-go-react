@@ -16,6 +16,7 @@ RUN npm run build
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 ADD config /config
+ADD assets /assets
 # COPY /server/config/ ./ ← NG
 # ADD config /config ← TEST
 # ADD asset /asset ← TEST
