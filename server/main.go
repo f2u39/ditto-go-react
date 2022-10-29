@@ -3,11 +3,9 @@ package main
 import (
 	"context"
 	"ditto/core"
-	"ditto/model/config"
 	"log"
 	"net/http"
 	"os/signal"
-	"strconv"
 	"syscall"
 	"time"
 )
@@ -23,7 +21,8 @@ func main() {
 
 	// Create a HTTP server
 	srv := &http.Server{
-		Addr:    ":" + strconv.Itoa(config.Config.HttpPort),
+		// Addr:    ":" + strconv.Itoa(config.Config.HttpPort),
+		Addr:    ":8080",
 		Handler: core.Ditto.Engine,
 	}
 
