@@ -9,9 +9,6 @@ import (
 )
 
 var (
-	// MySQL database
-	// MySqlDb *sql.DB
-
 	// MongoDB session
 	MgoSess *mgo.Session
 
@@ -27,5 +24,4 @@ func Mgo() *mgo.Session {
 
 func Init() {
 	mongo.Init()
-	// firebase.Init()
 }

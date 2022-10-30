@@ -3,7 +3,8 @@ package core
 import (
 	handler "ditto/ctrl"
 	router "ditto/ctrl/router"
-	"ditto/db"
+
+	// "ditto/db"
 	db_redis "ditto/db/redis"
 	"ditto/model/config"
 	"log"
@@ -30,7 +31,7 @@ func Init() {
 	NewCore()
 
 	// Connect to MongoDB
-	db.Init()
+	// db.Init()
 }
 
 func NewCore() {
@@ -56,7 +57,7 @@ func NewCore() {
 func NewEngine() *gin.Engine {
 	r := gin.Default()
 	r.Static("/assets", "./assets")
-	r.Use(static.Serve("/", static.LocalFile("./web2", true)))
+	r.Use(static.Serve("/", static.LocalFile("./web", true)))
 
 	api := r.Group("/api")
 	api.GET("/ping", func(c *gin.Context) {

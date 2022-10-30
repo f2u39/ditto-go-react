@@ -55,7 +55,7 @@ func index(c *gin.Context) {
 	data := gin.H{
 		"words": h.WordService.ByIsChecked(isChecked),
 	}
-	h.RESP(c, http.StatusOK, "word/index", data)
+	c.JSON(http.StatusOK, data)
 }
 
 func update(c *gin.Context) {

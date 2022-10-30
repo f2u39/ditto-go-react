@@ -30,7 +30,7 @@ func Route(e *gin.Engine) {
 
 	api := e.Group("/api/act")
 	{
-		api.GET("/", index)
+		api.GET("/", index2)
 	}
 }
 
@@ -105,6 +105,10 @@ func index(c *gin.Context) {
 	c.JSON(200, data)
 }
 
+func index2(c *gin.Context) {
+	c.JSON(200, "OK")
+}
+
 func start(c *gin.Context) {
 	switch c.Request.Method {
 	case "GET":
@@ -172,5 +176,5 @@ func stopwatch(c *gin.Context) {
 	if sw != nil {
 		watch = *sw
 	}
-	h.RESP(c, http.StatusOK, "act/index", watch)
+	c.JSON(http.StatusOK, watch)
 }

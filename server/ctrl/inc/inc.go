@@ -25,7 +25,7 @@ func index(c *gin.Context) {
 	data := gin.H{
 		"incs": incs,
 	}
-	h.RESP(c, http.StatusOK, "inc/index", data)
+	c.JSON(http.StatusOK, data)
 }
 
 func create(c *gin.Context) {
