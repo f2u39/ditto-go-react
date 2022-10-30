@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,7 +16,7 @@ var sw *act.StopWatch
 
 func Route(e *gin.Engine) {
 	// Use React as frontend
-	e.Use(static.Serve("/act", static.LocalFile("./web", true)))
+	// e.Use(static.Serve("/act", static.LocalFile("./web", true)))
 
 	auth := e.Group("/api/act").Use(mw.Auth)
 	{

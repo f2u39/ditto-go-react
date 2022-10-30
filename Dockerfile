@@ -14,8 +14,8 @@ RUN npm run build
 # Production
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
-ADD config /config
-ADD assets /assets
+ADD config ./config
+# ADD assets ./assets
 COPY --from=go_builder /main ./
 COPY --from=node_builder /build ./web
 RUN chmod +x ./main
