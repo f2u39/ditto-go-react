@@ -2,8 +2,8 @@ package user
 
 import (
 	"ditto/db/mongo"
-	"ditto/lib/err"
 	"ditto/model/user"
+	"log"
 
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2/bson"
@@ -24,8 +24,11 @@ func NewUserRepo() UserRepo {
 func (*userRepo) ByUsername(username string) (user.User, bool) {
 	var u user.User
 	qry := bson.M{"username": username}
-	ok := err.E(mongo.FindOne(mongo.Users, qry, &u))
-	return u, ok
+	err := mongo.FindOne(mongo.Users, qry, &u)
+	if err != nil {
+		log.Println(err)
+	}
+	return u, err == nil
 }
 
 func (r *userRepo) Login(username, password string) (user.User, bool) {

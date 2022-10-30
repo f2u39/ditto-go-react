@@ -3,6 +3,7 @@ package core
 import (
 	handler "ditto/ctrl"
 	router "ditto/ctrl/router"
+	"ditto/db"
 
 	// "ditto/db"
 	db_redis "ditto/db/redis"
@@ -31,7 +32,7 @@ func Init() {
 	NewCore()
 
 	// Connect to MongoDB
-	// db.Init()
+	db.Init()
 }
 
 func NewCore() {
