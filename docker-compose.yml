@@ -3,19 +3,28 @@ services:
   web:
     build: .
     ports:
-      - 80:8080
+      - "80:8080"
     depends_on:
       - mongo
       - redis
   mongo:
     image: mongo
-    container_name: mongo
+    container_name: 'mongo'
+    hostname: 'mongo'
     ports:
-      - 27017:27017
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rOOt1557
+    volumes:
+      - ./mongodb:/data/db
     restart: always
   redis:
     image: redis
     container_name: redis
     ports:
-      - 6379:6379
+      - "6379:6379"
     restart: always
+networks:
+  api-net:
+    driver: bridge

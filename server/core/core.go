@@ -11,7 +11,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
@@ -58,7 +57,7 @@ func NewCore() {
 func NewEngine() *gin.Engine {
 	r := gin.Default()
 	r.Static("/assets", "./assets")
-	r.Use(static.Serve("/", static.LocalFile("./web", true)))
+	// r.Use(static.Serve("/", static.LocalFile("./web", true)))
 
 	api := r.Group("/api")
 	api.GET("/ping", func(c *gin.Context) {

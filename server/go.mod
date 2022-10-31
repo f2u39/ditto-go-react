@@ -6,7 +6,6 @@ require (
 	cloud.google.com/go/firestore v1.6.1
 	cloud.google.com/go/storage v1.22.1
 	firebase.google.com/go v3.13.0+incompatible
-	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/contrib v0.0.0-20201101042839-6a891bf89f19
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-redis/redis/v8 v8.11.5
