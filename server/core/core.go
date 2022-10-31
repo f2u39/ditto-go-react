@@ -56,7 +56,7 @@ func NewCore() {
 
 func NewEngine() *gin.Engine {
 	r := gin.Default()
-	r.Static("/assets", "./assets")
+	// r.Static("/assets", "./assets")
 	// r.Use(static.Serve("/", static.LocalFile("./web", true)))
 
 	api := r.Group("/api")

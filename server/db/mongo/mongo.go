@@ -24,6 +24,17 @@ var (
 	Studios *mgo.Collection
 )
 
+func connect() (*mgo.Session, error) {
+	// Connect to MongoDB
+	dialInfo := &mgo.DialInfo{
+		Addrs:    []string{config.Config.MongoDB.URL},
+		Database: config.Config.MongoDB.Database,
+		// Username: dbCfg.MongoDB.Username,
+		// Password: dbCfg.MongoDB.Password,
+	}
+	return mgo.DialWithInfo(dialInfo)
+}
+
 func Before(id *bson.ObjectId, createdAt, updatedAt *time.Time) {
 	*id = bson.NewObjectId()
 	*createdAt = time.Now()
@@ -31,16 +42,8 @@ func Before(id *bson.ObjectId, createdAt, updatedAt *time.Time) {
 }
 
 func Init() {
-	// info := &mgo.DialInfo{
-	// 	Addrs:    []string{"mongodb://127.0.0.1:27017"},
-	// 	Database: "ditto",
-	// }
-
-	// sess, err := mgo.DialWithInfo(info)
-	sess, err := mgo.Dial("mongodb://root:rOOt1557@mongo:27017")
-	if err != nil {
-		panic(err)
-	}
+	var err error
+	Sess, err = connect()
 	if err != nil {
 		panic(err)
 	}
@@ -49,14 +52,22 @@ func Init() {
 	// but they will always see the history of changes moving forward,
 	// the data read will be consistent across sequential queries in the same session,
 	// and modifications made within the session will be observed in following queries (read-your-writes).
-	sess.SetMode(mgo.Monotonic, true)
+	Sess.SetMode(mgo.Monotonic, true)
 
 	db := config.Config.MongoDB.Database
-	Acts = sess.DB(db).C("act")
-	Incs = sess.DB(db).C("inc")
-	Games = sess.DB(db).C("game")
-	Users = sess.DB(db).C("user")
-	Words = sess.DB(db).C("word")
+
+	Acts = Sess.DB(db).C("act")
+	Animes = Sess.DB(db).C("anime")
+	Incs = Sess.DB(db).C("inc")
+	Games = Sess.DB(db).C("game")
+	Users = Sess.DB(db).C("user")
+	Todos = Sess.DB(db).C("todo")
+	Words = Sess.DB(db).C("word")
+	Studios = Sess.DB(db).C("studio")
+}
+
+func close() {
+	Sess.Close()
 }
 
 func Count(col *mgo.Collection, qry bson.M) (int, error) {

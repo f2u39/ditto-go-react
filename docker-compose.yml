@@ -1,28 +1,15 @@
 version: '3.9'
 services:
-  web:
-    build: .
-    ports:
-      - "80:8080"
-    depends_on:
-      - mongo
-      - redis
   mongo:
     image: mongo
-    container_name: 'mongo'
-    hostname: 'mongo'
+    container_name: mongo
     ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rOOt1557
+      - 27017:27017
     restart: always
+
   redis:
     image: redis
     container_name: redis
     ports:
       - "6379:6379"
     restart: always
-networks:
-  api-net:
-    driver: bridge
