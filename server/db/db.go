@@ -14,5 +14,5 @@ var (
 )
 
 func Init() {
-	mongo.Init()
+	mongo.Connect()
 }

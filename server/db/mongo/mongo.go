@@ -1,73 +1,54 @@
 package mongo
 
 import (
-	"ditto/lib/err"
+	"context"
 	"ditto/lib/format"
-	"ditto/model/config"
 	"fmt"
-	"time"
+	"log"
 
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
 var (
-	Sess *mgo.Session
-
-	Acts    *mgo.Collection
-	Animes  *mgo.Collection
-	Incs    *mgo.Collection
-	Games   *mgo.Collection
-	Users   *mgo.Collection
-	Todos   *mgo.Collection
-	Words   *mgo.Collection
-	Studios *mgo.Collection
+	Acts    *mongo.Collection
+	Animes  *mongo.Collection
+	Incs    *mongo.Collection
+	Games   *mongo.Collection
+	Users   *mongo.Collection
+	Todos   *mongo.Collection
+	Words   *mongo.Collection
+	Studios *mongo.Collection
 )
 
-func connect() (*mgo.Session, error) {
+func Connect() {
+	// Set client options
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+
 	// Connect to MongoDB
-	dialInfo := &mgo.DialInfo{
-		Addrs:    []string{config.Config.MongoDB.URL},
-		Database: config.Config.MongoDB.Database,
-		// Username: dbCfg.MongoDB.Username,
-		// Password: dbCfg.MongoDB.Password,
-	}
-	return mgo.DialWithInfo(dialInfo)
-}
-
-func Before(id *bson.ObjectId, createdAt, updatedAt *time.Time) {
-	*id = bson.NewObjectId()
-	*createdAt = time.Now()
-	*updatedAt = time.Now()
-}
-
-func Init() {
-	var err error
-	Sess, err = connect()
+	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
-	// In the Monotonic consistency mode reads may not be entirely up-to-date,
-	// but they will always see the history of changes moving forward,
-	// the data read will be consistent across sequential queries in the same session,
-	// and modifications made within the session will be observed in following queries (read-your-writes).
-	Sess.SetMode(mgo.Monotonic, true)
+	// Check the connection
+	err = client.Ping(context.TODO(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	db := config.Config.MongoDB.Database
-
-	Acts = Sess.DB(db).C("act")
-	Animes = Sess.DB(db).C("anime")
-	Incs = Sess.DB(db).C("inc")
-	Games = Sess.DB(db).C("game")
-	Users = Sess.DB(db).C("user")
-	Todos = Sess.DB(db).C("todo")
-	Words = Sess.DB(db).C("word")
-	Studios = Sess.DB(db).C("studio")
-}
-
-func close() {
-	Sess.Close()
+	db := "ditto"
+	Acts = client.Database(db).Collection("act")
+	Animes = client.Database(db).Collection("anime")
+	Incs = client.Database(db).Collection("inc")
+	Games = client.Database(db).Collection("game")
+	Users = client.Database(db).Collection("user")
+	Todos = client.Database(db).Collection("todo")
+	Words = client.Database(db).Collection("word")
+	Studios = client.Database(db).Collection("studio")
 }
 
 func Count(col *mgo.Collection, qry bson.M) (int, error) {
@@ -90,11 +71,15 @@ func DeleteById(col *mgo.Collection, id interface{}) error {
 	}
 }
 
-func Insert(col *mgo.Collection, T interface{}) bool {
-	return err.E(col.Insert(T))
+func Insert(col *mongo.Collection, T interface{}) error {
+	_, err := col.InsertOne(context.TODO(), T)
+	if err != nil {
+		log.Println(err)
+	}
+	return err
 }
 
-func FindOne(col *mgo.Collection, qry bson.M, T interface{}) error {
+func FindOne(col *mongo.Collection, filter bson.D, T interface{}) error {
 	return col.Find(qry).One(T)
 }
 
