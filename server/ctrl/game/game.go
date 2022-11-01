@@ -82,8 +82,8 @@ func create(c *gin.Context) {
 			Status:      game.PLAYING,
 			Genre:       genre,
 			Platform:    platform,
-			DeveloperID: format.ToObjId(developerId),
-			PublisherID: format.ToObjId(publisherId),
+			DeveloperID: format.ObjId(developerId),
+			PublisherID: format.ObjId(publisherId),
 		})
 		c.Redirect(http.StatusSeeOther, "/game")
 	}
@@ -127,8 +127,8 @@ func update(c *gin.Context) {
 
 		g := h.GameService.ByID(gId)
 		g.Title = c.PostForm("title")
-		g.DeveloperID = format.ToObjId(dId)
-		g.PublisherID = format.ToObjId(pId)
+		g.DeveloperID = format.ObjId(dId)
+		g.PublisherID = format.ObjId(pId)
 		g.Status = game.Status(c.PostForm("status"))
 		g.PlayTime = pt
 		g.Genre = c.PostForm("genre")
@@ -168,7 +168,7 @@ func delete(c *gin.Context) {
 
 	if len(acts) != 0 {
 		for _, v := range acts {
-			mongo.DeleteById(mongo.Acts, v.ID)
+			mongo.DeleteByID(mongo.Acts, v.ID)
 		}
 	}
 

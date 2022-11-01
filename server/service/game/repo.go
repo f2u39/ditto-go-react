@@ -29,7 +29,7 @@ func NewRepo() Repo {
 
 func (*repo) byID(id string) game.Game {
 	g := game.Game{}
-	mongo.FindID(mongo.Games, id, &g)
+	mongo.FindByID(mongo.Games, id, &g)
 	return g
 }
 
@@ -88,7 +88,7 @@ func (*repo) create(g game.Game) bool {
 }
 
 func (*repo) delete(id string) error {
-	err := mongo.DeleteById(mongo.Games, id)
+	err := mongo.DeleteByID(mongo.Games, id)
 	if err != nil {
 		return err
 	}

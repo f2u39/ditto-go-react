@@ -51,7 +51,7 @@ func create(c *gin.Context) {
 	typ := act.Type(json.Type)
 	date := datetime.FormatDate(json.Date, datetime.DEFAULT)
 	dur, _ := strconv.Atoi(json.Duration)
-	gId := format.ToObjId(json.GameId)
+	gId := format.ObjId(json.GameId)
 
 	if typ == act.GAMING {
 		if len(gId) == 0 {
@@ -163,7 +163,7 @@ func stop(c *gin.Context) {
 			EndTime:   sw.EndTime,
 			Date:      datetime.Today(datetime.DEFAULT),
 			Duration:  sw.Duration,
-			GameID:    format.ToObjId(sw.GameID),
+			GameID:    format.ObjId(sw.GameID),
 			Type:      sw.Type,
 		})
 	}

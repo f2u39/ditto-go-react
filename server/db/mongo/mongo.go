@@ -7,10 +7,10 @@ import (
 	"log"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 )
 
 var (
@@ -51,24 +51,23 @@ func Connect() {
 	Studios = client.Database(db).Collection("studio")
 }
 
-func Count(col *mgo.Collection, qry bson.M) (int, error) {
-	return col.Find(qry).Count()
+func Count(col *mongo.Collection, filter bson.D) (int64, error) {
+	return col.CountDocuments(context.TODO(), filter)
 }
 
-func Delete(col *mgo.Collection, T interface{}) error {
-	return col.Remove(T)
-}
+func DeleteByID(col *mgo.Collection, id any) error {
+	var objID primitive.ObjectID
 
-func DeleteById(col *mgo.Collection, id interface{}) error {
 	switch id.(type) {
 	case string:
-		oid := format.ToObjId(fmt.Sprintf("%v", id))
-		return col.RemoveId(oid)
-	case bson.ObjectId:
-		return col.RemoveId(id)
+		objID = format.ObjId(fmt.Sprintf("%v", id))
+	case primitive.ObjectID:
+		objID = id.(primitive.ObjectID)
 	default:
 		return nil
 	}
+
+	return col.RemoveId(objID)
 }
 
 func Insert(col *mongo.Collection, T interface{}) error {
@@ -79,27 +78,28 @@ func Insert(col *mongo.Collection, T interface{}) error {
 	return err
 }
 
-func FindOne(col *mongo.Collection, filter bson.D, T interface{}) error {
-	return col.Find(qry).One(T)
+func FindOne(col *mongo.Collection, filter bson.D, T any) error {
+	return col.FindOne(context.TODO(), filter).Decode(&T)
 }
 
-func FindID(col *mgo.Collection, id interface{}, T interface{}) error {
+func FindByID(col *mongo.Collection, id any, T any) error {
+	var objID primitive.ObjectID
+
 	switch id.(type) {
 	case string:
-		oid := format.ToObjId(fmt.Sprintf("%v", id))
-		return col.FindId(oid).One(T)
-	case bson.ObjectId:
-		return col.FindId(id).One(T)
+		objID = format.ObjId(fmt.Sprintf("%v", id))
+	case primitive.ObjectID:
+		objID = id.(primitive.ObjectID)
+	case nil:
+		return fmt.Errorf("bad id format")
 	default:
-		return fmt.Errorf("id is not string or bson.ObjectId")
+		return fmt.Errorf("bad id format")
 	}
+
+	return col.FindOne(context.TODO(), bson.M{"_id": objID}).Decode(&T)
 }
 
-func LookUp(col *mgo.Collection, pipeline []bson.M, T interface{}) error {
-	return col.Pipe(pipeline).All(T)
-}
-
-func FindMany(col *mgo.Collection, T interface{}, qry bson.M, sorts ...string) error {
+func FindMany(col *mongo.Collection, T any, filter bson.M, sorts ...string) error {
 	if len(sorts) == 0 {
 		return col.Find(qry).All(T)
 	} else {

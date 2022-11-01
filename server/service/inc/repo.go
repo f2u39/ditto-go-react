@@ -30,7 +30,7 @@ func (*incRepo) All() []inc.Inc {
 
 func (*incRepo) ByID(id string) inc.Inc {
 	inc := inc.Inc{}
-	mongo.FindID(mongo.Incs, id, &inc)
+	mongo.FindByID(mongo.Incs, id, &inc)
 	return inc
 }
 
