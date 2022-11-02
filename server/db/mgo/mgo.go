@@ -1,4 +1,4 @@
-package mongo
+package mgo
 
 import (
 	"context"
@@ -10,7 +10,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"gopkg.in/mgo.v2"
 )
 
 var (
@@ -133,7 +132,6 @@ func FindMany(col *mongo.Collection, T []any, filter bson.D, sorts ...bson.D) er
 	return nil
 }
 
-// Return total pages and error
 func FindPage(col *mongo.Collection, T []any, filter bson.D, page, limit int, sorts ...string) (int, error) {
 	_page := int64(page)
 	_limit := int64(limit)
@@ -189,6 +187,18 @@ func FindPage(col *mongo.Collection, T []any, filter bson.D, page, limit int, so
 	return int(totalPages), nil
 }
 
-func Update(col *mgo.Collection, id interface{}, T interface{}) error {
-	return col.UpdateId(id, T)
+func Update(col *mongo.Collection, id any, update bson.D) error {
+	var objID primitive.ObjectID
+
+	switch id.(type) {
+	case string:
+		objID = format.ObjId(fmt.Sprintf("%v", id))
+	case primitive.ObjectID:
+		objID = id.(primitive.ObjectID)
+	default:
+		return nil
+	}
+
+	_, err := col.UpdateOne(context.TODO(), bson.M{"_id": objID}, update)
+	return err
 }

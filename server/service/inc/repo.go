@@ -1,7 +1,7 @@
 package inc
 
 import (
-	"ditto/db/mongo"
+	"ditto/db/mgo"
 	"ditto/model/inc"
 	"time"
 
@@ -24,13 +24,13 @@ func NewIncRepo() IncRepo {
 
 func (*incRepo) All() []inc.Inc {
 	var incs []inc.Inc
-	mongo.FindMany(mongo.Incs, &incs, bson.M{})
+	mgo.FindMany(mgo.Incs, &incs, bson.M{})
 	return incs
 }
 
 func (*incRepo) ByID(id string) inc.Inc {
 	inc := inc.Inc{}
-	mongo.FindID(mongo.Incs, id, &inc)
+	mgo.FindID(mgo.Incs, id, &inc)
 	return inc
 }
 
@@ -38,7 +38,7 @@ func (*incRepo) Developers() []inc.Inc {
 	var incs []inc.Inc
 	qry := bson.M{"is_developer": 1}
 	srt := "name"
-	mongo.FindMany(mongo.Incs, &incs, qry, srt)
+	mgo.FindMany(mgo.Incs, &incs, qry, srt)
 	return incs
 }
 
@@ -46,7 +46,7 @@ func (*incRepo) Publishers() []inc.Inc {
 	var incs []inc.Inc
 	qry := bson.M{"is_publisher": 1}
 	srt := "name"
-	mongo.FindMany(mongo.Incs, &incs, qry, srt)
+	mgo.FindMany(mgo.Incs, &incs, qry, srt)
 	return incs
 }
 
@@ -54,5 +54,5 @@ func (*incRepo) Create(inc inc.Inc) bool {
 	// inc.ID = bson.NewObjectId()
 	inc.CreatedAt = time.Now()
 	inc.UpdatedAt = time.Now()
-	return mongo.Insert(mongo.Incs, inc)
+	return mgo.Insert(mgo.Incs, inc)
 }

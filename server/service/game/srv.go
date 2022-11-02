@@ -1,7 +1,7 @@
 package game
 
 import (
-	"ditto/db/mongo"
+	"ditto/db/mgo"
 	"ditto/model/game"
 	"ditto/service/base"
 
@@ -41,7 +41,7 @@ func (s *service) ByGenre(genre game.Genre) []game.Game {
 
 func (s *service) ByPlaying() []game.Game {
 	var games []game.Game
-	s.Base.FindMany(mongo.Games, &games, bson.M{"status": game.PLAYING}, "title")
+	s.Base.FindMany(mgo.Games, &games, bson.M{"status": game.PLAYING}, "title")
 	return games
 }
 

@@ -1,7 +1,7 @@
 package word
 
 import (
-	"ditto/db/mongo"
+	"ditto/db/mgo"
 	"ditto/model/word"
 	"ditto/service/base"
 )
@@ -45,12 +45,12 @@ func (s *wordService) Check(isCheck int, id string) error {
 }
 
 func (s *wordService) Create(w word.Word) bool {
-	mongo.Before(&w.ID, &w.CreatedAt, &w.UpdatedAt)
-	return s.Base.Create(mongo.Words, w)
+	mgo.Before(&w.ID, &w.CreatedAt, &w.UpdatedAt)
+	return s.Base.Create(mgo.Words, w)
 }
 
 func (s *wordService) Delete(id string) error {
-	return s.Base.Delete(mongo.Words, id)
+	return s.Base.Delete(mgo.Words, id)
 }
 
 func (s *wordService) Update(w word.Word) error {

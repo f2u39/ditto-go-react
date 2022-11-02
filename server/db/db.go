@@ -1,7 +1,7 @@
 package db
 
 import (
-	"ditto/db/mongo"
+	"ditto/db/mgo"
 
 	"github.com/go-redis/redis/v8"
 	_ "github.com/go-sql-driver/mysql"
@@ -14,5 +14,5 @@ var (
 )
 
 func Init() {
-	mongo.Connect()
+	mgo.Connect()
 }

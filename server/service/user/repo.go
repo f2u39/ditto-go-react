@@ -1,7 +1,7 @@
 package user
 
 import (
-	"ditto/db/mongo"
+	"ditto/db/mgo"
 	"ditto/model/user"
 	"log"
 
@@ -24,7 +24,7 @@ func NewUserRepo() UserRepo {
 func (*userRepo) ByUsername(username string) (user.User, bool) {
 	var u user.User
 	qry := bson.M{"username": username}
-	err := mongo.FindOne(mongo.Users, qry, &u)
+	err := mgo.FindOne(mgo.Users, qry, &u)
 	if err != nil {
 		log.Println(err)
 	}
@@ -51,7 +51,7 @@ func (r *userRepo) Login(username, password string) (user.User, bool) {
 func (r *userRepo) Register(user user.User) (user.User, bool) {
 	u, ok := r.ByUsername(user.Username)
 	if !ok && len(u.Password) == 0 {
-		return u, mongo.Insert(mongo.Users, user)
+		return u, mgo.Insert(mgo.Users, user)
 	} else {
 		return user, false
 	}

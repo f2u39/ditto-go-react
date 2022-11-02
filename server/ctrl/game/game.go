@@ -2,7 +2,7 @@ package game
 
 import (
 	h "ditto/ctrl"
-	"ditto/db/mongo"
+	"ditto/db/mgo"
 	"ditto/lib/format"
 	"ditto/lib/path"
 	"ditto/model/game"
@@ -168,7 +168,7 @@ func delete(c *gin.Context) {
 
 	if len(acts) != 0 {
 		for _, v := range acts {
-			mongo.DeleteID(mongo.Acts, v.ID)
+			mgo.DeleteID(mgo.Acts, v.ID)
 		}
 	}
 

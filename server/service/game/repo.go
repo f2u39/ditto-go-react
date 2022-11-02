@@ -1,7 +1,7 @@
 package game
 
 import (
-	"ditto/db/mongo"
+	"ditto/db/mgo"
 	"ditto/model/game"
 	"ditto/service/inc"
 	"time"
@@ -29,13 +29,13 @@ func NewRepo() Repo {
 
 func (*repo) byID(id string) game.Game {
 	g := game.Game{}
-	mongo.FindID(mongo.Games, id, &g)
+	mgo.FindID(mgo.Games, id, &g)
 	return g
 }
 
 func (*repo) byGenre(genre game.Genre) []game.Game {
 	var games []game.Game
-	mongo.FindMany(mongo.Games, &games, bson.M{"genre": genre}, "title")
+	mgo.FindMany(mgo.Games, &games, bson.M{"genre": genre}, "title")
 	return games
 }
 
@@ -50,7 +50,7 @@ func (*repo) byStatus(status game.Status) []game.Detail {
 	}
 
 	var games []game.Game
-	mongo.FindMany(mongo.Games, &games, qry, "title")
+	mgo.FindMany(mgo.Games, &games, qry, "title")
 
 	incSrv := inc.NewIncService()
 	var details []game.Detail
@@ -69,7 +69,7 @@ func (*repo) byStatus(status game.Status) []game.Detail {
 
 func (*repo) count(status game.Status) int {
 	qry := bson.M{"status": status}
-	cnt, _ := mongo.Count(mongo.Games, qry)
+	cnt, _ := mgo.Count(mgo.Games, qry)
 	return cnt
 }
 
@@ -84,11 +84,11 @@ func (*repo) create(g game.Game) bool {
 	g.ID = bson.NewObjectId()
 	g.CreatedAt = time.Now()
 	g.UpdatedAt = time.Now()
-	return mongo.Insert(mongo.Games, g)
+	return mgo.Insert(mgo.Games, g)
 }
 
 func (*repo) delete(id string) error {
-	err := mongo.DeleteID(mongo.Games, id)
+	err := mgo.DeleteID(mgo.Games, id)
 	if err != nil {
 		return err
 	}
@@ -111,7 +111,7 @@ func (*repo) pageByStatus(status game.Status, platform game.Platform, page, limi
 	}
 
 	var games []game.Game
-	totalPages, err := mongo.FindPage(mongo.Games, &games, qry, page, limit, "title")
+	totalPages, err := mgo.FindPage(mgo.Games, &games, qry, page, limit, "title")
 	if err != nil {
 		return nil, 1
 	}
@@ -132,5 +132,5 @@ func (*repo) pageByStatus(status game.Status, platform game.Platform, page, limi
 }
 
 func (*repo) update(g game.Game) error {
-	return mongo.Update(mongo.Games, g.ID, g)
+	return mgo.Update(mgo.Games, g.ID, g)
 }

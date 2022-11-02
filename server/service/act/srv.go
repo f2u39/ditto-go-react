@@ -1,7 +1,7 @@
 package act
 
 import (
-	"ditto/db/mongo"
+	"ditto/db/mgo"
 	"ditto/lib/format"
 	"ditto/model/act"
 	"ditto/service/base"
@@ -38,7 +38,7 @@ func (s *service) ByDate(date string) ([]act.Detail, error) {
 
 func (s *service) ByGame(gameId string) ([]act.Act, error) {
 	var acts []act.Act
-	err := s.Base.FindMany(mongo.Acts, &acts, bson.M{"game_id": format.ObjId(gameId)}, "")
+	err := s.Base.FindMany(mgo.Acts, &acts, bson.M{"game_id": format.ObjId(gameId)}, "")
 	return acts, err
 }
 
@@ -47,18 +47,18 @@ func (s *service) ByMonth(date string) ([]act.Detail, error) {
 }
 
 func (s *service) Delete(id string) error {
-	return s.Base.Delete(mongo.Acts, id)
+	return s.Base.Delete(mgo.Acts, id)
 }
 
 func (s *service) Create(a act.Act) bool {
-	mongo.Before(&a.ID, &a.CreatedAt, &a.UpdatedAt)
+	mgo.Before(&a.ID, &a.CreatedAt, &a.UpdatedAt)
 	if a.Type == act.GAMING {
 		gSrv := game.NewService()
 		g := gSrv.ByID(a.GameID.Hex())
 		g.PlayTime += a.Duration
 		gSrv.Update(g)
 	}
-	return s.Base.Create(mongo.Acts, a)
+	return s.Base.Create(mgo.Acts, a)
 }
 
 func (s *service) DaySum(ymd string) act.Summary {

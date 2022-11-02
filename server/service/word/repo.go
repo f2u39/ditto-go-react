@@ -1,7 +1,7 @@
 package word
 
 import (
-	"ditto/db/mongo"
+	"ditto/db/mgo"
 	"ditto/model/word"
 	"fmt"
 	"time"
@@ -29,7 +29,7 @@ func (*wordRepo) ByDate(date string, isCheck int) []word.Word {
 	match := bson.M{"$match": bson.M{"date": date, "is_checked": isCheck}}
 	sort := bson.M{"$sort": bson.M{"word": 1}}
 	pipeline := []bson.M{match, sort}
-	mongo.LookUp(mongo.Words, pipeline, &words)
+	mgo.LookUp(mgo.Words, pipeline, &words)
 	return words
 }
 
@@ -38,13 +38,13 @@ func (*wordRepo) ByIsChecked(isCheck int) []word.Word {
 	match := bson.M{"$match": bson.M{"is_checked": isCheck}}
 	sort := bson.M{"$sort": bson.M{"created_at": -1}}
 	pipeline := []bson.M{match, sort}
-	mongo.LookUp(mongo.Words, pipeline, &words)
+	mgo.LookUp(mgo.Words, pipeline, &words)
 	return words
 }
 
 func (*wordRepo) ByID(id string) word.Word {
 	w := word.Word{}
-	mongo.FindID(mongo.Words, id, &w)
+	mgo.FindID(mgo.Words, id, &w)
 	return w
 }
 
@@ -59,16 +59,16 @@ func (r *wordRepo) Check(isDone int, id string) error {
 	// }
 
 	w.IsChecked = isDone
-	return mongo.Update(mongo.Words, w.ID, w)
+	return mgo.Update(mgo.Words, w.ID, w)
 }
 
 func (*wordRepo) Create(word word.Word) bool {
 	word.ID = bson.NewObjectId()
 	word.CreatedAt = time.Now()
 	word.UpdatedAt = time.Now()
-	return mongo.Insert(mongo.Words, word)
+	return mgo.Insert(mgo.Words, word)
 }
 
 func (*wordRepo) Update(word word.Word) error {
-	return mongo.Update(mongo.Words, word.ID, word)
+	return mgo.Update(mgo.Words, word.ID, word)
 }

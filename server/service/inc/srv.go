@@ -1,7 +1,7 @@
 package inc
 
 import (
-	"ditto/db/mongo"
+	"ditto/db/mgo"
 	"ditto/model/inc"
 	"ditto/service/base"
 )
@@ -43,10 +43,10 @@ func (s *incService) Publishers() []inc.Inc {
 }
 
 func (s *incService) Create(inc inc.Inc) bool {
-	mongo.Before(&inc.ID, &inc.CreatedAt, &inc.UpdatedAt)
-	return s.Base.Create(mongo.Incs, inc)
+	mgo.Before(&inc.ID, &inc.CreatedAt, &inc.UpdatedAt)
+	return s.Base.Create(mgo.Incs, inc)
 }
 
 func (s *incService) Update(inc inc.Inc) error {
-	return s.Base.Update(mongo.Incs, inc.ID, inc)
+	return s.Base.Update(mgo.Incs, inc.ID, inc)
 }

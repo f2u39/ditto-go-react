@@ -1,7 +1,7 @@
 package act
 
 import (
-	"ditto/db/mongo"
+	"ditto/db/mgo"
 	"ditto/lib/datetime"
 	"ditto/model/act"
 	"fmt"
@@ -45,7 +45,7 @@ func (*repo) ByDate(date string) ([]act.Detail, error) {
 		"as":           "game",
 	}}
 	pipeline := []bson.M{match, group, sort, lookup}
-	err := mongo.LookUp(mongo.Acts, pipeline, &acts)
+	err := mgo.LookUp(mgo.Acts, pipeline, &acts)
 
 	for i, v := range acts {
 		acts[i].Hour = v.Act.Duration / 60
@@ -83,7 +83,7 @@ func (*repo) ByMonth(date string) ([]act.Detail, error) {
 
 	var acts []act.Detail
 	pipeline := []bson.M{match, group, sort, lookup}
-	err := mongo.LookUp(mongo.Acts, pipeline, &acts)
+	err := mgo.LookUp(mgo.Acts, pipeline, &acts)
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +113,7 @@ func (*repo) DaySum(ymd string) act.Summary {
 	}}
 
 	gPipe := []bson.M{gMatch, group}
-	mongo.LookUp(mongo.Acts, gPipe, &result)
+	mgo.LookUp(mgo.Acts, gPipe, &result)
 	if len(result) != 0 {
 		sum.GameDur = result[0]["duration"].(int)
 		sum.GameHour = sum.GameDur / 60
@@ -121,7 +121,7 @@ func (*repo) DaySum(ymd string) act.Summary {
 	}
 
 	pPipe := []bson.M{pMatch, group}
-	mongo.LookUp(mongo.Acts, pPipe, &result)
+	mgo.LookUp(mgo.Acts, pPipe, &result)
 	if len(result) != 0 {
 		sum.PgmDur = result[0]["duration"].(int)
 		sum.PgmHour = sum.PgmDur / 60
@@ -150,7 +150,7 @@ func (*repo) Duration(date string, typ act.Type) int {
 	}}
 
 	pipeline := []bson.M{match, group}
-	if mongo.LookUp(mongo.Acts, pipeline, &result) != nil {
+	if mgo.LookUp(mgo.Acts, pipeline, &result) != nil {
 		return 0
 	}
 
@@ -178,7 +178,7 @@ func (*repo) MonthSum(yyyymm string) act.Summary {
 	}}
 
 	gPipe := []bson.M{gMatch, group}
-	mongo.LookUp(mongo.Acts, gPipe, &result)
+	mgo.LookUp(mgo.Acts, gPipe, &result)
 	if len(result) != 0 {
 		sum.GameDur = result[0]["duration"].(int)
 		sum.GameHour = sum.GameDur / 60
@@ -186,7 +186,7 @@ func (*repo) MonthSum(yyyymm string) act.Summary {
 	}
 
 	pPipe := []bson.M{pMatch, group}
-	mongo.LookUp(mongo.Acts, pPipe, &result)
+	mgo.LookUp(mgo.Acts, pPipe, &result)
 	if len(result) != 0 {
 		sum.PgmDur = result[0]["duration"].(int)
 		sum.PgmHour = sum.PgmDur / 60
