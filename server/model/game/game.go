@@ -4,7 +4,7 @@ import (
 	"ditto/model/inc"
 	"time"
 
-	"gopkg.in/mgo.v2/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Status string
@@ -13,18 +13,18 @@ type Platform string
 
 // Game model
 type Game struct {
-	ID          bson.ObjectId `json:"id" bson:"_id"`
-	Title       string        `json:"title" bson:"title"`
-	Genre       string        `json:"genre" bson:"genre"`
-	Platform    Platform      `json:"platform" bson:"platform"`
-	DeveloperID bson.ObjectId `json:"developer_id" bson:"developer_id"`
-	PublisherID bson.ObjectId `json:"publisher_id" bson:"publisher_id"`
-	Status      Status        `json:"status" bson:"status"`
-	PlayTime    int           `json:"playtime" bson:"play_time"`
-	Ranking     int           `json:"ranking" bson:"ranking"`
-	Rating      string        `json:"rating" bson:"rating"`
-	CreatedAt   time.Time     `json:"created_at" bson:"created_at"`
-	UpdatedAt   time.Time     `json:"updated_at" bson:"updated_at"`
+	ID          primitive.ObjectID `json:"id" bson:"_id"`
+	Title       string             `json:"title" bson:"title"`
+	Genre       string             `json:"genre" bson:"genre"`
+	Platform    Platform           `json:"platform" bson:"platform"`
+	DeveloperID primitive.ObjectID `json:"developer_id" bson:"developer_id"`
+	PublisherID primitive.ObjectID `json:"publisher_id" bson:"publisher_id"`
+	Status      Status             `json:"status" bson:"status"`
+	PlayTime    int                `json:"playtime" bson:"play_time"`
+	Ranking     int                `json:"ranking" bson:"ranking"`
+	Rating      string             `json:"rating" bson:"rating"`
+	CreatedAt   time.Time          `json:"created_at" bson:"created_at"`
+	UpdatedAt   time.Time          `json:"updated_at" bson:"updated_at"`
 }
 
 type Detail struct {

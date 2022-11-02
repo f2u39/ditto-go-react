@@ -44,7 +44,7 @@ func (*wordRepo) ByIsChecked(isCheck int) []word.Word {
 
 func (*wordRepo) ByID(id string) word.Word {
 	w := word.Word{}
-	mongo.FindByID(mongo.Words, id, &w)
+	mongo.FindID(mongo.Words, id, &w)
 	return w
 }
 

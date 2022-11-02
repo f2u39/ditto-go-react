@@ -168,7 +168,7 @@ func delete(c *gin.Context) {
 
 	if len(acts) != 0 {
 		for _, v := range acts {
-			mongo.DeleteByID(mongo.Acts, v.ID)
+			mongo.DeleteID(mongo.Acts, v.ID)
 		}
 	}
 

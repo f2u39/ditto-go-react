@@ -55,7 +55,7 @@ func Count(col *mongo.Collection, filter bson.D) (int64, error) {
 	return col.CountDocuments(context.TODO(), filter)
 }
 
-func DeleteByID(col *mgo.Collection, id any) error {
+func DeleteID(col *mongo.Collection, id any) error {
 	var objID primitive.ObjectID
 
 	switch id.(type) {
@@ -67,7 +67,8 @@ func DeleteByID(col *mgo.Collection, id any) error {
 		return nil
 	}
 
-	return col.RemoveId(objID)
+	_, err := col.DeleteOne(context.TODO(), bson.M{"_id": objID})
+	return err
 }
 
 func Insert(col *mongo.Collection, T interface{}) error {
@@ -82,7 +83,7 @@ func FindOne(col *mongo.Collection, filter bson.D, T any) error {
 	return col.FindOne(context.TODO(), filter).Decode(&T)
 }
 
-func FindByID(col *mongo.Collection, id any, T any) error {
+func FindID(col *mongo.Collection, id any, T any) error {
 	var objID primitive.ObjectID
 
 	switch id.(type) {
@@ -99,43 +100,93 @@ func FindByID(col *mongo.Collection, id any, T any) error {
 	return col.FindOne(context.TODO(), bson.M{"_id": objID}).Decode(&T)
 }
 
-func FindMany(col *mongo.Collection, T any, filter bson.M, sorts ...string) error {
-	if len(sorts) == 0 {
-		return col.Find(qry).All(T)
-	} else {
-		return col.Find(qry).Sort(sorts...).All(T)
+func FindMany(col *mongo.Collection, T []any, filter bson.D, sorts ...bson.D) error {
+	options := options.Find()
+
+	if len(sorts) > 0 {
+		options.SetSort(sorts)
 	}
+
+	cur, err := col.Find(context.TODO(), filter, options)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	for cur.Next(context.TODO()) {
+		var elem any
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+
+		T = append(T, &elem)
+	}
+
+	if err := cur.Err(); err != nil {
+		log.Println(err)
+		return err
+	}
+
+	cur.Close(context.TODO())
+	return nil
 }
 
 // Return total pages and error
-func FindPage(col *mgo.Collection, T any, qry bson.M, page, limit int, sorts ...string) (int, error) {
-	// Check is page or limit is 0
-	if page <= 0 {
-		page = 1
+func FindPage(col *mongo.Collection, T []any, filter bson.D, page, limit int, sorts ...string) (int, error) {
+	_page := int64(page)
+	_limit := int64(limit)
+
+	options := options.Find()
+
+	if len(sorts) > 0 {
+		options.SetSort(sorts)
 	}
 
-	if limit == 0 {
-		limit = 10
+	if _page <= 0 {
+		_page = 1
 	}
 
-	cnt, err := col.Find(qry).Count()
+	cnt, err := Count(col, filter)
 	if err != nil {
 		return 0, err
 	}
 
-	totalPages := cnt / limit
-	if cnt%limit > 0 {
+	totalPages := cnt / _limit
+	if cnt%_limit > 0 {
 		totalPages += 1
 	}
 	if totalPages == 0 {
 		totalPages = 1
 	}
 
-	if len(sorts) == 0 {
-		return totalPages, col.Find(qry).Skip((page - 1) * limit).Limit(limit).All(T)
-	} else {
-		return totalPages, col.Find(qry).Sort(sorts...).Skip((page - 1) * limit).Limit(limit).All(T)
+	options.SetSkip(int64((_page - 1) * _limit)).SetLimit(_limit)
+
+	cur, err := col.Find(context.TODO(), bson.D{{}}, options)
+	if err != nil {
+		log.Println(err)
+		return 0, err
 	}
+
+	for cur.Next(context.TODO()) {
+		var elem any
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Println(err)
+			return 0, err
+		}
+
+		T = append(T, &elem)
+	}
+
+	if err := cur.Err(); err != nil {
+		log.Println(err)
+		return 0, err
+	}
+
+	cur.Close(context.TODO())
+	return int(totalPages), nil
 }
 
 func Update(col *mgo.Collection, id interface{}, T interface{}) error {

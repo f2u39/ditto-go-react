@@ -27,7 +27,7 @@ func (*baseRepo) All(col *mgo.Collection, T interface{}, srt ...string) error {
 }
 
 func (*baseRepo) ByID(col *mgo.Collection, id interface{}, T interface{}) error {
-	return mongo.FindByID(col, id, T)
+	return mongo.FindID(col, id, T)
 }
 
 func (*baseRepo) Create(col *mgo.Collection, T interface{}) bool {
@@ -35,7 +35,7 @@ func (*baseRepo) Create(col *mgo.Collection, T interface{}) bool {
 }
 
 func (*baseRepo) Delete(col *mgo.Collection, id interface{}) error {
-	return mongo.DeleteByID(col, id)
+	return mongo.DeleteID(col, id)
 }
 
 func (*baseRepo) Update(col *mgo.Collection, id interface{}, T interface{}) error {

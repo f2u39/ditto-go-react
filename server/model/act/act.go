@@ -4,7 +4,7 @@ import (
 	"ditto/model/game"
 	"time"
 
-	"gopkg.in/mgo.v2/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var (
@@ -13,16 +13,16 @@ var (
 )
 
 type Act struct {
-	ID        bson.ObjectId `json:"id" bson:"_id"`
-	StartTime time.Time     `json:"start" bson:"start"`
-	EndTime   time.Time     `json:"end" bson:"end"`
-	Date      string        `json:"date" bson:"date"`
-	Duration  int           `json:"duration" bson:"duration"`
-	Type      Type          `json:"type" bson:"type"`
-	CreatedAt time.Time     `json:"created_at" bson:"created_at"`
-	UpdatedAt time.Time     `json:"updated_at" bson:"updated_at"`
+	ID        primitive.ObjectID `json:"id" bson:"_id"`
+	StartTime time.Time          `json:"start" bson:"start"`
+	EndTime   time.Time          `json:"end" bson:"end"`
+	Date      string             `json:"date" bson:"date"`
+	Duration  int                `json:"duration" bson:"duration"`
+	Type      Type               `json:"type" bson:"type"`
+	CreatedAt time.Time          `json:"created_at" bson:"created_at"`
+	UpdatedAt time.Time          `json:"updated_at" bson:"updated_at"`
 
-	GameID bson.ObjectId `json:"game_id" bson:"game_id,omitempty"`
+	GameID primitive.ObjectID `json:"game_id" bson:"game_id,omitempty"`
 }
 
 type Detail struct {
