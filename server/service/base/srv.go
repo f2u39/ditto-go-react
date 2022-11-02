@@ -1,24 +1,24 @@
 package base
 
-import "gopkg.in/mgo.v2"
+import "go.mongodb.org/mongo-driver/mongo"
 
 type baseService struct {
 	Repo BaseRepo
 }
 
 type BaseService interface {
-	Create(col *mgo.Collection, T interface{}) bool
-	Delete(col *mgo.Collection, id string) error
+	Create(col *mongo.Collection, T any) error
+	Delete(col *mongo.Collection, id any) error
 }
 
 func NewBaseService() BaseService {
 	return &baseService{Repo: NewBaseRepo()}
 }
 
-func (srv *baseService) Create(col *mgo.Collection, T interface{}) bool {
+func (srv *baseService) Create(col *mongo.Collection, T any) error {
 	return srv.Repo.Create(col, T)
 }
 
-func (srv *baseService) Delete(col *mgo.Collection, id string) error {
+func (srv *baseService) Delete(col *mongo.Collection, id any) error {
 	return srv.Repo.Delete(col, id)
 }

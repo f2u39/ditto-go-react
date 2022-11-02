@@ -50,6 +50,35 @@ func Connect() {
 	Studios = client.Database(db).Collection("studio")
 }
 
+func Aggregate(col *mongo.Collection, pipeline []bson.D, T []any) error {
+	// opts := options.Find()
+
+	cur, err := col.Aggregate(context.TODO(), pipeline)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	for cur.Next(context.TODO()) {
+		var elem any
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Println(err)
+			return err
+		}
+
+		T = append(T, &elem)
+	}
+
+	if err := cur.Err(); err != nil {
+		log.Println(err)
+		return err
+	}
+
+	cur.Close(context.TODO())
+	return nil
+}
+
 func Count(col *mongo.Collection, filter bson.D) (int64, error) {
 	return col.CountDocuments(context.TODO(), filter)
 }
@@ -70,7 +99,7 @@ func DeleteID(col *mongo.Collection, id any) error {
 	return err
 }
 
-func Insert(col *mongo.Collection, T interface{}) error {
+func Insert(col *mongo.Collection, T any) error {
 	_, err := col.InsertOne(context.TODO(), T)
 	if err != nil {
 		log.Println(err)

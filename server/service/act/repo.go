@@ -30,22 +30,23 @@ func (*repo) ByDate(date string) ([]act.Detail, error) {
 	}
 
 	var acts []act.Detail
-	match := bson.M{"$match": bson.M{"date": date}}
-	group := bson.M{"$group": bson.M{
-		"_id":      "$_id",
-		"type":     bson.M{"$first": "$type"},
-		"game_id":  bson.M{"$first": "$game_id"},
-		"duration": bson.M{"$sum": "$duration"},
+	match := bson.D{{"$match", bson.D{{"date", date}}}}
+
+	group := bson.D{"$group", bson.D{
+		"_id", "$_id",
+		"type", bson.D{"$first", "$type"},
+		"game_id", bson.D{"$first", "$game_id"},
+		"duration", bson.D{"$sum", "$duration"},
 	}}
-	sort := bson.M{"$sort": bson.M{"type": 1, "duration": 1}}
-	lookup := bson.M{"$lookup": bson.M{
-		"from":         "game",
-		"localField":   "game_id",
-		"foreignField": "_id",
-		"as":           "game",
+	sort := bson.D{"$sort", bson.D{"type": 1, "duration": 1}}
+	lookup := bson.D{"$lookup", bson.D{
+		"from", "game",
+		"localField", "game_id",
+		"foreignField", "_id",
+		"as", "game",
 	}}
-	pipeline := []bson.M{match, group, sort, lookup}
-	err := mgo.LookUp(mgo.Acts, pipeline, &acts)
+	pipeline := []bson.D{match, group, sort, lookup}
+	err := mgo.Aggregate(mgo.Acts, pipeline, &acts)
 
 	for i, v := range acts {
 		acts[i].Hour = v.Act.Duration / 60
