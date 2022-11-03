@@ -6,15 +6,16 @@ import (
 	"ditto/model/act"
 	"ditto/service/base"
 	"ditto/service/game"
+	"time"
 
-	"gopkg.in/mgo.v2/bson"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type Service interface {
 	ByDate(date string) ([]act.Detail, error)
 	ByGame(gameId string) ([]act.Act, error)
 	ByMonth(date string) ([]act.Detail, error)
-	Create(act act.Act) bool
+	Create(act act.Act) error
 	DaySum(ymd string) act.Summary
 	Delete(actId string) error
 	Duration(ymd string, typ act.Type) int
@@ -38,7 +39,7 @@ func (s *service) ByDate(date string) ([]act.Detail, error) {
 
 func (s *service) ByGame(gameId string) ([]act.Act, error) {
 	var acts []act.Act
-	err := s.Base.FindMany(mgo.Acts, &acts, bson.M{"game_id": format.ObjId(gameId)}, "")
+	err := s.Base.FindMany(mgo.Acts, &acts, bson.D{{"game_id", format.ObjId(gameId)}}, "")
 	return acts, err
 }
 
@@ -50,8 +51,9 @@ func (s *service) Delete(id string) error {
 	return s.Base.Delete(mgo.Acts, id)
 }
 
-func (s *service) Create(a act.Act) bool {
-	mgo.Before(&a.ID, &a.CreatedAt, &a.UpdatedAt)
+func (s *service) Create(a act.Act) error {
+	a.CreatedAt = time.Now()
+	a.UpdatedAt = time.Now()
 	if a.Type == act.GAMING {
 		gSrv := game.NewService()
 		g := gSrv.ByID(a.GameID.Hex())

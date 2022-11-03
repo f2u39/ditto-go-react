@@ -203,7 +203,7 @@ func (*repo) Duration(date string, typ act.Type) int {
 }
 
 func (*repo) MonthSum(yyyymm string) act.Summary {
-	result := []bson.M{}
+	result := []bson.D{}
 	var sum act.Summary
 
 	// Check parameter
@@ -211,26 +211,41 @@ func (*repo) MonthSum(yyyymm string) act.Summary {
 		return sum
 	}
 
-	gMatch := bson.M{"$match": bson.M{"date": bson.RegEx{Pattern: "^" + yyyymm, Options: "m"}, "type": act.GAMING}}
-	pMatch := bson.M{"$match": bson.M{"date": bson.RegEx{Pattern: "^" + yyyymm, Options: "m"}, "type": act.PROGRAMMING}}
+	gMatch := bson.D{
+		{"$match", bson.D{
+			{"date", primitive.Regex{Pattern: "^" + yyyymm, Options: "m"}},
+			{"type", act.GAMING},
+		}},
+	}
 
-	group := bson.M{"$group": bson.M{
-		"_id":      "$type",
-		"duration": bson.M{"$sum": "$duration"},
-	}}
+	pMatch := bson.D{
+		{"$match", bson.D{
+			{"date", primitive.Regex{Pattern: "^" + yyyymm, Options: "m"}},
+			{"type", act.PROGRAMMING},
+		}},
+	}
 
-	gPipe := []bson.M{gMatch, group}
-	mgo.LookUp(mgo.Acts, gPipe, &result)
+	group := bson.D{
+		{"$group", bson.D{
+			{"_id", "$type"},
+			{"duration", bson.D{{"$sum", "$duration"}}},
+		}},
+	}
+
+	gPipe := []bson.D{gMatch, group}
+	mgo.Aggregate(mgo.Acts, gPipe, &result)
 	if len(result) != 0 {
-		sum.GameDur = result[0]["duration"].(int)
+		// TODO Need to fix
+		// sum.GameDur = result[0]["duration"].(int)
 		sum.GameHour = sum.GameDur / 60
 		sum.GameMin = sum.GameDur % 60
 	}
 
-	pPipe := []bson.M{pMatch, group}
-	mgo.LookUp(mgo.Acts, pPipe, &result)
+	pPipe := []bson.D{pMatch, group}
+	mgo.Aggregate(mgo.Acts, pPipe, &result)
 	if len(result) != 0 {
-		sum.PgmDur = result[0]["duration"].(int)
+		// TODO Need to fix
+		// sum.PgmDur = result[0]["duration"].(int)
 		sum.PgmHour = sum.PgmDur / 60
 		sum.PgmMin = sum.PgmDur % 60
 	}
