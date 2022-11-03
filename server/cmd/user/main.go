@@ -46,7 +46,7 @@ func RegisterPOST(w http.ResponseWriter, r *http.Request) {
 func Register(username string, password string) (user.User, error) {
 	_, err := ByUsername(username)
 
-	if err == mgo.ErrNotFound {
+	if err == mongo.ErrNotFound {
 		u := user.User{}
 		u.ID = bson.NewObjectId()
 		u.Username = username

@@ -5,7 +5,7 @@ import (
 	"ditto/model/game"
 	"ditto/service/base"
 
-	"gopkg.in/mgo.v2/bson"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type GameService interface {
@@ -14,7 +14,7 @@ type GameService interface {
 	ByPlaying() []game.Game
 	ByStatus(status game.Status) []game.Detail
 	Counts() (int, int, int)
-	Create(g game.Game) bool
+	Create(g game.Game) error
 	Delete(id string) error
 	PageByStatus(status game.Status, platform game.Platform, page, limit int) ([]game.Detail, int)
 	Update(g game.Game) error
@@ -53,7 +53,7 @@ func (s *service) Counts() (int, int, int) {
 	return s.Repo.counts()
 }
 
-func (s *service) Create(g game.Game) bool {
+func (s *service) Create(g game.Game) error {
 	return s.Repo.create(g)
 }
 

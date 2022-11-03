@@ -5,7 +5,7 @@ import (
 	"ditto/model/inc"
 	"time"
 
-	"gopkg.in/mgo.v2/bson"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type incRepo struct{}
@@ -15,7 +15,7 @@ type IncRepo interface {
 	Developers() []inc.Inc
 	Publishers() []inc.Inc
 	ByID(id string) inc.Inc
-	Create(inc inc.Inc) bool
+	Create(inc inc.Inc) error
 }
 
 func NewIncRepo() IncRepo {
@@ -50,8 +50,7 @@ func (*incRepo) Publishers() []inc.Inc {
 	return incs
 }
 
-func (*incRepo) Create(inc inc.Inc) bool {
-	// inc.ID = bson.NewObjectId()
+func (*incRepo) Create(inc inc.Inc) error {
 	inc.CreatedAt = time.Now()
 	inc.UpdatedAt = time.Now()
 	return mgo.Insert(mgo.Incs, inc)

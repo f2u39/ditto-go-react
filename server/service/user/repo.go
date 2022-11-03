@@ -3,56 +3,44 @@ package user
 import (
 	"ditto/db/mgo"
 	"ditto/model/user"
-	"log"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/crypto/bcrypt"
-	"gopkg.in/mgo.v2/bson"
 )
 
 type userRepo struct{}
 
 type UserRepo interface {
-	ByUsername(username string) (user.User, bool)
-	Login(username, password string) (user.User, bool)
-	Register(u user.User) (user.User, bool)
+	ByUsername(username string) (user.User, error)
+	Login(username, password string) (user.User, error)
+	Register(u user.User) (user.User, error)
 }
 
 func NewUserRepo() UserRepo {
 	return &userRepo{}
 }
 
-func (*userRepo) ByUsername(username string) (user.User, bool) {
+func (*userRepo) ByUsername(username string) (user.User, error) {
 	var u user.User
-	qry := bson.M{"username": username}
-	err := mgo.FindOne(mgo.Users, qry, &u)
-	if err != nil {
-		log.Println(err)
-	}
-	return u, err == nil
+	filter := bson.M{"username": username}
+	err := mgo.FindOne(mgo.Users, filter, &u)
+	return u, err
 }
 
-func (r *userRepo) Login(username, password string) (user.User, bool) {
-	// var u user.User
-	// qry := bson.M{"username": username, "password": password}
-	// err := mongo.FindOne(mongo.Users, qry, &u)
-	// if err != nil {
-	// 	return user.User{}, false
-	// }
-	// return u, true
-
-	u, ok := r.ByUsername(username)
-	if ok && bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)) == nil {
-		return u, true
+func (r *userRepo) Login(username, password string) (user.User, error) {
+	u, err := r.ByUsername(username)
+	if err != nil && bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)) == nil {
+		return u, err
 	} else {
-		return user.User{}, false
+		return user.User{}, err
 	}
 }
 
-func (r *userRepo) Register(user user.User) (user.User, bool) {
-	u, ok := r.ByUsername(user.Username)
-	if !ok && len(u.Password) == 0 {
+func (r *userRepo) Register(user user.User) (user.User, error) {
+	u, err := r.ByUsername(user.Username)
+	if err != nil && len(u.Password) == 0 {
 		return u, mgo.Insert(mgo.Users, user)
 	} else {
-		return user, false
+		return user, nil
 	}
 }

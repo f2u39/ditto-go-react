@@ -6,7 +6,7 @@ import (
 	"ditto/service/inc"
 	"time"
 
-	"gopkg.in/mgo.v2/bson"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type repo struct{}
@@ -17,7 +17,7 @@ type Repo interface {
 	byStatus(status game.Status) []game.Detail
 	count(status game.Status) int
 	counts() (int, int, int)
-	create(g game.Game) bool
+	create(g game.Game) error
 	delete(id string) error
 	pageByStatus(status game.Status, platform game.Platform, page, limit int) ([]game.Detail, int)
 	update(g game.Game) error
@@ -68,9 +68,9 @@ func (*repo) byStatus(status game.Status) []game.Detail {
 }
 
 func (*repo) count(status game.Status) int {
-	qry := bson.M{"status": status}
-	cnt, _ := mgo.Count(mgo.Games, qry)
-	return cnt
+	filter := bson.M{"status": status}
+	cnt, _ := mgo.Count(mgo.Games, filter)
+	return int(cnt)
 }
 
 func (r *repo) counts() (int, int, int) {
@@ -80,8 +80,7 @@ func (r *repo) counts() (int, int, int) {
 	return playedCnt, playingCnt, blockingCnt
 }
 
-func (*repo) create(g game.Game) bool {
-	g.ID = bson.NewObjectId()
+func (*repo) create(g game.Game) error {
 	g.CreatedAt = time.Now()
 	g.UpdatedAt = time.Now()
 	return mgo.Insert(mgo.Games, g)
@@ -96,22 +95,22 @@ func (*repo) delete(id string) error {
 }
 
 func (*repo) pageByStatus(status game.Status, platform game.Platform, page, limit int) ([]game.Detail, int) {
-	var qry bson.M
+	var filter bson.M
 
 	// Check status
 	if len(status) != 0 {
-		qry = bson.M{"status": status}
+		filter = bson.M{"status": status}
 	} else {
 		// If empty, the default status is "playing"
-		qry = bson.M{"status": game.PLAYING}
+		filter = bson.M{"status": game.PLAYING}
 	}
 
 	if len(platform) != 0 && platform != "All" {
-		qry["platform"] = platform
+		filter["platform"] = platform
 	}
 
 	var games []game.Game
-	totalPages, err := mgo.FindPage(mgo.Games, &games, qry, page, limit, "title")
+	totalPages, err := mgo.FindPage(mgo.Games, &games, filter, page, limit, "title")
 	if err != nil {
 		return nil, 1
 	}

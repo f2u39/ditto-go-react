@@ -4,12 +4,13 @@ import (
 	"ditto/db/mgo"
 	"ditto/model/inc"
 	"ditto/service/base"
+	"time"
 )
 
 type IncService interface {
 	All() []inc.Inc
 	ByID(id string) inc.Inc
-	Create(inc inc.Inc) bool
+	Create(inc inc.Inc) error
 	Developers() []inc.Inc
 	Publishers() []inc.Inc
 	Update(inc inc.Inc) error
@@ -34,17 +35,18 @@ func (s *incService) ByID(id string) inc.Inc {
 	return s.Repo.ByID(id)
 }
 
+func (s *incService) Create(inc inc.Inc) error {
+	inc.CreatedAt = time.Now()
+	inc.UpdatedAt = time.Now()
+	return s.Base.Create(mgo.Incs, inc)
+}
+
 func (s *incService) Developers() []inc.Inc {
 	return s.Repo.Developers()
 }
 
 func (s *incService) Publishers() []inc.Inc {
 	return s.Repo.Publishers()
-}
-
-func (s *incService) Create(inc inc.Inc) bool {
-	mgo.Before(&inc.ID, &inc.CreatedAt, &inc.UpdatedAt)
-	return s.Base.Create(mgo.Incs, inc)
 }
 
 func (s *incService) Update(inc inc.Inc) error {

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"gopkg.in/mgo.v2/bson"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type wordRepo struct{}
@@ -16,7 +16,7 @@ type WordRepo interface {
 	ByID(id string) word.Word
 	ByIsChecked(isCheck int) []word.Word
 	Check(isCheck int, id string) error
-	Create(word word.Word) bool
+	Create(word word.Word) error
 	Update(word word.Word) error
 }
 
@@ -26,19 +26,19 @@ func NewWordRepo() WordRepo {
 
 func (*wordRepo) ByDate(date string, isCheck int) []word.Word {
 	var words []word.Word
-	match := bson.M{"$match": bson.M{"date": date, "is_checked": isCheck}}
-	sort := bson.M{"$sort": bson.M{"word": 1}}
-	pipeline := []bson.M{match, sort}
-	mgo.LookUp(mgo.Words, pipeline, &words)
+	match := bson.D{{"$match", bson.D{{"date", date}, {"is_checked", isCheck}}}}
+	sort := bson.D{{"$sort", bson.D{{"word", 1}}}}
+	pipe := []bson.D{match, sort}
+	mgo.Aggregate(mgo.Words, pipe, &words)
 	return words
 }
 
 func (*wordRepo) ByIsChecked(isCheck int) []word.Word {
 	var words []word.Word
-	match := bson.M{"$match": bson.M{"is_checked": isCheck}}
-	sort := bson.M{"$sort": bson.M{"created_at": -1}}
-	pipeline := []bson.M{match, sort}
-	mgo.LookUp(mgo.Words, pipeline, &words)
+	match := bson.D{{"$match", bson.D{{"is_checked", isCheck}}}}
+	sort := bson.D{{"$sort", bson.D{{"created_at", -1}}}}
+	pipe := []bson.D{match, sort}
+	mgo.Aggregate(mgo.Words, pipe, &words)
 	return words
 }
 
@@ -62,8 +62,7 @@ func (r *wordRepo) Check(isDone int, id string) error {
 	return mgo.Update(mgo.Words, w.ID, w)
 }
 
-func (*wordRepo) Create(word word.Word) bool {
-	word.ID = bson.NewObjectId()
+func (*wordRepo) Create(word word.Word) error {
 	word.CreatedAt = time.Now()
 	word.UpdatedAt = time.Now()
 	return mgo.Insert(mgo.Words, word)
