@@ -11,6 +11,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
@@ -57,21 +59,11 @@ func NewCore() {
 func NewEngine() *gin.Engine {
 	r := gin.Default()
 	// r.Static("/assets", "./assets")
-	// r.Use(static.Serve("/", static.LocalFile("./web", true)))
-
-	api := r.Group("/api")
-	api.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Gopher",
-		})
-	})
+	r.Use(static.Serve("/", static.LocalFile("./web", true)))
 
 	// CORS
-	// config := cors.DefaultConfig()
-	// config.AllowOrigins = []string{
-	// 	"http://127.0.0.1:80", "http://127.0.0.1:3000", "http://127.0.0.1:8080",
-	// 	"http://0.0.0.0:80", "http://0.0.0.0:3000", "http://0.0.0.0:8080"}
-	// r.Use(cors.New(config))
+	r.Use(cors.Default())
+
 	return r
 }
 

@@ -82,8 +82,8 @@ func create(c *gin.Context) {
 			Status:      game.PLAYING,
 			Genre:       genre,
 			Platform:    platform,
-			DeveloperID: format.ObjId(developerId),
-			PublisherID: format.ObjId(publisherId),
+			DeveloperID: format.ToObjID(developerId),
+			PublisherID: format.ToObjID(publisherId),
 		})
 		c.Redirect(http.StatusSeeOther, "/game")
 	}
@@ -127,8 +127,8 @@ func update(c *gin.Context) {
 
 		g := h.GameService.ByID(gId)
 		g.Title = c.PostForm("title")
-		g.DeveloperID = format.ObjId(dId)
-		g.PublisherID = format.ObjId(pId)
+		g.DeveloperID = format.ToObjID(dId)
+		g.PublisherID = format.ToObjID(pId)
 		g.Status = game.Status(c.PostForm("status"))
 		g.PlayTime = pt
 		g.Genre = c.PostForm("genre")

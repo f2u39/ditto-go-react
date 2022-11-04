@@ -5,7 +5,7 @@ import (
 )
 
 // Transform ObjectIdHex to ObjectId
-func ObjId(hex string) primitive.ObjectID {
+func ToObjID(hex string) primitive.ObjectID {
 	objID, _ := primitive.ObjectIDFromHex(hex)
 	return objID
 }

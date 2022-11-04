@@ -25,16 +25,12 @@ var (
 )
 
 func Connect() {
-	// Set client options
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
-
-	// Connect to MongoDB
-	client, err := mongo.Connect(context.TODO(), clientOptions)
+	opts := options.Client().ApplyURI("mongodb://localhost:27017")
+	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Check the connection
 	err = client.Ping(context.TODO(), nil)
 	if err != nil {
 		log.Fatal(err)
@@ -99,7 +95,7 @@ func DeleteID(col *mongo.Collection, id any) error {
 
 	switch id.(type) {
 	case string:
-		objID = format.ObjId(fmt.Sprintf("%v", id))
+		objID = format.ToObjID(fmt.Sprintf("%v", id))
 	case primitive.ObjectID:
 		objID = id.(primitive.ObjectID)
 	default:
@@ -127,7 +123,7 @@ func FindID(col *mongo.Collection, id any, T any) error {
 
 	switch id.(type) {
 	case string:
-		objID = format.ObjId(fmt.Sprintf("%v", id))
+		objID = format.ToObjID(fmt.Sprintf("%v", id))
 	case primitive.ObjectID:
 		objID = id.(primitive.ObjectID)
 	case nil:
@@ -257,7 +253,7 @@ func Update(col *mongo.Collection, id any, upd any) error {
 
 	switch id.(type) {
 	case string:
-		objID = format.ObjId(fmt.Sprintf("%v", id))
+		objID = format.ToObjID(fmt.Sprintf("%v", id))
 	case primitive.ObjectID:
 		objID = id.(primitive.ObjectID)
 	default:

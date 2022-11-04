@@ -39,7 +39,7 @@ func (s *service) ByDate(date string) ([]act.Detail, error) {
 
 func (s *service) ByGame(gameId string) ([]act.Act, error) {
 	var acts []act.Act
-	err := s.Base.FindMany(mgo.Acts, &acts, bson.D{{"game_id", format.ObjId(gameId)}}, "")
+	err := s.Base.FindMany(mgo.Acts, &acts, bson.D{{"game_id", format.ToObjID(gameId)}}, "")
 	return acts, err
 }
 
