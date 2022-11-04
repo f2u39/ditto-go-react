@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,7 +17,7 @@ var sw *act.StopWatch
 
 func Route(e *gin.Engine) {
 	// Use React as frontend
-	// e.Use(static.Serve("/act", static.LocalFile("./web", true)))
+	e.Use(static.Serve("/act", static.LocalFile("./web", true)))
 
 	auth := e.Group("/api/act").Use(mw.Auth)
 	{
@@ -30,7 +31,7 @@ func Route(e *gin.Engine) {
 
 	api := e.Group("/api/act")
 	{
-		api.GET("/", index2)
+		api.GET("/", index)
 	}
 }
 
@@ -103,10 +104,6 @@ func index(c *gin.Context) {
 		"stopwatch":     sw,
 	}
 	c.JSON(200, data)
-}
-
-func index2(c *gin.Context) {
-	c.JSON(200, "OK")
 }
 
 func start(c *gin.Context) {

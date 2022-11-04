@@ -34,17 +34,17 @@ func NewService() Service {
 }
 
 func (s *service) ByDate(date string) ([]act.Detail, error) {
-	return s.Repo.ByDate(date)
+	return s.Repo.byDate(date)
 }
 
 func (s *service) ByGame(gameId string) ([]act.Act, error) {
 	var acts []act.Act
-	err := s.Base.FindMany(mgo.Acts, &acts, bson.D{{"game_id", format.ToObjID(gameId)}}, "")
+	err := s.Base.FindMany(mgo.Acts, &acts, bson.D{{"game_id", format.ToObjID(gameId)}}, bson.D{})
 	return acts, err
 }
 
 func (s *service) ByMonth(date string) ([]act.Detail, error) {
-	return s.Repo.ByMonth(date)
+	return s.Repo.byMonth(date)
 }
 
 func (s *service) Delete(id string) error {
@@ -64,13 +64,13 @@ func (s *service) Create(a act.Act) error {
 }
 
 func (s *service) DaySum(ymd string) act.Summary {
-	return s.Repo.DaySum(ymd)
+	return s.Repo.daySum(ymd)
 }
 
 func (s *service) Duration(ymd string, typ act.Type) int {
-	return s.Repo.Duration(ymd, typ)
+	return s.Repo.duration(ymd, typ)
 }
 
 func (s *service) MonthSum(yyyymm string) act.Summary {
-	return s.Repo.MonthSum(yyyymm)
+	return s.Repo.monthSum(yyyymm)
 }

@@ -135,14 +135,14 @@ func FindID(col *mongo.Collection, id any, T any) error {
 	return col.FindOne(context.TODO(), bson.M{"_id": objID}).Decode(&T)
 }
 
-func FindMany(col *mongo.Collection, T any, filter any, sorts ...any) error {
-	options := options.Find()
+func FindMany(col *mongo.Collection, T any, filter bson.D, sorts ...bson.D) error {
+	opts := options.Find()
 
 	if len(sorts) > 0 {
-		options.SetSort(sorts)
+		opts.SetSort(sorts)
 	}
 
-	cur, err := col.Find(context.TODO(), filter, options)
+	cur, err := col.Find(context.TODO(), filter, opts)
 	if err != nil {
 		log.Println(err)
 		return err

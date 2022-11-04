@@ -6,6 +6,7 @@ import (
 	"ditto/service/base"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type GameService interface {
@@ -41,7 +42,7 @@ func (s *service) ByGenre(genre game.Genre) []game.Game {
 
 func (s *service) ByPlaying() []game.Game {
 	var games []game.Game
-	s.Base.FindMany(mgo.Games, &games, bson.M{"status": game.PLAYING}, "title")
+	s.Base.FindMany(mgo.Games, &games, bson.D{primitive.E{Key: "status", Value: game.PLAYING}}, bson.D{primitive.E{Key: "title", Value: 1}})
 	return games
 }
 

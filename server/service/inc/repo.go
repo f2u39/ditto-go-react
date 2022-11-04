@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type incRepo struct{}
@@ -24,7 +25,7 @@ func NewIncRepo() IncRepo {
 
 func (*incRepo) All() []inc.Inc {
 	var incs []inc.Inc
-	mgo.FindMany(mgo.Incs, &incs, bson.M{})
+	mgo.FindMany(mgo.Incs, &incs, bson.D{})
 	return incs
 }
 
@@ -36,16 +37,16 @@ func (*incRepo) ByID(id string) inc.Inc {
 
 func (*incRepo) Developers() []inc.Inc {
 	var incs []inc.Inc
-	qry := bson.M{"is_developer": 1}
-	srt := "name"
+	qry := bson.D{primitive.E{Key: "is_developer", Value: 1}}
+	srt := bson.D{primitive.E{Key: "name", Value: 1}}
 	mgo.FindMany(mgo.Incs, &incs, qry, srt)
 	return incs
 }
 
 func (*incRepo) Publishers() []inc.Inc {
 	var incs []inc.Inc
-	qry := bson.M{"is_publisher": 1}
-	srt := "name"
+	qry := bson.D{primitive.E{Key: "is_publisher", Value: 1}}
+	srt := bson.D{primitive.E{Key: "name", Value: 1}}
 	mgo.FindMany(mgo.Incs, &incs, qry, srt)
 	return incs
 }

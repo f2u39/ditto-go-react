@@ -38,6 +38,15 @@ sudo docker exec 210 mongodump --db ditto --out /mongodump_20221028
 sudo docker cp 210:/mongodump_20221028 ~/mongodump_20221028
 ```
 
+### Restore MongoDB
+
+``` cmd
+docker cp mongodbdump a3d:/mongodbdump
+docker exec -i a3d /usr/bin/mongorestore --db ditto /mongodbdump/ditto
+
+a3d
+```
+
 ### Docker deployment
 
 ``` cmd

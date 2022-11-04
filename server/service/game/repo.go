@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type repo struct{}
@@ -35,22 +36,22 @@ func (*repo) byID(id string) game.Game {
 
 func (*repo) byGenre(genre game.Genre) []game.Game {
 	var games []game.Game
-	mgo.FindMany(mgo.Games, &games, bson.M{"genre": genre}, "title")
+	mgo.FindMany(mgo.Games, &games, bson.D{primitive.E{Key: "genre", Value: genre}}, bson.D{primitive.E{Key: "title", Value: 1}})
 	return games
 }
 
 func (*repo) byStatus(status game.Status) []game.Detail {
-	var qry bson.M
+	var filter bson.D
 
 	// Default status is "playing"
 	if len(status) != 0 {
-		qry = bson.M{"status": status}
+		filter = bson.D{primitive.E{Key: "status", Value: status}}
 	} else {
-		qry = bson.M{"status": game.PLAYING}
+		filter = bson.D{primitive.E{Key: "status", Value: game.PLAYING}}
 	}
 
 	var games []game.Game
-	mgo.FindMany(mgo.Games, &games, qry, "title")
+	mgo.FindMany(mgo.Games, &games, filter, bson.D{primitive.E{Key: "title", Value: 1}})
 
 	incSrv := inc.NewIncService()
 	var details []game.Detail
