@@ -25,7 +25,7 @@ func NewIncRepo() IncRepo {
 
 func (*incRepo) All() []inc.Inc {
 	var incs []inc.Inc
-	mgo.FindMany(mgo.Incs, &incs, bson.D{})
+	mgo.FindMany(mgo.Incs, &incs, bson.D{}, bson.D{})
 	return incs
 }
 
