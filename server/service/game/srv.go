@@ -42,7 +42,9 @@ func (s *service) ByGenre(genre game.Genre) []game.Game {
 
 func (s *service) ByPlaying() []game.Game {
 	var games []game.Game
-	s.Base.FindMany(mgo.Games, &games, bson.D{primitive.E{Key: "status", Value: game.PLAYING}}, bson.D{primitive.E{Key: "title", Value: 1}})
+	filter := bson.D{primitive.E{Key: "status", Value: game.PLAYING}}
+	sort := bson.D{primitive.E{Key: "title", Value: 1}}
+	mgo.FindMany(mgo.Games, &games, filter, sort)
 	return games
 }
 

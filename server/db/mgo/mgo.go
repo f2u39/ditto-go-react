@@ -65,7 +65,7 @@ func Aggregate(col *mongo.Collection, pipeline []bson.D, T any) error {
 
 	for cur.Next(context.TODO()) {
 		elemp := reflect.New(elemt)
-		err := cur.Decode(&elemp)
+		err := cur.Decode(elemp.Interface())
 		if err != nil {
 			log.Println(err)
 			return err
@@ -73,6 +73,7 @@ func Aggregate(col *mongo.Collection, pipeline []bson.D, T any) error {
 
 		slicev = reflect.Append(slicev, elemp.Elem())
 		slicev = slicev.Slice(0, slicev.Cap())
+		i++
 	}
 
 	if err := cur.Err(); err != nil {
@@ -159,7 +160,7 @@ func FindMany(col *mongo.Collection, T any, filter bson.D, sorts bson.D) error {
 
 	for cur.Next(context.TODO()) {
 		elemp := reflect.New(elemt)
-		err := cur.Decode(&elemp)
+		err := cur.Decode(elemp.Interface())
 		if err != nil {
 			log.Println(err)
 			return err
@@ -167,6 +168,7 @@ func FindMany(col *mongo.Collection, T any, filter bson.D, sorts bson.D) error {
 
 		slicev = reflect.Append(slicev, elemp.Elem())
 		slicev = slicev.Slice(0, slicev.Cap())
+		i++
 	}
 
 	if err := cur.Err(); err != nil {
@@ -226,7 +228,7 @@ func FindPage(col *mongo.Collection, T any, filter any, page, limit int, sorts .
 
 	for cur.Next(context.TODO()) {
 		elemp := reflect.New(elemt)
-		err := cur.Decode(&elemp)
+		err := cur.Decode(elemp.Interface())
 		if err != nil {
 			log.Println(err)
 			return 0, err
@@ -234,6 +236,7 @@ func FindPage(col *mongo.Collection, T any, filter any, page, limit int, sorts .
 
 		slicev = reflect.Append(slicev, elemp.Elem())
 		slicev = slicev.Slice(0, slicev.Cap())
+		i++
 	}
 
 	if err := cur.Err(); err != nil {
