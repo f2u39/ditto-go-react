@@ -103,6 +103,7 @@ func index(c *gin.Context) {
 		"playing_games": h.GameService.ByPlaying(),
 		"stopwatch":     sw,
 	}
+
 	c.JSON(200, data)
 }
 

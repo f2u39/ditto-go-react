@@ -1,3 +1,4 @@
+// Source almost from [mgo](https://github.com/go-mgo/mgo)
 package mgo
 
 import (
@@ -6,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"reflect"
+	"sync"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -23,6 +25,37 @@ var (
 	Words   *mongo.Collection
 	Studios *mongo.Collection
 )
+
+type Iter struct {
+	m   sync.Mutex
+	cur *mongo.Cursor
+	err error
+}
+
+func NewIter(cur *mongo.Cursor, err error) *Iter {
+	return &Iter{
+		cur: cur,
+		err: err,
+	}
+}
+
+func (iter *Iter) Next(T any) bool {
+	iter.m.Lock()
+	defer iter.m.Unlock()
+
+	if iter.cur.Next(context.TODO()) {
+		err := iter.cur.Decode(T)
+		if err != nil {
+			log.Println(err)
+			return false
+		}
+	} else {
+		return false
+	}
+
+	// return iter.cur.Err() != nil
+	return true
+}
 
 func Connect() {
 	opts := options.Client().ApplyURI("mongodb://localhost:27017")
@@ -49,6 +82,7 @@ func Connect() {
 
 func Aggregate(col *mongo.Collection, pipeline []bson.D, T any) error {
 	cur, err := col.Aggregate(context.TODO(), pipeline)
+	iter := NewIter(cur, err)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -63,28 +97,24 @@ func Aggregate(col *mongo.Collection, pipeline []bson.D, T any) error {
 	elemt := slicev.Type().Elem()
 	i := 0
 
-	for cur.Next(context.TODO()) {
-		elemp := reflect.New(elemt)
-		err := cur.Decode(elemp.Interface())
-		if err != nil {
-			log.Println(err)
-			return err
+	for {
+		if slicev.Len() == i {
+			elemp := reflect.New(elemt)
+			if !iter.Next(elemp.Interface()) {
+				break
+			}
+			slicev = reflect.Append(slicev, elemp.Elem())
+			slicev = slicev.Slice(0, slicev.Cap())
+		} else {
+			if !iter.Next(slicev.Index(i).Addr().Interface()) {
+				break
+			}
 		}
-
-		slicev = reflect.Append(slicev, elemp.Elem())
-		slicev = slicev.Slice(0, slicev.Cap())
 		i++
 	}
 
-	if err := cur.Err(); err != nil {
-		log.Println(err)
-		return err
-	}
-
 	resultv.Elem().Set(slicev.Slice(0, i))
-
-	cur.Close(context.TODO())
-	return nil
+	return cur.Close(context.TODO())
 }
 
 func Count(col *mongo.Collection, filter any) (int64, error) {
@@ -148,6 +178,7 @@ func FindMany(col *mongo.Collection, T any, filter bson.D, sorts bson.D) error {
 		log.Println(err)
 		return err
 	}
+	iter := NewIter(cur, err)
 
 	resultv := reflect.ValueOf(T)
 	if resultv.Kind() != reflect.Ptr || resultv.Elem().Kind() != reflect.Slice {
@@ -158,28 +189,24 @@ func FindMany(col *mongo.Collection, T any, filter bson.D, sorts bson.D) error {
 	elemt := slicev.Type().Elem()
 	i := 0
 
-	for cur.Next(context.TODO()) {
-		elemp := reflect.New(elemt)
-		err := cur.Decode(elemp.Interface())
-		if err != nil {
-			log.Println(err)
-			return err
+	for {
+		if slicev.Len() == i {
+			elemp := reflect.New(elemt)
+			if !iter.Next(elemp.Interface()) {
+				break
+			}
+			slicev = reflect.Append(slicev, elemp.Elem())
+			slicev = slicev.Slice(0, slicev.Cap())
+		} else {
+			if !iter.Next(slicev.Index(i).Addr().Interface()) {
+				break
+			}
 		}
-
-		slicev = reflect.Append(slicev, elemp.Elem())
-		slicev = slicev.Slice(0, slicev.Cap())
 		i++
 	}
 
-	if err := cur.Err(); err != nil {
-		log.Println(err)
-		return err
-	}
-
 	resultv.Elem().Set(slicev.Slice(0, i))
-
-	cur.Close(context.TODO())
-	return nil
+	return cur.Close(context.TODO())
 }
 
 func FindPage(col *mongo.Collection, T any, filter any, page, limit int, sorts ...string) (int, error) {
@@ -211,11 +238,12 @@ func FindPage(col *mongo.Collection, T any, filter any, page, limit int, sorts .
 
 	opts.SetSkip(int64((_page - 1) * _limit)).SetLimit(_limit)
 
-	cur, err := col.Find(context.TODO(), bson.D{{}}, opts)
+	cur, err := col.Find(context.TODO(), filter, opts)
 	if err != nil {
 		log.Println(err)
 		return 0, err
 	}
+	iter := NewIter(cur, err)
 
 	resultv := reflect.ValueOf(T)
 	if resultv.Kind() != reflect.Ptr || resultv.Elem().Kind() != reflect.Slice {
@@ -226,22 +254,20 @@ func FindPage(col *mongo.Collection, T any, filter any, page, limit int, sorts .
 	elemt := slicev.Type().Elem()
 	i := 0
 
-	for cur.Next(context.TODO()) {
-		elemp := reflect.New(elemt)
-		err := cur.Decode(elemp.Interface())
-		if err != nil {
-			log.Println(err)
-			return 0, err
+	for {
+		if slicev.Len() == i {
+			elemp := reflect.New(elemt)
+			if !iter.Next(elemp.Interface()) {
+				break
+			}
+			slicev = reflect.Append(slicev, elemp.Elem())
+			slicev = slicev.Slice(0, slicev.Cap())
+		} else {
+			if !iter.Next(slicev.Index(i).Addr().Interface()) {
+				break
+			}
 		}
-
-		slicev = reflect.Append(slicev, elemp.Elem())
-		slicev = slicev.Slice(0, slicev.Cap())
 		i++
-	}
-
-	if err := cur.Err(); err != nil {
-		log.Println(err)
-		return 0, err
 	}
 
 	resultv.Elem().Set(slicev.Slice(0, i))

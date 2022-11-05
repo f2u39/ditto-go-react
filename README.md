@@ -57,3 +57,4 @@ docker run -p 80:8080 -d ditto-go-react
 ## References
 
 - [Deploying Go + React to Heroku using Docker](https://levelup.gitconnected.com/deploying-go-react-to-heroku-using-docker-9844bf075228)
+- [mgo - MongoDB driver for Go](https://github.com/go-mgo/mgo)
