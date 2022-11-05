@@ -22,22 +22,20 @@ const (
 func Route(e *gin.Engine) {
 	auth := e.Group("/game").Use(mw.Auth)
 	{
-		auth.GET("/", index)
 		auth.Any("/create", create)
 		auth.Any("/update", update)
 		auth.Any("/delete", delete)
 		auth.POST("/update_status", updateStatus)
-
 		auth.GET("/counts", counts)
 		auth.GET("/status/:status/:platform/:page", status)
 	}
 
-	// anon := e.Group("/api/game")
-	// {
-	// 	anon.GET("/counts", counts)
-	// 	anon.GET("/", index)
-	// 	anon.GET("/status/:status/:platform/:page", status)
-	// }
+	anon := e.Group("/api/game")
+	{
+		anon.GET("/counts", counts)
+		anon.GET("/", index)
+		anon.GET("/status/:status/:platform/:page", status)
+	}
 }
 
 func updateStatus(c *gin.Context) {

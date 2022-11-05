@@ -5,6 +5,9 @@ import (
 	"ditto/model/inc"
 	"ditto/service/base"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type IncService interface {
@@ -17,38 +20,49 @@ type IncService interface {
 }
 
 func NewIncService() IncService {
-	return &incService{
-		Base: base.NewBaseRepo(),
-		Repo: NewIncRepo()}
+	return &incService{Base: base.NewBaseRepo()}
 }
 
 type incService struct {
 	Base base.BaseRepo
-	Repo IncRepo
 }
 
 func (s *incService) All() []inc.Inc {
-	return s.Repo.All()
+	var incs []inc.Inc
+	mgo.FindMany(mgo.Incs, &incs, bson.D{}, bson.D{})
+	return incs
 }
 
 func (s *incService) ByID(id string) inc.Inc {
-	return s.Repo.ByID(id)
+	inc := inc.Inc{}
+	mgo.FindID(mgo.Incs, id, &inc)
+	return inc
 }
 
 func (s *incService) Create(inc inc.Inc) error {
 	inc.CreatedAt = time.Now()
 	inc.UpdatedAt = time.Now()
-	return s.Base.Create(mgo.Incs, inc)
+	return mgo.Insert(mgo.Incs, inc)
 }
 
 func (s *incService) Developers() []inc.Inc {
-	return s.Repo.Developers()
+	var incs []inc.Inc
+	qry := bson.D{primitive.E{Key: "is_developer", Value: 1}}
+	srt := bson.D{primitive.E{Key: "name", Value: 1}}
+	mgo.FindMany(mgo.Incs, &incs, qry, srt)
+	return incs
 }
 
 func (s *incService) Publishers() []inc.Inc {
-	return s.Repo.Publishers()
+	var incs []inc.Inc
+	qry := bson.D{primitive.E{Key: "is_publisher", Value: 1}}
+	srt := bson.D{primitive.E{Key: "name", Value: 1}}
+	mgo.FindMany(mgo.Incs, &incs, qry, srt)
+	return incs
 }
 
 func (s *incService) Update(inc inc.Inc) error {
-	return s.Base.Update(mgo.Incs, inc.ID, inc)
+	inc.CreatedAt = time.Now()
+	inc.UpdatedAt = time.Now()
+	return mgo.Update(mgo.Incs, inc.ID, inc)
 }

@@ -12,15 +12,11 @@ import TuneIcon from '@mui/icons-material/Tune';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import { Badge, Box, Grid, InputAdornment, Tabs, TextField, Tooltip } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
-
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-
-import Switch from '@mui/material/Switch';
-
-import { Check2Square, Tablet, PcDisplay, NintendoSwitch, Playstation, Xbox, BatteryHalf } from 'react-bootstrap-icons';
+import { Check2Square, Tablet, PcDisplay, NintendoSwitch, Playstation, Xbox } from 'react-bootstrap-icons';
 import { Code, CodeSlash } from 'react-bootstrap-icons';
 import { Battery, BatteryCharging, BatteryFull } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
@@ -96,7 +92,7 @@ export default function Game() {
     };
 
     const handleStartGame = (id: string) => {
-        fetch(`/act/watch/start?id=${id}`)
+        fetch(`/api/act/watch/start?id=${id}`)
     }
 
     return (

@@ -55,6 +55,7 @@ func (s *service) ByPlaying() []game.Game {
 
 func (s *service) ByStatus(status game.Status) []game.Detail {
 	var filter bson.D
+	var games []game.Game
 
 	// Default status is "playing"
 	if len(status) != 0 {
@@ -63,8 +64,8 @@ func (s *service) ByStatus(status game.Status) []game.Detail {
 		filter = bson.D{primitive.E{Key: "status", Value: game.PLAYING}}
 	}
 
-	var games []game.Game
-	mgo.FindMany(mgo.Games, &games, filter, bson.D{primitive.E{Key: "title", Value: 1}})
+	sort := bson.D{primitive.E{Key: "title", Value: 1}}
+	mgo.FindMany(mgo.Games, &games, filter, sort)
 
 	incSrv := inc.NewIncService()
 	var details []game.Detail
@@ -82,7 +83,7 @@ func (s *service) ByStatus(status game.Status) []game.Detail {
 }
 
 func count(status game.Status) int {
-	filter := bson.M{"status": status}
+	filter := bson.D{primitive.E{Key: "status", Value: status}}
 	cnt, _ := mgo.Count(mgo.Games, filter)
 	return int(cnt)
 }
@@ -109,22 +110,24 @@ func (s *service) Delete(id string) error {
 }
 
 func (s *service) PageByStatus(status game.Status, platform game.Platform, page, limit int) ([]game.Detail, int) {
-	var filter bson.M
+	var filter bson.D
 
 	// Check status
 	if len(status) != 0 {
-		filter = bson.M{"status": status}
+		filter = bson.D{primitive.E{Key: "status", Value: status}}
 	} else {
 		// If empty, the default status is "playing"
-		filter = bson.M{"status": game.PLAYING}
+		filter = bson.D{primitive.E{Key: "status", Value: game.PLAYING}}
 	}
 
 	if len(platform) != 0 && platform != "All" {
-		filter["platform"] = platform
+		filter = append(filter, primitive.E{Key: "platform", Value: platform})
+
 	}
 
 	var games []game.Game
-	totalPages, err := mgo.FindPage(mgo.Games, &games, filter, page, limit, "title")
+	sort := bson.D{primitive.E{Key: "title", Value: 1}}
+	totalPages, err := mgo.FindPage(mgo.Games, &games, filter, page, limit, sort)
 	if err != nil {
 		return nil, 1
 	}

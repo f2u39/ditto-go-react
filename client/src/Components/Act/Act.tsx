@@ -255,10 +255,10 @@ export default function Act() {
                         <Table size="small">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell align="center" style={{ width: 40 }}><FormatListNumberedRtlIcon /></TableCell>
-                                    <TableCell align="center" style={{ width: 110 }}><AccessTimeIcon /></TableCell>
-                                    <TableCell align="left"><TitleIcon /></TableCell>
-                                    <TableCell style={{ width: 120 }}></TableCell>
+                                    <TableCell align="center" style={{ width: 40, verticalAlign: 'top' }}><FormatListNumberedRtlIcon /></TableCell>
+                                    <TableCell align="center" style={{ width: 110, verticalAlign: 'top' }}><AccessTimeIcon /></TableCell>
+                                    <TableCell align="left" style={{ verticalAlign: 'top' }}><TitleIcon /></TableCell>
+                                    <TableCell style={{ width: 120, verticalAlign: 'top' }}></TableCell>
                                 </TableRow>
                             </TableHead>
 
@@ -275,15 +275,15 @@ export default function Act() {
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0, fontSize: 15 } }}
                                             >
                                                 {detail.act.type === 'Gaming' ?
-                                                    <TableCell align="center"><Typography color="lightpink"><SportsEsportsIcon /></Typography></TableCell> :
-                                                    <TableCell align="center"><Typography color="mediumpurple"><GitHubIcon /></Typography></TableCell>}
+                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><SportsEsportsIcon /></Typography></TableCell> :
+                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitHubIcon /></Typography></TableCell>}
 
                                                 {detail.act.type === 'Gaming' ?
-                                                    <TableCell align="center"><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell> :
-                                                    <TableCell align="center"><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell>}
+                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell> :
+                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell>}
 
                                                 {detail.act.type === 'Gaming' ?
-                                                    <TableCell colSpan={2} align="left"><Typography color="lightpink">{detail.game[0].title}</Typography></TableCell> :
+                                                    <TableCell colSpan={2} align="left" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.game[0].title}</Typography></TableCell> :
                                                     <TableCell colSpan={2}></TableCell>}
                                             </TableRow>
                                         )
@@ -292,13 +292,13 @@ export default function Act() {
 
                                 <TableRow>
                                     <TableCell colSpan={2}></TableCell>
-                                    <TableCell align="right"><Typography color="lightpink"><ControllerIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right"><Typography color="lightpink">{daySummary.game_hour === 0 ? '' : daySummary.game_hour+'h'} {daySummary.game_min}m</Typography></TableCell>
+                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><ControllerIcon size={23} /></Typography></TableCell>
+                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{daySummary.game_hour === 0 ? '' : daySummary.game_hour+'h'} {daySummary.game_min}m</Typography></TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell colSpan={2}></TableCell>
-                                    <TableCell align="right"><Typography color="mediumpurple"><GitIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right"><Typography color="mediumpurple">{daySummary.pgm_hour === 0 ? '' : daySummary.pgm_hour+'h'} {daySummary.pgm_min}m</Typography></TableCell>
+                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitIcon size={23} /></Typography></TableCell>
+                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{daySummary.pgm_hour === 0 ? '' : daySummary.pgm_hour+'h'} {daySummary.pgm_min}m</Typography></TableCell>
                                 </TableRow>
 
                                 <TableRow sx={{ borderTop: 1 }}>
@@ -313,15 +313,15 @@ export default function Act() {
                                                 sx={{ '&:last-child td, &:last-child th': { border: 0, fontSize: 15 } }}
                                             >
                                                 {detail.act.type === 'Gaming' ?
-                                                    <TableCell align="center"><Typography color="lightpink"><SportsEsportsIcon /></Typography></TableCell> :
-                                                    <TableCell align="center"><Typography color="mediumpurple"><GitHubIcon /></Typography></TableCell>}
+                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><SportsEsportsIcon /></Typography></TableCell> :
+                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitHubIcon /></Typography></TableCell>}
 
                                                 {detail.act.type === 'Gaming' ?
-                                                    <TableCell align="center"><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell> :
-                                                    <TableCell align="center"><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell>}
+                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell> :
+                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell>}
 
                                                 {detail.act.type === 'Gaming' ?
-                                                    <TableCell colSpan={2} align="left"><Typography color="lightpink">{detail.game[0].title}</Typography></TableCell> :
+                                                    <TableCell colSpan={2} align="left" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.game[0].title}</Typography></TableCell> :
                                                     <TableCell colSpan={2}></TableCell>}
                                             </TableRow>
                                         )
@@ -330,13 +330,13 @@ export default function Act() {
 
                                 <TableRow>
                                     <TableCell colSpan={2}></TableCell>
-                                    <TableCell align="right"><Typography color="lightpink"><ControllerIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right"><Typography color="lightpink">{monSummary.game_hour === 0 ? '' : monSummary.game_hour+'h'} {monSummary.game_min}m</Typography></TableCell>
+                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><ControllerIcon size={23} /></Typography></TableCell>
+                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{monSummary.game_hour === 0 ? '' : monSummary.game_hour+'h'} {monSummary.game_min}m</Typography></TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell colSpan={2}></TableCell>
-                                    <TableCell align="right"><Typography color="mediumpurple"><GitIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right"><Typography color="mediumpurple">{monSummary.pgm_hour === 0 ? '' : monSummary.pgm_hour+'h'} {monSummary.pgm_min}m</Typography></TableCell>
+                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitIcon size={23} /></Typography></TableCell>
+                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{monSummary.pgm_hour === 0 ? '' : monSummary.pgm_hour+'h'} {monSummary.pgm_min}m</Typography></TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>

@@ -80,8 +80,8 @@ func Connect() {
 	Studios = client.Database(db).Collection("studio")
 }
 
-func Aggregate(col *mongo.Collection, pipeline []bson.D, T any) error {
-	cur, err := col.Aggregate(context.TODO(), pipeline)
+func Aggregate(col *mongo.Collection, pipe []bson.D, T any) error {
+	cur, err := col.Aggregate(context.TODO(), pipe)
 	iter := NewIter(cur, err)
 	if err != nil {
 		log.Println(err)
@@ -117,7 +117,7 @@ func Aggregate(col *mongo.Collection, pipeline []bson.D, T any) error {
 	return cur.Close(context.TODO())
 }
 
-func Count(col *mongo.Collection, filter any) (int64, error) {
+func Count(col *mongo.Collection, filter bson.D) (int64, error) {
 	return col.CountDocuments(context.TODO(), filter)
 }
 
@@ -209,7 +209,7 @@ func FindMany(col *mongo.Collection, T any, filter bson.D, sorts bson.D) error {
 	return cur.Close(context.TODO())
 }
 
-func FindPage(col *mongo.Collection, T any, filter any, page, limit int, sorts ...string) (int, error) {
+func FindPage(col *mongo.Collection, T any, filter bson.D, page, limit int, sorts bson.D) (int, error) {
 	_page := int64(page)
 	_limit := int64(limit)
 
