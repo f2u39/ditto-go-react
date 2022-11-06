@@ -40,8 +40,8 @@ export PATH=$PATH:/usr/local/go/bin
 
 ``` cmd
 # AWS EC2: Docker → Ubuntu
-sudo docker exec 210 mongodump --db ditto --out /mongodump_20221028
-sudo docker cp 210:/mongodump_20221028 ~/mongodump_20221028
+sudo docker exec 210 mongodump --db ditto --out /mongodump_20221106
+sudo docker cp 210:/mongodump_20221106 ~/mongodump_20221106
 ```
 
 ### Restore MongoDB
@@ -50,7 +50,9 @@ sudo docker cp 210:/mongodump_20221028 ~/mongodump_20221028
 docker cp mongodbdump a3d:/mongodbdump
 docker exec -i a3d /usr/bin/mongorestore --db ditto /mongodbdump/ditto
 
-a3d
+# AWS EC2: Ubuntu → Docker
+docker cp mongodump_20221106 a3d:/mongodump_20221106
+docker exec -i a3d /usr/bin/mongorestore --db ditto /mongodump_20221106/ditto
 ```
 
 ### Docker deployment
@@ -58,6 +60,7 @@ a3d
 ``` cmd
 docker build -t ditto-go-react .
 docker run -p 80:8080 -d ditto-go-react
+docker-compose up -d --build web
 ```
 
 ## References

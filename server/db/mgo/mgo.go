@@ -58,7 +58,7 @@ func (iter *Iter) Next(T any) bool {
 }
 
 func Connect() {
-	opts := options.Client().ApplyURI("mongodb://localhost:27017")
+	opts := options.Client().ApplyURI("mongodb://mongo:27017")
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
 		log.Fatal(err)
