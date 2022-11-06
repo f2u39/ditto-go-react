@@ -7,6 +7,12 @@
 
 ## Memo
 
+### Ubuntu port 80
+
+``` cmd
+sudo kill -9 `sudo lsof -t -i:80`
+```
+
 ### Ubuntu install React
 
 ``` cmd

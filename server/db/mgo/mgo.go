@@ -133,7 +133,7 @@ func DeleteID(col *mongo.Collection, id any) error {
 		return nil
 	}
 
-	_, err := col.DeleteOne(context.TODO(), bson.M{"_id": objID})
+	_, err := col.DeleteOne(context.TODO(), bson.D{primitive.E{Key: "_id", Value: objID}})
 	return err
 }
 
@@ -149,7 +149,7 @@ func FindOne(col *mongo.Collection, filter any, T any) error {
 	return col.FindOne(context.TODO(), filter).Decode(&T)
 }
 
-func FindID(col *mongo.Collection, id any, T any) error {
+func FindID(col *mongo.Collection, id any) (*mongo.SingleResult, error) {
 	var objID primitive.ObjectID
 
 	switch id.(type) {
@@ -158,12 +158,11 @@ func FindID(col *mongo.Collection, id any, T any) error {
 	case primitive.ObjectID:
 		objID = id.(primitive.ObjectID)
 	case nil:
-		return fmt.Errorf("bad id format")
+		return nil, fmt.Errorf("bad id format")
 	default:
-		return fmt.Errorf("bad id format")
+		return nil, fmt.Errorf("bad id format")
 	}
-
-	return col.FindOne(context.TODO(), bson.M{"_id": objID}).Decode(&T)
+	return col.FindOne(context.TODO(), bson.D{primitive.E{Key: "_id", Value: objID}}), nil
 }
 
 func FindMany(col *mongo.Collection, T any, filter bson.D, sorts bson.D) error {
@@ -289,6 +288,6 @@ func Update(col *mongo.Collection, id any, upd any) error {
 		return nil
 	}
 
-	_, err := col.UpdateOne(context.TODO(), bson.M{"_id": objID}, upd)
+	_, err := col.UpdateOne(context.TODO(), bson.D{primitive.E{Key: "_id", Value: objID}}, upd)
 	return err
 }

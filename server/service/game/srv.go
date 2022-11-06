@@ -32,9 +32,13 @@ type service struct {
 }
 
 func (s *service) ByID(id string) game.Game {
-	g := game.Game{}
-	mgo.FindID(mgo.Games, id, &g)
-	return g
+	var game game.Game
+	result, err := mgo.FindID(mgo.Games, id)
+	if err != nil {
+		return game
+	}
+	result.Decode(&game)
+	return game
 }
 
 func (s *service) ByGenre(genre game.Genre) []game.Game {
@@ -72,8 +76,8 @@ func (s *service) ByStatus(status game.Status) []game.Detail {
 	for _, g := range games {
 		detail := game.Detail{
 			Game:      g,
-			Developer: incSrv.ByID(g.DeveloperID.Hex()),
-			Publisher: incSrv.ByID(g.PublisherID.Hex()),
+			Developer: incSrv.ByID(g.DeveloperID),
+			Publisher: incSrv.ByID(g.PublisherID),
 			PlayHour:  g.PlayTime / 60,
 			PlayMin:   g.PlayTime % 60,
 		}
@@ -122,7 +126,6 @@ func (s *service) PageByStatus(status game.Status, platform game.Platform, page,
 
 	if len(platform) != 0 && platform != "All" {
 		filter = append(filter, primitive.E{Key: "platform", Value: platform})
-
 	}
 
 	var games []game.Game
@@ -134,11 +137,12 @@ func (s *service) PageByStatus(status game.Status, platform game.Platform, page,
 
 	incSrv := inc.NewIncService()
 	var details []game.Detail
+
 	for _, g := range games {
 		detail := game.Detail{
 			Game:      g,
-			Developer: incSrv.ByID(g.DeveloperID.Hex()),
-			Publisher: incSrv.ByID(g.PublisherID.Hex()),
+			Developer: incSrv.ByID(g.DeveloperID),
+			Publisher: incSrv.ByID(g.PublisherID),
 			PlayHour:  g.PlayTime / 60,
 			PlayMin:   g.PlayTime % 60,
 		}

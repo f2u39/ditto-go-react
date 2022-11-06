@@ -11,7 +11,7 @@ type baseRepo struct{}
 
 type BaseRepo interface {
 	All(col *mongo.Collection, T any, srt bson.D) error
-	ByID(col *mongo.Collection, id any, T any) error
+	// ByID(col *mongo.Collection, id any, T any) error
 	Create(col *mongo.Collection, T any) error
 	FindMany(col *mongo.Collection, T any, filter bson.D, srt bson.D) error
 	Delete(col *mongo.Collection, id any) error
@@ -26,9 +26,9 @@ func (*baseRepo) All(col *mongo.Collection, T any, srt bson.D) error {
 	return mgo.FindMany(col, T, bson.D{}, srt)
 }
 
-func (*baseRepo) ByID(col *mongo.Collection, id any, T any) error {
-	return mgo.FindID(col, id, T)
-}
+// func (*baseRepo) ByID(col *mongo.Collection, id any, T any) error {
+// 	return mgo.FindID(col, id, T)
+// }
 
 func (*baseRepo) Create(col *mongo.Collection, T any) error {
 	return mgo.Insert(col, T)

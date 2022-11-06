@@ -8,10 +8,12 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
 func Route(e *gin.Engine) {
+	e.Use(static.Serve("/word", static.LocalFile("./web", true)))
 	word := e.Group("/word").Use(mw.Auth)
 	{
 		word.GET("/", index)

@@ -12,6 +12,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,6 +21,8 @@ const (
 )
 
 func Route(e *gin.Engine) {
+	e.Use(static.Serve("/game", static.LocalFile("./web", true)))
+
 	auth := e.Group("/game").Use(mw.Auth)
 	{
 		auth.Any("/create", create)

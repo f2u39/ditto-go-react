@@ -5,6 +5,7 @@ import (
 	"ditto/model/user"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -22,7 +23,7 @@ func NewUserRepo() UserRepo {
 
 func (*userRepo) ByUsername(username string) (user.User, error) {
 	var u user.User
-	filter := bson.M{"username": username}
+	filter := bson.D{primitive.E{Key: "username", Value: username}}
 	err := mgo.FindOne(mgo.Users, filter, &u)
 	return u, err
 }

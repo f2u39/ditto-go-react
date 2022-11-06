@@ -12,7 +12,7 @@ import (
 
 type IncService interface {
 	All() []inc.Inc
-	ByID(id string) inc.Inc
+	ByID(id any) inc.Inc
 	Create(inc inc.Inc) error
 	Developers() []inc.Inc
 	Publishers() []inc.Inc
@@ -33,9 +33,13 @@ func (s *incService) All() []inc.Inc {
 	return incs
 }
 
-func (s *incService) ByID(id string) inc.Inc {
-	inc := inc.Inc{}
-	mgo.FindID(mgo.Incs, id, &inc)
+func (s *incService) ByID(id any) inc.Inc {
+	var inc inc.Inc
+	result, err := mgo.FindID(mgo.Incs, id)
+	if err != nil {
+		return inc
+	}
+	result.Decode(&inc)
 	return inc
 }
 

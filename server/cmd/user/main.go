@@ -113,7 +113,7 @@ func byUsername(username string) (user.User, error) {
 	defer disconnect()
 
 	var u user.User
-	filter := bson.M{"username": username}
+	filter := bson.D{primitive.E{Key: "username", Value: username}}
 
 	err := col.FindOne(context.TODO(), filter).Decode(&u)
 	if err != nil {

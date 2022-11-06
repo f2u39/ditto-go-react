@@ -41,7 +41,6 @@ export default function Game() {
     const [platform, setPlatform] = useState('All');
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [expandedId, setExpandedId] = useState(-1)
     const [status, setStatus] = useState("Playing")
     const [playedCount, setPlayedCount] = useState(0);
     const [playingCount, setPlayingCount] = useState(0);
@@ -70,25 +69,18 @@ export default function Game() {
             })
     }, [status, platform, page]);
 
-    const handleExpandClick = (i: number) => {
-        setExpandedId(expandedId === i ? -1 : i);
-    }
-
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        setExpandedId(-1);
         setPage(value);
     };
 
     const handleStatusChange = (event: React.SyntheticEvent, newStatus: string) => {
-        setExpandedId(-1);
-        setPage(1);
-        setStatus(newStatus);
+        setPage(1)
+        setStatus(newStatus)
     };
 
     const handlePlatformChange = (event: React.SyntheticEvent, newValue: string) => {
-        setExpandedId(-1);
-        setPage(1);
-        setPlatform(newValue);
+        setPage(1)
+        setPlatform(newValue)
     };
 
     const handleStartGame = (id: string) => {
@@ -159,8 +151,6 @@ export default function Game() {
                         <Grid item xs={10}>
                             <Grid
                                 container
-                            // justifyContent="center"
-                            // sx={{ flexGrow: 1 }}
                             >
                                 {details.map((element, i) => (
                                     <Card
@@ -189,15 +179,7 @@ export default function Game() {
                                                     <PlayCircleOutlineIcon />
                                                 </IconButton>
                                             </Tooltip>
-
-                                            <ExpandMore
-                                                expand={expandedId === i}
-                                                onClick={() => handleExpandClick(i)}
-                                            >
-                                                <ExpandMoreIcon />
-                                            </ExpandMore>
                                         </CardActions>
-                                        <Collapse in={expandedId === i} timeout="auto" unmountOnExit>
                                             <CardContent>
                                                 <Box sx={{
                                                     mx: "auto",
@@ -295,7 +277,6 @@ export default function Game() {
                                                     />
                                                 </Box>
                                             </CardContent>
-                                        </Collapse>
                                     </Card>
                                 ))
                                 }
