@@ -40,19 +40,20 @@ export PATH=$PATH:/usr/local/go/bin
 
 ``` cmd
 # AWS EC2: Docker → Ubuntu
-sudo docker exec 210 mongodump --db ditto --out /mongodump_20221106
-sudo docker cp 210:/mongodump_20221106 ~/mongodump_20221106
+sudo docker exec 25b mongodump --db ditto --out /mongodump_20221106
+sudo docker cp 25b:/mongodump_20221106 ~/mongodump_20221106
 ```
 
 ### Restore MongoDB
 
 ``` cmd
-docker cp mongodbdump a3d:/mongodbdump
-docker exec -i a3d /usr/bin/mongorestore --db ditto /mongodbdump/ditto
+# Windows
+docker cp mongodump_20221106 4e7:/mongodump_20221106
+docker exec -i 4e7 /usr/bin/mongorestore --db ditto /mongodump_20221106/ditto
 
 # AWS EC2: Ubuntu → Docker
-docker cp mongodump_20221106 a3d:/mongodump_20221106
-docker exec -i a3d /usr/bin/mongorestore --db ditto /mongodump_20221106/ditto
+sudo docker cp mongodump_20221106 25b:/mongodump_20221106
+sudo docker exec -i 25b /usr/bin/mongorestore --db ditto /mongodump_20221106/ditto
 ```
 
 ### Docker deployment
