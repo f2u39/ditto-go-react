@@ -1,12 +1,19 @@
-version: '3.9'
+version: "3.9"
 services:
+  web:
+    build: .
+    ports:
+      - "80:8080"
+    depends_on:
+      - mongo
+      - redis
   mongo:
     image: mongo
-    container_name: mongo
+    container_name: 'mongo'
+    hostname: 'mongo'
     ports:
-      - 27017:27017
+      - "27017:27017"
     restart: always
-
   redis:
     image: redis
     container_name: redis
