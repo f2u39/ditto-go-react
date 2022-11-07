@@ -2,7 +2,6 @@ package redis
 
 import (
 	"context"
-	"ditto/model/config"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -15,8 +14,8 @@ var (
 
 func NewRedisClient() *redis.Client {
 	cli := redis.NewClient(&redis.Options{
-		Addr:     config.Config.Redis.Address,
-		Password: config.Config.Redis.Password,
+		Addr:     "redis:6379",
+		Password: "",
 		DB:       0,
 	})
 	return cli
