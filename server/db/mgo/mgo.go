@@ -59,6 +59,7 @@ func (iter *Iter) Next(T any) bool {
 
 func Connect() {
 	opts := options.Client().ApplyURI("mongodb://mongo:27017")
+	// opts := options.Client().ApplyURI("mongodb://127.0.0.1:27017")
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
 		log.Fatal(err)
@@ -145,11 +146,12 @@ func Insert(col *mongo.Collection, T any) error {
 	return err
 }
 
-func FindOne(col *mongo.Collection, filter any, T any) error {
-	return col.FindOne(context.TODO(), filter).Decode(&T)
+func FindOne(col *mongo.Collection, filter any) *mongo.SingleResult {
+	return col.FindOne(context.TODO(), filter)
+
 }
 
-func FindID(col *mongo.Collection, id any) (*mongo.SingleResult, error) {
+func FindID(col *mongo.Collection, id any) *mongo.SingleResult {
 	var objID primitive.ObjectID
 
 	switch id.(type) {
@@ -158,11 +160,11 @@ func FindID(col *mongo.Collection, id any) (*mongo.SingleResult, error) {
 	case primitive.ObjectID:
 		objID = id.(primitive.ObjectID)
 	case nil:
-		return nil, fmt.Errorf("bad id format")
+		return nil
 	default:
-		return nil, fmt.Errorf("bad id format")
+
 	}
-	return col.FindOne(context.TODO(), bson.D{primitive.E{Key: "_id", Value: objID}}), nil
+	return col.FindOne(context.TODO(), bson.D{primitive.E{Key: "_id", Value: objID}})
 }
 
 func FindMany(col *mongo.Collection, T any, filter bson.D, sorts bson.D) error {

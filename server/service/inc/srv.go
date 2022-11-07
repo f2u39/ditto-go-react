@@ -35,10 +35,7 @@ func (s *incService) All() []inc.Inc {
 
 func (s *incService) ByID(id any) inc.Inc {
 	var inc inc.Inc
-	result, err := mgo.FindID(mgo.Incs, id)
-	if err != nil {
-		return inc
-	}
+	result := mgo.FindID(mgo.Incs, id)
 	result.Decode(&inc)
 	return inc
 }

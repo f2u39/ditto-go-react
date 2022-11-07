@@ -64,6 +64,12 @@ docker run -p 80:8080 -d ditto-go-react
 docker-compose up -d --build web
 ```
 
+### Delete Redis data
+
+``` redis-cli
+flushall
+```
+
 ## References
 
 - [Deploying Go + React to Heroku using Docker](https://levelup.gitconnected.com/deploying-go-react-to-heroku-using-docker-9844bf075228)

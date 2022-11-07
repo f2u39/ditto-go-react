@@ -44,10 +44,7 @@ func (*wordRepo) ByIsChecked(isCheck int) []word.Word {
 
 func (*wordRepo) ByID(id string) word.Word {
 	var w word.Word
-	result, err := mgo.FindID(mgo.Words, id)
-	if err != nil {
-		return w
-	}
+	result := mgo.FindID(mgo.Words, id)
 	result.Decode(&w)
 	return w
 }

@@ -33,10 +33,7 @@ type service struct {
 
 func (s *service) ByID(id string) game.Game {
 	var game game.Game
-	result, err := mgo.FindID(mgo.Games, id)
-	if err != nil {
-		return game
-	}
+	result := mgo.FindID(mgo.Games, id)
 	result.Decode(&game)
 	return game
 }
