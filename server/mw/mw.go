@@ -7,6 +7,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"time"
 
@@ -23,6 +24,7 @@ func SetAuth(c *gin.Context, userID string) string {
 	}
 	token := base64.URLEncoding.EncodeToString(b)
 
+	log.Println("setAuth:", token, "→", userID)
 	if err := db_redis.Set(token, userID, expiration); err != nil {
 		panic("Failed to set session key to Redis..." + err.Error())
 	}

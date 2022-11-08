@@ -18,13 +18,13 @@ func login(c *gin.Context) {
 	var u user.User
 	c.BindJSON(&u)
 
-	u, err := h.UserService.Login(u.Username, u.Password)
+	auth, err := h.UserService.Login(u.Username, u.Password)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"msg": "Login failed.",
 		})
 	} else {
-		token := mw.SetAuth(c, u.ID.Hex())
+		token := mw.SetAuth(c, auth.ID.Hex())
 		c.JSON(http.StatusOK, gin.H{
 			"auth_token": token,
 		})
