@@ -5,6 +5,8 @@ import (
 	"ditto/model/word"
 	"ditto/service/base"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type wordService struct {
@@ -46,9 +48,10 @@ func (s *wordService) Check(isCheck int, id string) error {
 }
 
 func (s *wordService) Create(w word.Word) error {
+	w.ID = primitive.NewObjectIDFromTimestamp(time.Now())
 	w.CreatedAt = time.Now()
 	w.UpdatedAt = time.Now()
-	return s.Base.Create(mgo.Words, w)
+	return mgo.Insert(mgo.Words, w)
 }
 
 func (s *wordService) Delete(id string) error {

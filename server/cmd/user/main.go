@@ -54,7 +54,7 @@ func register(username string, password string) error {
 
 	if err != nil && len(u.Username) == 0 {
 		new := user.User{}
-		new.ID = primitive.NewObjectID()
+		new.ID = primitive.NewObjectIDFromTimestamp(time.Now())
 		new.Username = username
 		new.Password = HashPass(password)
 		new.CreatedAt = time.Now()

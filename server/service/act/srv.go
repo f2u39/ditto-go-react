@@ -5,7 +5,6 @@ import (
 	"ditto/lib/datetime"
 	"ditto/lib/format"
 	"ditto/model/act"
-	"ditto/service/base"
 	"ditto/service/game"
 	"fmt"
 	"time"
@@ -26,12 +25,10 @@ type Service interface {
 	MonthSum(yyyymm string) act.Summary
 }
 
-type service struct {
-	Base base.BaseRepo
-}
+type service struct{}
 
 func NewService() Service {
-	return &service{Base: base.NewBaseRepo()}
+	return &service{}
 }
 
 func (s *service) ByDate(date string) ([]act.Detail, error) {
@@ -81,7 +78,7 @@ func (s *service) ByDate(date string) ([]act.Detail, error) {
 
 func (s *service) ByGame(gameId string) ([]act.Act, error) {
 	var acts []act.Act
-	err := s.Base.FindMany(mgo.Acts, &acts, bson.D{{"game_id", format.ToObjID(gameId)}}, bson.D{})
+	err := mgo.FindMany(mgo.Acts, &acts, bson.D{{"game_id", format.ToObjID(gameId)}}, bson.D{})
 	return acts, err
 }
 
@@ -131,11 +128,8 @@ func (s *service) ByMonth(date string) ([]act.Detail, error) {
 	return acts, nil
 }
 
-func (s *service) Delete(id string) error {
-	return s.Base.Delete(mgo.Acts, id)
-}
-
 func (s *service) Create(a act.Act) error {
+	a.ID = primitive.NewObjectIDFromTimestamp(time.Now())
 	a.CreatedAt = time.Now()
 	a.UpdatedAt = time.Now()
 	if a.Type == act.GAMING {
@@ -144,7 +138,11 @@ func (s *service) Create(a act.Act) error {
 		g.PlayTime += a.Duration
 		gSrv.Update(g)
 	}
-	return s.Base.Create(mgo.Acts, a)
+	return mgo.Insert(mgo.Acts, a)
+}
+
+func (s *service) Delete(id string) error {
+	return mgo.DeleteID(mgo.Acts, id)
 }
 
 func (s *service) DaySum(ymd string) act.Summary {

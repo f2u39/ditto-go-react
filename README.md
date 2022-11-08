@@ -36,6 +36,12 @@ sudo tar -C /usr/local -xvf go1.19.2.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 ```
 
+### Clear MongoDB trash record
+
+``` cmd
+db.act.deleteOne({"_id": ObjectId('000000000000000000000000')})
+```
+
 ### Backup MongoDB
 
 ``` cmd

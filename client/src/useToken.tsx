@@ -4,15 +4,20 @@ export default function useToken() {
     const getToken = () => {
         // const authToken = localStorage.getItem('auth_token');
         const authToken = getCookie("auth_token")
+        console.log(authToken)
         return authToken
     };
 
     const [token, setToken] = useState(getToken());
-    const saveToken = (userToken: { auth_token: any; }) => {
+    const saveToken = (userToken: { auth_token: any }) => {
         // localStorage.setItem('auth_token', JSON.stringify(userToken));
-        setCookie("auth_token", JSON.stringify(userToken))
-        setToken(userToken.auth_token)
-    };
+        if (userToken !== null) {
+            setCookie("auth_token", JSON.stringify(userToken))
+            setToken(userToken.auth_token)
+        } else {
+            return null
+        }
+    }
 
     return {
         token,

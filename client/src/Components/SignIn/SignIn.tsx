@@ -15,7 +15,6 @@ import LoginIcon from '@mui/icons-material/Login';
 import './SignIn.css';
 
 async function login(credentials: { username: string; password: string; }) {
-  // console.log(credentials);
   return fetch('/user/login', {
     method: 'POST',
     headers: {
@@ -26,6 +25,7 @@ async function login(credentials: { username: string; password: string; }) {
     if (response.ok) {
       return response.json();
     } else {
+      alert("🤔")
       return null;
     }
   })
@@ -150,9 +150,6 @@ const UsernameTextField = styled(TextField)(() => ({
         '-webkit-text-fill-color': '#b9a3db'
       }
     }
-    // '&.Mui-focused fieldset': {
-    //   borderColor: '#3c005a',
-    // },
   },
 }));
 
@@ -177,8 +174,5 @@ const PasswordTextField = styled(TextField)(() => ({
         '-webkit-text-fill-color': '#b9a3db'
       }
     }
-    // '&.Mui-focused fieldset': {
-    //   borderColor: '#3c005a',
-    // },
   },
 }));

@@ -41,6 +41,7 @@ func (s *incService) ByID(id any) inc.Inc {
 }
 
 func (s *incService) Create(inc inc.Inc) error {
+	inc.ID = primitive.NewObjectIDFromTimestamp(time.Now())
 	inc.CreatedAt = time.Now()
 	inc.UpdatedAt = time.Now()
 	return mgo.Insert(mgo.Incs, inc)

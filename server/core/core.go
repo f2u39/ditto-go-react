@@ -17,7 +17,9 @@ import (
 )
 
 // Ditto ← Core
-var Ditto Core
+var (
+	Ditto Core
+)
 
 type Core struct {
 	Engine *gin.Engine

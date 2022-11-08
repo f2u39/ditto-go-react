@@ -97,6 +97,7 @@ func (s *service) Counts() (int, int, int) {
 }
 
 func (s *service) Create(g game.Game) error {
+	g.ID = primitive.NewObjectIDFromTimestamp(time.Now())
 	g.CreatedAt = time.Now()
 	g.UpdatedAt = time.Now()
 	return mgo.Insert(mgo.Games, g)

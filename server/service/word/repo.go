@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type wordRepo struct{}
@@ -63,10 +64,11 @@ func (r *wordRepo) Check(isDone int, id string) error {
 	return mgo.Update(mgo.Words, w.ID, w)
 }
 
-func (*wordRepo) Create(word word.Word) error {
-	word.CreatedAt = time.Now()
-	word.UpdatedAt = time.Now()
-	return mgo.Insert(mgo.Words, word)
+func (*wordRepo) Create(w word.Word) error {
+	w.ID = primitive.NewObjectIDFromTimestamp(time.Now())
+	w.CreatedAt = time.Now()
+	w.UpdatedAt = time.Now()
+	return mgo.Insert(mgo.Words, w)
 }
 
 func (*wordRepo) Update(word word.Word) error {
