@@ -165,6 +165,7 @@ export default function Act() {
 
         fetch("/api/act/create", {
             method: "POST",
+            credentials: "same-origin",
             body: JSON.stringify(formValues),
             headers: {
                 "Content-Type": "application/json"

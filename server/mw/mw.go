@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -34,7 +33,10 @@ func SetAuth(c *gin.Context, userID string) string {
 
 func getAuth(c *gin.Context) interface{} {
 	authToken, _ := c.Cookie("auth_token")
+	log.Println("getAuth - authToken from c.Cookie", authToken)
 	userID, err := db_redis.Get(authToken)
+	log.Println("getAuth - userID from db_Redis.Get(authToken)", userID)
+
 	switch {
 	case err == redis.Nil:
 		fmt.Println("Cannot not found user from this token...")
@@ -56,7 +58,6 @@ func ClearAuth(c *gin.Context) {
 func Auth(c *gin.Context) {
 	uid := getAuth(c)
 	if uid == nil {
-		c.Redirect(http.StatusSeeOther, "/user/login")
 		return
 	}
 	c.Next()
