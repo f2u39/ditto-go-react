@@ -129,8 +129,7 @@ export default function Act() {
 
     const defaultValues = {
         type: 'Gaming',
-        // date: dayjs(new Date()).format('YYYYMMDD'),
-        date: date?.format('YYYYMMDD'),
+        date: dayjs(new Date()).format('YYYYMMDD'),
         duration: '',
         gameId: '',
     }
@@ -161,7 +160,7 @@ export default function Act() {
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        // console.log(formValues)
+        console.log(formValues)
 
         fetch("/api/act/create", {
             method: "POST",
@@ -385,7 +384,7 @@ export default function Act() {
                                 <DatePicker
                                     label="Date"
                                     inputFormat={"MM/DD/YYYY"}
-                                    value={tempDate}
+                                    value={date}
                                     onChange={handleChangeTempDate}
                                     renderInput={(params) =>
                                         <TextField {...params}

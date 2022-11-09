@@ -14,8 +14,8 @@ var (
 
 func NewRedisClient() *redis.Client {
 	cli := redis.NewClient(&redis.Options{
-		Addr: "redis:6379",
-		// Addr:     "",
+		// RedisAddr: "redis:6379",
+		Addr:     "",
 		Password: "",
 		DB:       0,
 	})
