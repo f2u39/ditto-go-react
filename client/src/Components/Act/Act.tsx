@@ -105,7 +105,6 @@ export default function Act() {
         .then(data => {
             fetchData()
             handleStopwatchClose()
-            // console.log(data)
         })
     }
 
@@ -130,7 +129,8 @@ export default function Act() {
 
     const defaultValues = {
         type: 'Gaming',
-        date: dayjs(new Date()).format('YYYYMMDD'),
+        // date: dayjs(new Date()).format('YYYYMMDD'),
+        date: date?.format('YYYYMMDD'),
         duration: '',
         gameId: '',
     }
@@ -165,7 +165,8 @@ export default function Act() {
 
         fetch("/api/act/create", {
             method: "POST",
-            credentials: "same-origin",
+            // credentials: 'include',
+            credentials: 'same-origin',
             body: JSON.stringify(formValues),
             headers: {
                 "Content-Type": "application/json"
@@ -284,7 +285,7 @@ export default function Act() {
                                                     <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell>}
 
                                                 {detail.act.type === 'Gaming' ?
-                                                    <TableCell colSpan={2} align="left" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.game[0].title}</Typography></TableCell> :
+                                                    <TableCell colSpan={2} align="left" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.game[0]?.title}</Typography></TableCell> :
                                                     <TableCell colSpan={2}></TableCell>}
                                             </TableRow>
                                         )
@@ -322,7 +323,7 @@ export default function Act() {
                                                     <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell>}
 
                                                 {detail.act.type === 'Gaming' ?
-                                                    <TableCell colSpan={2} align="left" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.game[0].title}</Typography></TableCell> :
+                                                    <TableCell colSpan={2} align="left" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.game[0]?.title}</Typography></TableCell> :
                                                     <TableCell colSpan={2}></TableCell>}
                                             </TableRow>
                                         )
@@ -385,7 +386,7 @@ export default function Act() {
                                     label="Date"
                                     inputFormat={"MM/DD/YYYY"}
                                     value={tempDate}
-                                    onChange={handleUpdateDate}
+                                    onChange={handleChangeTempDate}
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             name="date"
