@@ -41,6 +41,7 @@ export default function Act() {
         setDate(dayjs(date).add(1, 'day'))
     }
 
+    // TODO Fix it
     const [tempDate, setTempDate] = useState<Dayjs | null>(dayjs(new Date()))
     const handleChangeTempDate = (newValue: Dayjs | null) => {
         setTempDate(newValue)
@@ -127,6 +128,7 @@ export default function Act() {
     const stopwatching: any = acts.stopwatch ? acts.stopwatch : []
     console.log(stopwatching)
 
+    // TODO Fix it
     const defaultValues = {
         type: 'Gaming',
         date: dayjs(new Date()).format('YYYYMMDD'),
