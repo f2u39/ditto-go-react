@@ -16,7 +16,7 @@ import { Grid } from '@mui/material';
 export default function App() {
   const { token, setToken } = useToken()
 
-  console.log(token)
+  // console.log(token)
   if (!token) {
     return <SignIn setToken={setToken} />
   } else {

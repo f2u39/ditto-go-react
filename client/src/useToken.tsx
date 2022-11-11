@@ -4,7 +4,7 @@ export default function useToken() {
     const getToken = () => {
         // const authToken = localStorage.getItem('auth_token');
         const authToken = getCookie("auth_token")
-        console.log(authToken)
+        // console.log(authToken)
         return authToken
     };
 
@@ -12,7 +12,7 @@ export default function useToken() {
     const saveToken = (userToken: { auth_token: any }) => {
         // localStorage.setItem('auth_token', JSON.stringify(userToken));
         if (userToken !== null) {
-            console.log(JSON.stringify(userToken.auth_token))
+            // console.log(JSON.stringify(userToken.auth_token))
             setCookie("auth_token", JSON.stringify(userToken.auth_token))
             setToken(userToken.auth_token)
         } else {

@@ -29,14 +29,29 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
 export default function Act() {
-    // =========== States ===========
     const [date, setDate] = useState<Dayjs | null>(dayjs(new Date()))
+    const [tempDate, setTempDate] = useState<Dayjs | null>(date)
     const [openNewActivity, setOpenNewActivity] = useState(false)
     const [openCalendar, setOpenCalendar] = useState(false)
     const [openStopwatch, setOpenStopwatch] = useState(false)
 
-    const handleUpdateDate = (newValue: Dayjs | null) => {
-        setDate(newValue)
+    const handleChangeTempDate = (newValue: Dayjs | null) => {
+        setTempDate(newValue)
+    }
+
+    const handleCreateActChangeDate = (newValue: Dayjs | null) => {
+        // handleCreateActInputChange({ "date", newValue.format('YYYYMMDD') })
+        // handleCreateActInputChange({ target: { name: "date"; value: newValue.format('YYYYMMDD'); } })
+        setTempDate(newValue)
+        setFormCreateActValues({
+            ...formCreateActValues,
+            "date": newValue!!.format('YYYYMMDD'),
+        })
+    }
+
+    const handleChangeTempDateSubmit= (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        setDate(tempDate)
         setOpenCalendar(false)
     }
 
@@ -49,7 +64,7 @@ export default function Act() {
 
     const handleNewActivityOpen = () => { setOpenNewActivity(true) }
     const handleNewActivityClose = () => {
-        setFormValues(defaultCreateActValues)
+        setFormCreateActValues(defaultCreateActValues)
         setOpenNewActivity(false)
     }
 
@@ -112,7 +127,6 @@ export default function Act() {
             .then(data => {
                 if (data != null) {
                     setActs(data)
-                    console.log(acts)
                 }
             })
     }
@@ -123,7 +137,6 @@ export default function Act() {
     const monSummary: any = acts.month_summary ? acts.month_summary : []
     const playingGames = Array.isArray(acts.playing_games) ? acts.playing_games : []
     const stopwatching: any = acts.stopwatch ? acts.stopwatch : []
-    console.log(stopwatching)
 
     const defaultCreateActValues = {
         type: 'Gaming',
@@ -137,15 +150,21 @@ export default function Act() {
         gameId: ''
     }
 
-    const [formValues, setFormValues] = useState(defaultCreateActValues)
+    function reset() {
+        setTempDate(dayjs(new Date()))
+        setFormCreateActValues(defaultCreateActValues)
+    }
+
+    const [formCreateActValues, setFormCreateActValues] = useState(defaultCreateActValues)
     const [formStopwatch, setFormStopwatch] = useState(defaultStopwatchValue)
 
     const handleCreateActInputChange = (e: { target: { name: any; value: any; } }) => {
         const { name, value } = e.target;
-        setFormValues({
-            ...formValues,
+        setFormCreateActValues({
+            ...formCreateActValues,
             [name]: value,
         })
+        console.log("CreateActInputValue: " + formCreateActValues.date)
     }
 
     const handleStopwatchChange = (e: { target: { name: any; value: any; } }) => {
@@ -156,15 +175,15 @@ export default function Act() {
         })
     }
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleCreateActSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        console.log(formValues)
+        console.log(formCreateActValues)
 
         fetch("/api/act/create", {
             method: "POST",
             // credentials: 'include',
             credentials: 'same-origin',
-            body: JSON.stringify(formValues),
+            body: JSON.stringify(formCreateActValues),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -174,6 +193,7 @@ export default function Act() {
             .then(() => {
                 handleNewActivityClose()
                 fetchData()
+                reset()
             })
             .catch(error => console.error("Error:", error))
     }
@@ -200,15 +220,7 @@ export default function Act() {
                                     aria-haspopup="true"
                                     color="inherit"
                                 >
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DatePicker
-                                            label="Date"
-                                            inputFormat={"MM/DD/YYYY"}
-                                            value={date}
-                                            onChange={handleUpdateDate}
-                                            renderInput={ (params) => <TextField {...params} /> }
-                                        />
-                                    </LocalizationProvider>
+                                    <PostAddIcon onClick={handleNewActivityOpen} sx={{ fontSize: 35 }} />
                                 </IconButton>
 
                                 <IconButton
@@ -350,19 +362,46 @@ export default function Act() {
                 </Grid>
             </Grid>
 
+            <Dialog open={openCalendar} onClose={handleCalendarClose}>
+                <DialogTitle>Select a date</DialogTitle>
+                <DialogContent>
+                    <form onSubmit={handleChangeTempDateSubmit}>
+                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DesktopDatePicker
+                                    inputFormat={"MM/DD/YYYY"}
+                                    value={tempDate}
+                                    onChange={ handleChangeTempDate }
+                                    renderInput={(params) => 
+                                        <TextField {...params} />
+                                    }
+                                />
+                            </LocalizationProvider>
+
+                            <FormControl sx={{ mt: 2 }}>
+                                <Stack direction="row" spacing={2} justifyContent="flex-end">
+                                    <Button onClick={handleCalendarClose}>Cancel</Button>
+                                    <Button type="submit">Submit</Button>
+                                </Stack>
+                            </FormControl>
+                        </FormControl>
+                    </form>     
+                </DialogContent>
+            </Dialog>
+
             <Dialog
                 open={openNewActivity}
                 onClose={handleNewActivityClose}
             >
                 <DialogTitle align="center">New Activity</DialogTitle>
                 <DialogContent>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleCreateActSubmit}>
                         <FormControl sx={{ mt: 2, minWidth: 500 }}>
                             <InputLabel htmlFor="type">Type</InputLabel>
                             <Select
                                 name="type"
                                 label="Type"
-                                value={formValues.type}
+                                value={formCreateActValues.type}
                                 onChange={handleCreateActInputChange}
                             >
                                 <MenuItem value="Gaming">Gaming</MenuItem>
@@ -372,17 +411,28 @@ export default function Act() {
 
                         <FormControl sx={{ mt: 2, minWidth: 500 }}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
+                                {/* <DatePicker
                                     label="Date"
-                                    inputFormat={"MM/DD/YYYY"}
-                                    value={date}
-                                    onChange={ () => {} }
+                                    // inputFormat={"MM/DD/YYYY"}
+                                    inputFormat={"YYYYMMDD"}
+                                    value={tempDate}
+                                    onChange={ handleChangeTempDate }
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             name="date"
-                                            value={formValues.date}
+                                            // value={tempDate}
                                             onChange={handleCreateActInputChange}
                                         />
+                                    }
+                                /> */}
+
+                                <DatePicker
+                                    label="Date"
+                                    inputFormat={"MM/DD/YYYY"}
+                                    value={tempDate}
+                                    onChange={ handleCreateActChangeDate }
+                                    renderInput={(params) => 
+                                        <TextField {...params} />
                                     }
                                 />
                             </LocalizationProvider>
@@ -393,7 +443,7 @@ export default function Act() {
                                 name="duration"
                                 label="Duration"
                                 type="number"
-                                value={formValues.duration}
+                                value={formCreateActValues.duration}
                                 onChange={handleCreateActInputChange}
                                 InputProps={{
                                     inputProps: { min: 0 }
@@ -406,7 +456,7 @@ export default function Act() {
                             <Select
                                 name="gameId"
                                 label="Game"
-                                value={formValues.gameId}
+                                value={formCreateActValues.gameId}
                                 inputProps={{
                                     name: 'gameId',
                                 }}
@@ -419,7 +469,6 @@ export default function Act() {
                                 })}
                             </Select>
                         </FormControl>
-
                         <FormControl sx={{ mt: 2 }}>
                             <Stack direction="row" spacing={2} justifyContent="flex-end">
                                 <Button onClick={handleNewActivityClose}>Cancel</Button>
