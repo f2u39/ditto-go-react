@@ -6,6 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Link from '@mui/material/Link';
 import { AppBar, Badge, Box, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Stack, Toolbar, Tooltip, Typography } from '@mui/material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import TimerIcon from '@mui/icons-material/Timer';
@@ -255,10 +256,15 @@ export default function Act() {
                             >
                                 <Grid item>
                                     <Grid container direction="row" alignItems="center">
-                                        {dayjs(date).format('DD MMM (ddd) YYYY')}
-                                        <Tooltip title="Pick date">
+                                        <Link href="#" variant="h6" underline="hover" onClick={handleCalendarOpen}>
+                                            {dayjs(date).format('DD MMM (ddd) YYYY')}
+                                        </Link>
+                                        {/* <Typography onClick={handleCalendarOpen}>
+                                            {dayjs(date).format('DD MMM (ddd) YYYY')}
+                                        </Typography> */}
+                                        {/* <Tooltip title="Pick date">
                                             <IconButton onClick={handleCalendarOpen}><DateRangeIcon fontSize="large" /></IconButton>
-                                        </Tooltip>
+                                        </Tooltip> */}
                                     </Grid>
                                 </Grid>
                             </Grid>
