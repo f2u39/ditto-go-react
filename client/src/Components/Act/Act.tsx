@@ -29,11 +29,17 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
 export default function Act() {
+    // =========== States ===========
     const [date, setDate] = useState<Dayjs | null>(dayjs(new Date()))
+    const [openNewActivity, setOpenNewActivity] = useState(false)
+    const [openCalendar, setOpenCalendar] = useState(false)
+    const [openStopwatch, setOpenStopwatch] = useState(false)
+
     const handleUpdateDate = (newValue: Dayjs | null) => {
         setDate(newValue)
         setOpenCalendar(false)
     }
+
     const handlePreviousDate = () => {
         setDate(dayjs(date).add(-1, 'day'))
     }
@@ -41,24 +47,15 @@ export default function Act() {
         setDate(dayjs(date).add(1, 'day'))
     }
 
-    // TODO Fix it
-    const [tempDate, setTempDate] = useState<Dayjs | null>(dayjs(new Date()))
-    const handleChangeTempDate = (newValue: Dayjs | null) => {
-        setTempDate(newValue)
-    }
-
-    const [openNewActivity, setOpenNewActivity] = useState(false)
     const handleNewActivityOpen = () => { setOpenNewActivity(true) }
     const handleNewActivityClose = () => {
-        setFormValues(defaultValues)
+        setFormValues(defaultCreateActValues)
         setOpenNewActivity(false)
     }
 
-    const [openCalendar, setOpenCalendar] = useState(false)
     const handleCalendarOpen = () => { setOpenCalendar(true) }
     const handleCalendarClose = () => { setOpenCalendar(false) }
 
-    const [openStopwatch, setOpenStopwatch] = useState(false)
     const handleStopwatchOpen = () => { setOpenStopwatch(true) }
     const handleStopwatchClose = () => {
         setFormStopwatch(defaultStopwatchValue)
@@ -128,8 +125,7 @@ export default function Act() {
     const stopwatching: any = acts.stopwatch ? acts.stopwatch : []
     console.log(stopwatching)
 
-    // TODO Fix it
-    const defaultValues = {
+    const defaultCreateActValues = {
         type: 'Gaming',
         date: dayjs(new Date()).format('YYYYMMDD'),
         duration: '',
@@ -141,10 +137,10 @@ export default function Act() {
         gameId: ''
     }
 
-    const [formValues, setFormValues] = useState(defaultValues)
+    const [formValues, setFormValues] = useState(defaultCreateActValues)
     const [formStopwatch, setFormStopwatch] = useState(defaultStopwatchValue)
 
-    const handleInputChange = (e: { target: { name: any; value: any; } }) => {
+    const handleCreateActInputChange = (e: { target: { name: any; value: any; } }) => {
         const { name, value } = e.target;
         setFormValues({
             ...formValues,
@@ -204,9 +200,16 @@ export default function Act() {
                                     aria-haspopup="true"
                                     color="inherit"
                                 >
-                                    <PostAddIcon onClick={handleNewActivityOpen} sx={{ fontSize: 35 }} />
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            label="Date"
+                                            inputFormat={"MM/DD/YYYY"}
+                                            value={date}
+                                            onChange={handleUpdateDate}
+                                            renderInput={ (params) => <TextField {...params} /> }
+                                        />
+                                    </LocalizationProvider>
                                 </IconButton>
-
 
                                 <IconButton
                                     size="large"
@@ -347,20 +350,6 @@ export default function Act() {
                 </Grid>
             </Grid>
 
-            <Dialog open={openCalendar} onClose={handleCalendarClose}>
-                <DialogTitle>Select a date</DialogTitle>
-                <DialogContent>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DesktopDatePicker
-                            inputFormat={"MM/DD/YYYY"}
-                            value={tempDate}
-                            onChange={handleUpdateDate}
-                            renderInput={(params) => <TextField {...params} />}
-                        />
-                    </LocalizationProvider>
-                </DialogContent>
-            </Dialog>
-
             <Dialog
                 open={openNewActivity}
                 onClose={handleNewActivityClose}
@@ -374,7 +363,7 @@ export default function Act() {
                                 name="type"
                                 label="Type"
                                 value={formValues.type}
-                                onChange={handleInputChange}
+                                onChange={handleCreateActInputChange}
                             >
                                 <MenuItem value="Gaming">Gaming</MenuItem>
                                 <MenuItem value="Programming">Programming</MenuItem>
@@ -387,12 +376,12 @@ export default function Act() {
                                     label="Date"
                                     inputFormat={"MM/DD/YYYY"}
                                     value={date}
-                                    onChange={handleChangeTempDate}
+                                    onChange={ () => {} }
                                     renderInput={(params) =>
                                         <TextField {...params}
                                             name="date"
                                             value={formValues.date}
-                                            onChange={handleInputChange}
+                                            onChange={handleCreateActInputChange}
                                         />
                                     }
                                 />
@@ -400,13 +389,12 @@ export default function Act() {
                         </FormControl>
 
                         <FormControl sx={{ mt: 2, minWidth: 500 }}>
-                            {/* <InputLabel htmlFor="duration">Duration</InputLabel> */}
                             <TextField
                                 name="duration"
                                 label="Duration"
                                 type="number"
                                 value={formValues.duration}
-                                onChange={handleInputChange}
+                                onChange={handleCreateActInputChange}
                                 InputProps={{
                                     inputProps: { min: 0 }
                                 }}
@@ -422,7 +410,7 @@ export default function Act() {
                                 inputProps={{
                                     name: 'gameId',
                                 }}
-                                onChange={handleInputChange}
+                                onChange={handleCreateActInputChange}
                             >
                                 {playingGames.map((game: any, index) => {
                                     return (
