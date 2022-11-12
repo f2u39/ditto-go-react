@@ -301,31 +301,8 @@ export default function Game() {
             </TabContext>
         </Box>
     );
-
-    async function fetchDetails() {
-        try {
-            let url = `/api/game/status/Played/${page}`
-            let resp = await fetch(url);
-            let json = await resp.json();
-            setDetails(json["details"]);
-            setTotalPages(json["total_pages"])
-        } catch (error) {
-            console.log(error);
-        }
-    }
 }
 
-function GameTabPanel() {
-    return (
-        <div
-            role="tabpanel"
-        >
-            <Box sx={{ p: 3 }}>
-
-            </Box>
-        </div>
-    );
-}
 
 interface Detail {
     game: Game,
