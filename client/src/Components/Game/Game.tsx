@@ -4,10 +4,8 @@ import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TuneIcon from '@mui/icons-material/Tune';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import { Badge, Box, Grid, InputAdornment, Tabs, TextField, Tooltip } from '@mui/material';
@@ -16,7 +14,7 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { Check2Square, Tablet, PcDisplay, NintendoSwitch, Playstation, Xbox } from 'react-bootstrap-icons';
+import { CheckSquareFill, Tablet, PcDisplay, NintendoSwitch, Playstation, Xbox } from 'react-bootstrap-icons';
 import { Code, CodeSlash } from 'react-bootstrap-icons';
 import { Battery, BatteryCharging, BatteryFull } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
@@ -100,7 +98,6 @@ export default function Game() {
                             }
                             value="Played"
                         />
-
                         <Tab
                             icon={
                                 <Badge badgeContent={playingCount} color="success">
@@ -109,7 +106,6 @@ export default function Game() {
                             }
                             value="Playing"
                         />
-
                         <Tab
                             icon={
                                 <Badge badgeContent={blockingCount} color="error">
@@ -126,13 +122,11 @@ export default function Game() {
                         container
                         direction="row"
                         justifyContent="space-between"
-                        sx={{
-                            display: 'inline-flex',
-                        }}
+                        sx={{ display: 'inline-flex' }}
                     >
                         <Grid
                             item
-                            sx={{borderRight: 1, borderColor: 'divider' }}
+                            sx={{ m: -3, borderRight: 1, borderColor: 'divider' }}
                         >
                             <Tabs
                                 variant="fullWidth"
@@ -140,34 +134,35 @@ export default function Game() {
                                 value={platform}
                                 onChange={handlePlatformChange}
                             >
-                                <Tab icon={<Check2Square color="white" size={30} />} value="All" />
-                                <Tab icon={<PcDisplay color="orange" size={30} />} value="PC" />
-                                <Tab icon={<Playstation color="#2E6DB4" size={30} />} value="PlayStation" />
-                                <Tab icon={<NintendoSwitch color="#E60012" size={30} />} value="Nintendo Switch" />
-                                <Tab icon={<Xbox color="#107C10" size={30} />} value="Xbox" />
-                                <Tab icon={<Tablet color="#730073" size={30} />} value="Mobile" />
+                                <Tab sx={{ mt: 6 }} icon={<CheckSquareFill size={30} />} value="All" />
+                                <Tab sx={{ mt: 2 }} icon={<PcDisplay color="orange" size={30} />} value="PC" />
+                                <Tab sx={{ mt: 2 }} icon={<Playstation color="#2E6DB4" size={30} />} value="PlayStation" />
+                                <Tab sx={{ mt: 2 }} icon={<NintendoSwitch color="#E60012" size={30} />} value="Nintendo Switch" />
+                                <Tab sx={{ mt: 2 }} icon={<Xbox color="#107C10" size={30} />} value="Xbox" />
+                                <Tab sx={{ mt: 2 }} icon={<Tablet color="#730073" size={30} />} value="Mobile" />
                             </Tabs>
                         </Grid>
+
                         <Grid item xs={10}>
                             <Grid
                                 container
                             >
                                 {details.map((element, i) => (
                                     <Card
-                                        sx={{ ml: 3, mt: 3, maxWidth: 300 }}
+                                        sx={{ ml: 3, mt: 3, maxWidth: 250 }}
                                         key={element.game.id}
                                     >
                                         <CardMedia
                                             component="img"
-                                            height="300"
+                                            height="250"
                                             image={"/assets/images/games/" + element.game.id + ".webp"}
                                         />
                                         <CardContent>
-                                            <Typography variant="body2" align="center" color="text.secondary">
+                                            <Typography variant="subtitle1" align="center" color="text.secondary">
                                                 {element.game.title}
                                             </Typography>
                                         </CardContent>
-                                        <CardActions disableSpacing>
+                                        <CardActions sx={{ mt: -1 }} disableSpacing>
                                             <Tooltip title="Property">
                                                 <IconButton>
                                                     <TuneIcon />
@@ -180,7 +175,7 @@ export default function Game() {
                                                 </IconButton>
                                             </Tooltip>
                                         </CardActions>
-                                            <CardContent>
+                                            <CardContent sx={{ mt: -4 }}>
                                                 <Box sx={{
                                                     mx: "auto",
                                                     display: 'flex',
@@ -192,11 +187,14 @@ export default function Game() {
                                                 }}
                                                 >
                                                     <TextField
-                                                        disabled
+                                                        fullWidth
+                                                        size="small"
                                                         sx={{ pt: 1 }}
                                                         inputProps={{
-                                                            style: { padding: '7px 5px', textAlign: 'right' },
+                                                            style: { textAlign: 'right' },
+                                                            readOnly: true,
                                                         }}
+                                                        value={element.game.rating}
                                                         InputProps={{
                                                             startAdornment: (
                                                                 <InputAdornment position="start">
@@ -206,60 +204,54 @@ export default function Game() {
                                                                     {element.game.platform === 'Nintendo Switch' ? <NintendoSwitch /> : <></>}
                                                                     {element.game.platform === 'Xbox' ? <Xbox /> : <></>}
                                                                 </InputAdornment>
-                                                            ),
-                                                            endAdornment: (
-                                                                <InputAdornment position="end">
-                                                                    {element.game.rating}
-                                                                </InputAdornment>
                                                             )
                                                         }}
                                                     />
                                                     <TextField
-                                                        disabled
+                                                        fullWidth
+                                                        size="small"
                                                         sx={{ pt: 1 }}
                                                         inputProps={{
-                                                            style: { padding: '7px 5px', textAlign: 'right' },
+                                                            style: { textAlign: 'right' },
+                                                            readOnly: true,
                                                         }}
+                                                        value={element.developer.name}
                                                         InputProps={{
                                                             startAdornment: (
                                                                 <InputAdornment position="start">
                                                                     <Code />
                                                                 </InputAdornment>
-                                                            ),
-                                                            endAdornment: (
-                                                                <InputAdornment position="end">
-                                                                    {element.developer.name}
-                                                                </InputAdornment>
                                                             )
                                                         }}
                                                     />
 
                                                     <TextField
-                                                        disabled
+                                                        fullWidth
+                                                        size="small"
                                                         sx={{ pt: 1 }}
                                                         inputProps={{
-                                                            style: { padding: '7px 5px', textAlign: 'right' },
+                                                            style: { textAlign: 'right' },
+                                                            readOnly: true,
                                                         }}
+                                                        value={element.publisher.name}
                                                         InputProps={{
                                                             startAdornment: (
                                                                 <InputAdornment position="start">
                                                                     <CodeSlash />
                                                                 </InputAdornment>
-                                                            ),
-                                                            endAdornment: (
-                                                                <InputAdornment position="end">
-                                                                    {element.publisher.name}
-                                                                </InputAdornment>
                                                             )
                                                         }}
                                                     />
 
                                                     <TextField
-                                                        disabled
+                                                        fullWidth
+                                                        size="small"
                                                         sx={{ pt: 1 }}
                                                         inputProps={{
-                                                            style: { padding: '7px 5px', textAlign: 'right' },
+                                                            style: { textAlign: 'right' },
+                                                            readOnly: true,
                                                         }}
+                                                        value={element.play_hour}
                                                         InputProps={{
                                                             startAdornment: (
                                                                 <InputAdornment position="start">
@@ -269,9 +261,7 @@ export default function Game() {
                                                                 </InputAdornment>
                                                             ),
                                                             endAdornment: (
-                                                                <InputAdornment position="end">
-                                                                    {element.play_hour}h
-                                                                </InputAdornment>
+                                                                <InputAdornment position="end">Hour(s)</InputAdornment>
                                                             )
                                                         }}
                                                     />
