@@ -8,19 +8,21 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import TuneIcon from '@mui/icons-material/Tune';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import { Badge, Box, Grid, InputAdornment, Tabs, TextField, Tooltip } from '@mui/material';
+import { Badge, Box, Button, Dialog, DialogContent, DialogTitle, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, Tabs, TextField, Tooltip } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { CheckSquareFill, Tablet, PcDisplay, NintendoSwitch, Playstation, Xbox } from 'react-bootstrap-icons';
+import { CheckSquareFill, Tablet, PcDisplay, NintendoSwitch, Playstation, Xbox, Stack } from 'react-bootstrap-icons';
 import { Code, CodeSlash } from 'react-bootstrap-icons';
 import { Battery, BatteryCharging, BatteryFull } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 interface ExpandMoreProps extends IconButtonProps {
-    expand: boolean;
+    expand: boolean
 }
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
@@ -35,14 +37,50 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 export default function Game() {
-    const [details, setDetails] = useState<Detail[]>([]);
-    const [platform, setPlatform] = useState('All');
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const [details, setDetails] = useState<Detail[]>([])
+    const [platform, setPlatform] = useState('All')
+    const [page, setPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(1)
     const [status, setStatus] = useState("Playing")
-    const [playedCount, setPlayedCount] = useState(0);
-    const [playingCount, setPlayingCount] = useState(0);
-    const [blockingCount, setBlockingCount] = useState(0);
+    const [playedCount, setPlayedCount] = useState(0)
+    const [playingCount, setPlayingCount] = useState(0)
+    const [blockingCount, setBlockingCount] = useState(0)
+    const [openGameDialog, setOpenGameDialog] = useState(false)
+
+    const defaultGameFormValues = {
+        title: '',
+        developerId: '',
+        publisherId: '',
+        genre: '',
+        platform: ''
+    }
+
+    const [formGameValues, setFormGameValues] = useState(defaultGameFormValues)
+    const handleGameDialogOpen = () => { setOpenGameDialog(true) }
+    const handleGameDialogClose = () => {
+        setFormGameValues(defaultGameFormValues)
+        setOpenGameDialog(false)
+    }
+
+    const handleGameFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        fetch("/api/act/create", {
+            method: "POST",
+            credentials: 'same-origin',
+            body: JSON.stringify(formGameValues),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(() => {
+                handleGameDialogClose()
+                // fetchData()
+                // reset()
+            })
+            .catch(error => console.error("Error:", error))
+    }
 
     useEffect(() => {
         fetch(`/api/game/status/${status}/${platform}/${page}`)
@@ -207,7 +245,7 @@ export default function Game() {
                                                             )
                                                         }}
                                                     />
-                                                    
+
                                                     <TextField
                                                         fullWidth
                                                         size="small"
@@ -290,8 +328,95 @@ export default function Game() {
                     </Grid>
                 </TabPanel>
             </TabContext>
+
+            <Dialog
+                open={openGameDialog}
+                onClose={handleGameDialogClose}
+            >
+                <DialogTitle align="center">New Activity</DialogTitle>
+                <DialogContent>
+                    <form onSubmit={handleGameFormSubmit}>
+                        <FormControl
+                            fullWidth
+                            sx={{ mt: 2, minWidth: 150 }}
+                        >
+                            <InputLabel htmlFor="title">Type</InputLabel>
+                            <Select
+                                name="title"
+                                label="Title"
+                                value={formGameValues.title}
+                                onChange={handleCreateActInputChange}
+                            >
+                                <MenuItem value="Gaming">Gaming</MenuItem>
+                                <MenuItem value="Programming">Programming</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        <FormControl
+                            fullWidth
+                            sx={{ mt: 2, minWidth: 150 }}
+                        >
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="Date"
+                                    inputFormat={"MM/DD/YYYY"}
+                                    value={tempDate}
+                                    onChange={handleCreateActChangeDate}
+                                    renderInput={(params) =>
+                                        <TextField {...params} />
+                                    }
+                                />
+                            </LocalizationProvider>
+                        </FormControl>
+
+                        <FormControl
+                            fullWidth
+                            sx={{ mt: 2, minWidth: 150 }}
+                        >
+                            <TextField
+                                name="duration"
+                                label="Duration"
+                                type="number"
+                                value={formCreateActValues.duration}
+                                onChange={handleCreateActInputChange}
+                                InputProps={{
+                                    inputProps: { min: 0 }
+                                }}
+                            />
+                        </FormControl>
+
+                        <FormControl
+                            fullWidth
+                            sx={{ mt: 2, minWidth: 150 }}
+                        >
+                            <InputLabel htmlFor="type">Game</InputLabel>
+                            <Select
+                                name="gameId"
+                                label="Game"
+                                value={formCreateActValues.gameId}
+                                inputProps={{
+                                    name: 'gameId',
+                                }}
+                                onChange={handleCreateActInputChange}
+                            >
+                                {playingGames.map((game: any, index) => {
+                                    return (
+                                        <MenuItem key={index} value={game.id}>{game.title}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+                        <FormControl sx={{ mt: 2 }}>
+                            <Stack direction="row" spacing={2} justifyContent="flex-end">
+                                <Button onClick={handleNewActivityClose}>Cancel</Button>
+                                <Button type="submit">Submit</Button>
+                            </Stack>
+                        </FormControl>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </Box>
-    );
+    )
 }
 
 
