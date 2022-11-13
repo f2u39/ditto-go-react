@@ -65,21 +65,21 @@ export default function Game() {
                 setPlayingCount(data["playing_cnt"])
                 setBlockingCount(data["blocking_cnt"])
             })
-    }, [status, platform, page]);
+    }, [status, platform, page])
 
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
-    };
+    }
 
     const handleStatusChange = (event: React.SyntheticEvent, newStatus: string) => {
         setPage(1)
         setStatus(newStatus)
-    };
+    }
 
     const handlePlatformChange = (event: React.SyntheticEvent, newValue: string) => {
         setPage(1)
         setPlatform(newValue)
-    };
+    }
 
     const handleStartGame = (id: string) => {
         fetch(`/api/act/watch/start?id=${id}`)
@@ -177,14 +177,14 @@ export default function Game() {
                                         </CardActions>
                                             <CardContent sx={{ mt: -4 }}>
                                                 <Box sx={{
-                                                    mx: "auto",
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    alignItems: 'center',
-                                                    '& > *': {
-                                                        m: 1,
-                                                    },
-                                                }}
+                                                        mx: "auto",
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        alignItems: 'center',
+                                                        '& > *': {
+                                                            m: 1,
+                                                        },
+                                                    }}
                                                 >
                                                     <TextField
                                                         fullWidth
@@ -207,6 +207,7 @@ export default function Game() {
                                                             )
                                                         }}
                                                     />
+                                                    
                                                     <TextField
                                                         fullWidth
                                                         size="small"

@@ -7,10 +7,21 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Link from '@mui/material/Link';
-import { AppBar, Badge, Box, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Stack, Toolbar, Tooltip, Typography } from '@mui/material';
+import { AppBar } from '@mui/material';
+import { Badge } from '@mui/material';
+import { Box } from '@mui/material';
+import { FormControl } from '@mui/material';
+import { Grid } from '@mui/material';
+import { IconButton } from '@mui/material';
+import { InputLabel } from '@mui/material';
+import { MenuItem } from '@mui/material';
+import { Select } from '@mui/material';
+import { Stack } from '@mui/material';
+import { Tooltip } from '@mui/material';
+import { Toolbar } from '@mui/material';
+import { Typography } from '@mui/material';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import TimerIcon from '@mui/icons-material/Timer';
-import DateRangeIcon from '@mui/icons-material/DateRange';
 import { Git as GitIcon } from 'react-bootstrap-icons';
 import { Controller as ControllerIcon } from 'react-bootstrap-icons';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
@@ -41,8 +52,6 @@ export default function Act() {
     }
 
     const handleCreateActChangeDate = (newValue: Dayjs | null) => {
-        // handleCreateActInputChange({ "date", newValue.format('YYYYMMDD') })
-        // handleCreateActInputChange({ target: { name: "date"; value: newValue.format('YYYYMMDD'); } })
         setTempDate(newValue)
         setFormCreateActValues({
             ...formCreateActValues,
@@ -50,7 +59,7 @@ export default function Act() {
         })
     }
 
-    const handleChangeTempDateSubmit= (event: React.FormEvent<HTMLFormElement>) => {
+    const handleChangeTempDateSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         setDate(tempDate)
         setOpenCalendar(false)
@@ -115,11 +124,11 @@ export default function Act() {
         fetch("/api/act/watch/stop", {
             method: "POST",
         })
-        .then(resp => resp.json())
-        .then(data => {
-            fetchData()
-            handleStopwatchClose()
-        })
+            .then(resp => resp.json())
+            .then(data => {
+                fetchData()
+                handleStopwatchClose()
+            })
     }
 
     function fetchData() {
@@ -206,15 +215,19 @@ export default function Act() {
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
-                sx={{ pt: 5 }}
                 xs={12}
             >
                 <Grid item xs={8}>
                     <Box sx={{ flexGrow: 1 }}>
-                        <AppBar position="static" style={{ background: 'transparent', boxShadow: 'none' }}>
+                        <AppBar
+                            position="static"
+                            style={{
+                                background: 'transparent',
+                                boxShadow: 'none'
+                            }}
+                        >
                             <Toolbar>
                                 <Typography sx={{ flexGrow: 1 }} />
-
                                 <IconButton
                                     size="large"
                                     aria-controls="menu-appbar"
@@ -246,7 +259,6 @@ export default function Act() {
                                     <ArrowCircleLeftIcon />
                                 </IconButton>
                             </Tooltip>
-
                             <Grid
                                 container
                                 spacing={0}
@@ -256,15 +268,9 @@ export default function Act() {
                             >
                                 <Grid item>
                                     <Grid container direction="row" alignItems="center">
-                                        <Link href="#" variant="h6" underline="hover" onClick={handleCalendarOpen}>
+                                        <Link href="#" variant="body1" underline="hover" onClick={handleCalendarOpen}>
                                             {dayjs(date).format('DD MMM (ddd) YYYY')}
                                         </Link>
-                                        {/* <Typography onClick={handleCalendarOpen}>
-                                            {dayjs(date).format('DD MMM (ddd) YYYY')}
-                                        </Typography> */}
-                                        {/* <Tooltip title="Pick date">
-                                            <IconButton onClick={handleCalendarOpen}><DateRangeIcon fontSize="large" /></IconButton>
-                                        </Tooltip> */}
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -303,8 +309,8 @@ export default function Act() {
                                                     <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitHubIcon /></Typography></TableCell>}
 
                                                 {detail.act.type === 'Gaming' ?
-                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell> :
-                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell>}
+                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell> :
+                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell>}
 
                                                 {detail.act.type === 'Gaming' ?
                                                     <TableCell colSpan={2} align="left" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.game[0]?.title}</Typography></TableCell> :
@@ -317,14 +323,13 @@ export default function Act() {
                                 <TableRow>
                                     <TableCell colSpan={2}></TableCell>
                                     <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><ControllerIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{daySummary.game_hour === 0 ? '' : daySummary.game_hour+'h'} {daySummary.game_min}m</Typography></TableCell>
+                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{daySummary.game_hour === 0 ? '' : daySummary.game_hour + 'h'} {daySummary.game_min}m</Typography></TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell colSpan={2}></TableCell>
                                     <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{daySummary.pgm_hour === 0 ? '' : daySummary.pgm_hour+'h'} {daySummary.pgm_min}m</Typography></TableCell>
+                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{daySummary.pgm_hour === 0 ? '' : daySummary.pgm_hour + 'h'} {daySummary.pgm_min}m</Typography></TableCell>
                                 </TableRow>
-
                                 <TableRow sx={{ borderTop: 1 }}>
                                     <TableCell colSpan={4} align="center">📅Monthly</TableCell>
                                 </TableRow>
@@ -341,8 +346,8 @@ export default function Act() {
                                                     <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitHubIcon /></Typography></TableCell>}
 
                                                 {detail.act.type === 'Gaming' ?
-                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell> :
-                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour+'h'} {detail.min}m</Typography></TableCell>}
+                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell> :
+                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell>}
 
                                                 {detail.act.type === 'Gaming' ?
                                                     <TableCell colSpan={2} align="left" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.game[0]?.title}</Typography></TableCell> :
@@ -355,12 +360,12 @@ export default function Act() {
                                 <TableRow>
                                     <TableCell colSpan={2}></TableCell>
                                     <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><ControllerIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{monSummary.game_hour === 0 ? '' : monSummary.game_hour+'h'} {monSummary.game_min}m</Typography></TableCell>
+                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{monSummary.game_hour === 0 ? '' : monSummary.game_hour + 'h'} {monSummary.game_min}m</Typography></TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell colSpan={2}></TableCell>
                                     <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{monSummary.pgm_hour === 0 ? '' : monSummary.pgm_hour+'h'} {monSummary.pgm_min}m</Typography></TableCell>
+                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{monSummary.pgm_hour === 0 ? '' : monSummary.pgm_hour + 'h'} {monSummary.pgm_min}m</Typography></TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>
@@ -368,17 +373,20 @@ export default function Act() {
                 </Grid>
             </Grid>
 
-            <Dialog open={openCalendar} onClose={handleCalendarClose}>
+            <Dialog
+                open={openCalendar}
+                onClose={handleCalendarClose}
+            >
                 <DialogTitle>Select a date</DialogTitle>
                 <DialogContent>
                     <form onSubmit={handleChangeTempDateSubmit}>
-                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                        <FormControl>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DesktopDatePicker
                                     inputFormat={"MM/DD/YYYY"}
                                     value={tempDate}
-                                    onChange={ handleChangeTempDate }
-                                    renderInput={(params) => 
+                                    onChange={handleChangeTempDate}
+                                    renderInput={(params) =>
                                         <TextField {...params} />
                                     }
                                 />
@@ -391,7 +399,7 @@ export default function Act() {
                                 </Stack>
                             </FormControl>
                         </FormControl>
-                    </form>     
+                    </form>
                 </DialogContent>
             </Dialog>
 
@@ -402,7 +410,10 @@ export default function Act() {
                 <DialogTitle align="center">New Activity</DialogTitle>
                 <DialogContent>
                     <form onSubmit={handleCreateActSubmit}>
-                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                        <FormControl
+                            fullWidth
+                            sx={{ mt: 2, minWidth: 150 }}
+                        >
                             <InputLabel htmlFor="type">Type</InputLabel>
                             <Select
                                 name="type"
@@ -415,36 +426,27 @@ export default function Act() {
                             </Select>
                         </FormControl>
 
-                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                        <FormControl
+                            fullWidth
+                            sx={{ mt: 2, minWidth: 150 }}
+                        >
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                {/* <DatePicker
-                                    label="Date"
-                                    // inputFormat={"MM/DD/YYYY"}
-                                    inputFormat={"YYYYMMDD"}
-                                    value={tempDate}
-                                    onChange={ handleChangeTempDate }
-                                    renderInput={(params) =>
-                                        <TextField {...params}
-                                            name="date"
-                                            // value={tempDate}
-                                            onChange={handleCreateActInputChange}
-                                        />
-                                    }
-                                /> */}
-
                                 <DatePicker
                                     label="Date"
                                     inputFormat={"MM/DD/YYYY"}
                                     value={tempDate}
-                                    onChange={ handleCreateActChangeDate }
-                                    renderInput={(params) => 
+                                    onChange={handleCreateActChangeDate}
+                                    renderInput={(params) =>
                                         <TextField {...params} />
                                     }
                                 />
                             </LocalizationProvider>
                         </FormControl>
 
-                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                        <FormControl
+                            fullWidth
+                            sx={{ mt: 2, minWidth: 150 }}
+                        >
                             <TextField
                                 name="duration"
                                 label="Duration"
@@ -457,7 +459,10 @@ export default function Act() {
                             />
                         </FormControl>
 
-                        <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                        <FormControl
+                            fullWidth
+                            sx={{ mt: 2, minWidth: 150 }}
+                        >
                             <InputLabel htmlFor="type">Game</InputLabel>
                             <Select
                                 name="gameId"
