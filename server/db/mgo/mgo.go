@@ -58,8 +58,8 @@ func (iter *Iter) Next(T any) bool {
 }
 
 func Connect() {
-	// opts := options.Client().ApplyURI("mongodb://mongo:27017")
-	opts := options.Client().ApplyURI("mongodb://127.0.0.1:27017")
+	opts := options.Client().ApplyURI("mongodb://mongo:27017")
+	// opts := options.Client().ApplyURI("mongodb://127.0.0.1:27017")
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
 		log.Fatal(err)
@@ -148,7 +148,6 @@ func Insert(col *mongo.Collection, T any) error {
 
 func FindOne(col *mongo.Collection, filter any) *mongo.SingleResult {
 	return col.FindOne(context.TODO(), filter)
-
 }
 
 func FindID(col *mongo.Collection, id any) *mongo.SingleResult {

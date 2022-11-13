@@ -329,7 +329,7 @@ export default function Game() {
                 </TabPanel>
             </TabContext>
 
-            <Dialog
+            {/* <Dialog
                 open={openGameDialog}
                 onClose={handleGameDialogClose}
             >
@@ -414,7 +414,7 @@ export default function Game() {
                         </FormControl>
                     </form>
                 </DialogContent>
-            </Dialog>
+            </Dialog> */}
         </Box>
     )
 }
