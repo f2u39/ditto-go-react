@@ -46,6 +46,8 @@ export default function Game() {
     const [playingCount, setPlayingCount] = useState(0)
     const [blockingCount, setBlockingCount] = useState(0)
     const [openGameDialog, setOpenGameDialog] = useState(false)
+    
+    const playingGames = Array.isArray(acts.playing_games) ? acts.playing_games : []
 
     const defaultGameFormValues = {
         title: '',
@@ -61,7 +63,6 @@ export default function Game() {
         setFormGameValues(defaultGameFormValues)
         setOpenGameDialog(false)
     }
-
     const handleGameFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
@@ -80,6 +81,14 @@ export default function Game() {
                 // reset()
             })
             .catch(error => console.error("Error:", error))
+    }
+
+    const handleGameInputChange = (e: { target: { name: any; value: any; } }) => {
+        const { name, value } = e.target;
+        setFormGameValues({
+            ...formGameValues,
+            [name]: value,
+        })
     }
 
     useEffect(() => {
@@ -329,7 +338,7 @@ export default function Game() {
                 </TabPanel>
             </TabContext>
 
-            {/* <Dialog
+            <Dialog
                 open={openGameDialog}
                 onClose={handleGameDialogClose}
             >
@@ -345,7 +354,7 @@ export default function Game() {
                                 name="title"
                                 label="Title"
                                 value={formGameValues.title}
-                                onChange={handleCreateActInputChange}
+                                onChange={handleGameInputChange}
                             >
                                 <MenuItem value="Gaming">Gaming</MenuItem>
                                 <MenuItem value="Programming">Programming</MenuItem>
@@ -356,48 +365,15 @@ export default function Game() {
                             fullWidth
                             sx={{ mt: 2, minWidth: 150 }}
                         >
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                    label="Date"
-                                    inputFormat={"MM/DD/YYYY"}
-                                    value={tempDate}
-                                    onChange={handleCreateActChangeDate}
-                                    renderInput={(params) =>
-                                        <TextField {...params} />
-                                    }
-                                />
-                            </LocalizationProvider>
-                        </FormControl>
-
-                        <FormControl
-                            fullWidth
-                            sx={{ mt: 2, minWidth: 150 }}
-                        >
-                            <TextField
-                                name="duration"
-                                label="Duration"
-                                type="number"
-                                value={formCreateActValues.duration}
-                                onChange={handleCreateActInputChange}
-                                InputProps={{
-                                    inputProps: { min: 0 }
-                                }}
-                            />
-                        </FormControl>
-
-                        <FormControl
-                            fullWidth
-                            sx={{ mt: 2, minWidth: 150 }}
-                        >
-                            <InputLabel htmlFor="type">Game</InputLabel>
+                            <InputLabel htmlFor="developer">Developer</InputLabel>
                             <Select
-                                name="gameId"
-                                label="Game"
-                                value={formCreateActValues.gameId}
+                                name="developerId"
+                                label="Developer"
+                                value={formGameValues.developerId}
                                 inputProps={{
                                     name: 'gameId',
                                 }}
-                                onChange={handleCreateActInputChange}
+                                onChange={handleGameInputChange}
                             >
                                 {playingGames.map((game: any, index) => {
                                     return (
@@ -407,14 +383,14 @@ export default function Game() {
                             </Select>
                         </FormControl>
                         <FormControl sx={{ mt: 2 }}>
-                            <Stack direction="row" spacing={2} justifyContent="flex-end">
-                                <Button onClick={handleNewActivityClose}>Cancel</Button>
+                            <Stack direction="row" spacing={2}>
+                                <Button onClick={handleGameDialogClose}>Cancel</Button>
                                 <Button type="submit">Submit</Button>
                             </Stack>
                         </FormControl>
                     </form>
                 </DialogContent>
-            </Dialog> */}
+            </Dialog>
         </Box>
     )
 }
