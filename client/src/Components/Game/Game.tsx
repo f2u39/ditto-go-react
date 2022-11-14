@@ -46,8 +46,12 @@ export default function Game() {
     const [playingCount, setPlayingCount] = useState(0)
     const [blockingCount, setBlockingCount] = useState(0)
     const [openGameDialog, setOpenGameDialog] = useState(false)
-    
-    const playingGames = Array.isArray(acts.playing_games) ? acts.playing_games : []
+    const [createUpdateGame, setCreateUpdateGame] = useState({
+        developers: [],
+        publishers: [],
+        genres: [],
+        platforms: [],
+    })
 
     const defaultGameFormValues = {
         title: '',
@@ -55,6 +59,18 @@ export default function Game() {
         publisherId: '',
         genre: '',
         platform: ''
+    }
+
+    function fetchCreateUpdateGame() {
+        fetch("/api/game/create`", {
+            method: "GET",
+        })
+            .then(resp => resp.json())
+            .then(data => {
+                if (data != null) {
+                    setCreateUpdateGame(data)
+                }
+            })
     }
 
     const [formGameValues, setFormGameValues] = useState(defaultGameFormValues)
@@ -77,8 +93,6 @@ export default function Game() {
             .then(response => response.json())
             .then(() => {
                 handleGameDialogClose()
-                // fetchData()
-                // reset()
             })
             .catch(error => console.error("Error:", error))
     }
@@ -131,6 +145,11 @@ export default function Game() {
     const handleStartGame = (id: string) => {
         fetch(`/api/act/watch/start?id=${id}`)
     }
+
+    const developers = Array.isArray(createUpdateGame.developers) ? createUpdateGame.developers : []
+    const publishers = Array.isArray(createUpdateGame.publishers) ? createUpdateGame.publishers : []
+    const genres = Array.isArray(createUpdateGame.genres) ? createUpdateGame.genres : []
+    const platforms = Array.isArray(createUpdateGame.platforms) ? createUpdateGame.platforms : []
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -191,9 +210,7 @@ export default function Game() {
                         </Grid>
 
                         <Grid item xs={10}>
-                            <Grid
-                                container
-                            >
+                            <Grid container>
                                 {details.map((element, i) => (
                                     <Card
                                         sx={{ ml: 3, mt: 3, maxWidth: 250 }}
@@ -212,7 +229,7 @@ export default function Game() {
                                         <CardActions sx={{ mt: -1 }} disableSpacing>
                                             <Tooltip title="Property">
                                                 <IconButton>
-                                                    <TuneIcon />
+                                                    <TuneIcon onClick={handleGameDialogOpen} />
                                                 </IconButton>
                                             </Tooltip>
 
@@ -342,14 +359,14 @@ export default function Game() {
                 open={openGameDialog}
                 onClose={handleGameDialogClose}
             >
-                <DialogTitle align="center">New Activity</DialogTitle>
+                <DialogTitle align="center">Update Game</DialogTitle>
                 <DialogContent>
                     <form onSubmit={handleGameFormSubmit}>
                         <FormControl
                             fullWidth
                             sx={{ mt: 2, minWidth: 150 }}
                         >
-                            <InputLabel htmlFor="title">Type</InputLabel>
+                            <InputLabel htmlFor="title">Title</InputLabel>
                             <Select
                                 name="title"
                                 label="Title"
@@ -371,13 +388,35 @@ export default function Game() {
                                 label="Developer"
                                 value={formGameValues.developerId}
                                 inputProps={{
-                                    name: 'gameId',
+                                    name: 'developerId',
                                 }}
                                 onChange={handleGameInputChange}
                             >
-                                {playingGames.map((game: any, index) => {
+                                {developers.map((dev: any, index) => {
                                     return (
-                                        <MenuItem key={index} value={game.id}>{game.title}</MenuItem>
+                                        <MenuItem key={index} value={dev.id}>{dev.name}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl
+                            fullWidth
+                            sx={{ mt: 2, minWidth: 150 }}
+                        >
+                            <InputLabel htmlFor="developer">Publisher</InputLabel>
+                            <Select
+                                name="publisherId"
+                                label="Publisher"
+                                value={formGameValues.publisherId}
+                                inputProps={{
+                                    name: 'publisherId',
+                                }}
+                                onChange={handleGameInputChange}
+                            >
+                                {publishers.map((pub: any, index) => {
+                                    return (
+                                        <MenuItem key={index} value={pub.id}>{pub.name}</MenuItem>
                                     )
                                 })}
                             </Select>

@@ -499,7 +499,7 @@ export default function Act() {
                     {
                         acts.stopwatch === null ?
                             <form onSubmit={handleStartStopwatchSubmit}>
-                                <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                                <FormControl>
                                     <InputLabel htmlFor="type">Type</InputLabel>
                                     <Select
                                         name="type"

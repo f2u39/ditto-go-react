@@ -42,8 +42,6 @@ func Route(e *gin.Engine) {
 }
 
 func updateStatus(c *gin.Context) {
-	// json, _ := ioutil.ReadAll(c.Request.Body)
-
 	gameId := c.PostForm("id")
 	newStatus := c.PostForm("newStatus")
 
