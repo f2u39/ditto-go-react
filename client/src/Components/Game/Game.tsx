@@ -395,7 +395,6 @@ export default function Game() {
     )
 }
 
-
 interface Detail {
     game: Game,
     developer: Developer,
