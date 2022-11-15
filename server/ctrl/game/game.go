@@ -139,7 +139,7 @@ func update(c *gin.Context) {
 		if file != nil && err == nil {
 			fn := gId + ".webp"
 			root := path.Root()
-			path := root + "/../assets/img/games/" + fn
+			path := root + "/assets/images/games/" + fn
 			c.SaveUploadedFile(file, path)
 		}
 

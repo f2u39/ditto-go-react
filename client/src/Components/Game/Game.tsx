@@ -151,9 +151,6 @@ export default function Game() {
             .catch(error => console.error("Error:", error))
     }
 
-    
-    
-
     useEffect(() => {
         fetch(`/api/game/status/${status}/${platform}/${page}`)
             .then(resp => resp.json())
@@ -405,7 +402,7 @@ export default function Game() {
             >
                 <DialogTitle align="center">Update Game</DialogTitle>
                 <DialogContent>
-                    <form method="post" action="/api/game/update">
+                    <form method="post" encType="multipart/form-data" action="/api/game/update">
                         <FormControl fullWidth sx={{ mt: 2 }}>
                             <TextField
                                 name="id"
@@ -496,6 +493,51 @@ export default function Game() {
                             </Select>
                         </FormControl>
 
+                        <FormControl
+                            sx={{
+                                mt: 2,
+                                width: "48%",
+                            }}
+                        >
+                            <InputLabel htmlFor="Platform">Platform</InputLabel>
+                            <Select
+                                name="platform"
+                                label="Platform"
+                                defaultValue={updateGame.game.platform}
+                            >
+                                {updateGame.platforms.map((platform: any, index) => {
+                                    return (
+                                        <MenuItem key={index} value={platform}>{platform}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl 
+                            sx={{
+                                mt: 2,
+                                ml: 2,
+                                width: "49%",
+                            }}
+                        >
+                            <InputLabel htmlFor="Rating">Rating</InputLabel>
+                            <Select
+                                name="rating"
+                                label="Rating"
+                                defaultValue={updateGame.game.rating}
+                            >
+                                <MenuItem key="S+" value="S+">S+</MenuItem>
+                                <MenuItem key="S" value="S">S</MenuItem>
+                                <MenuItem key="A+" value="A+">A+</MenuItem>
+                                <MenuItem key="A" value="A">A</MenuItem>
+                                <MenuItem key="B+" value="B+">B+</MenuItem>
+                                <MenuItem key="B" value="B">B</MenuItem>
+                                <MenuItem key="C+" value="C+">C+</MenuItem>
+                                <MenuItem key="C" value="C">C</MenuItem>
+                                <MenuItem key="D" value="D">D</MenuItem>
+                            </Select>
+                        </FormControl>
+
                         <FormControl sx={{ mt: 2, width: "22%", }}>
                             <TextField
                                 name="play_time_hour"
@@ -523,22 +565,7 @@ export default function Game() {
                                 width: "49%",
                             }}
                         >
-                            <InputLabel htmlFor="Rating">Rating</InputLabel>
-                            <Select
-                                name="rating"
-                                label="Rating"
-                                defaultValue={updateGame.game.rating}
-                            >
-                                <MenuItem key="S+" value="S+">S+</MenuItem>
-                                <MenuItem key="S" value="S">S</MenuItem>
-                                <MenuItem key="A+" value="A+">A+</MenuItem>
-                                <MenuItem key="A" value="A">A</MenuItem>
-                                <MenuItem key="B+" value="B+">B+</MenuItem>
-                                <MenuItem key="B" value="B">B</MenuItem>
-                                <MenuItem key="C+" value="C+">C+</MenuItem>
-                                <MenuItem key="C" value="C">C</MenuItem>
-                                <MenuItem key="D" value="D">D</MenuItem>
-                            </Select>
+                            <input type="file" id="cover" name="cover" />
                         </FormControl>
 
                         <DialogActions sx={{ mt: 1, mb: -1, mr: -1 }}>

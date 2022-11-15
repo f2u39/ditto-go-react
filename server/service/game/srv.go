@@ -150,5 +150,18 @@ func (s *service) PageByStatus(status game.Status, platform game.Platform, page,
 }
 
 func (s *service) Update(g game.Game) error {
-	return mgo.Update(mgo.Games, g.ID, g)
+	update := bson.D{primitive.E{
+		Key: "$set", Value: bson.D{
+			primitive.E{Key: "title", Value: g.Title},
+			primitive.E{Key: "genre", Value: g.Genre},
+			primitive.E{Key: "platform", Value: g.Platform},
+			primitive.E{Key: "developer_id", Value: g.DeveloperID},
+			primitive.E{Key: "publisher_id", Value: g.PublisherID},
+			primitive.E{Key: "status", Value: g.Status},
+			primitive.E{Key: "play_time", Value: g.PlayTime},
+			primitive.E{Key: "rating", Value: g.Rating},
+			primitive.E{Key: "ranking", Value: g.Ranking},
+		}},
+	}
+	return mgo.Update(mgo.Games, g.ID, update)
 }

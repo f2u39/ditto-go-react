@@ -65,7 +65,7 @@ var (
 
 	// Platform
 	PC          = Platform("PC")
-	SWITCH      = Platform("NintendoSwitch")
+	SWITCH      = Platform("Nintendo Switch")
 	PLAYSTATION = Platform("PlayStation")
 	XBOX        = Platform("Xbox")
 	MOBILE      = Platform("Mobile")
