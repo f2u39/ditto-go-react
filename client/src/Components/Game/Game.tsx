@@ -8,7 +8,7 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import TuneIcon from '@mui/icons-material/Tune';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import { Badge, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, Tabs, TextField, Tooltip } from '@mui/material';
+import { Badge, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, Tabs, TextField, Tooltip } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
@@ -18,6 +18,7 @@ import { CheckSquareFill, Tablet, PcDisplay, NintendoSwitch, Playstation, Xbox }
 import { Code, CodeSlash } from 'react-bootstrap-icons';
 import { Battery, BatteryCharging, BatteryFull } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
+import PostAddIcon from '@mui/icons-material/PostAdd';
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean
@@ -44,9 +45,9 @@ export default function Game() {
     const [playingCount, setPlayingCount] = useState(0)
     const [toPlayCount, setToPlayCount] = useState(0)
     const [openUpdateGameDialog, setOpenUpdateGameDialog] = useState(false)
-    const [createUpdateGame, setCreateUpdateGame] = useState({
-        id: '',
-        title: '',
+    const [openCreateGameDialog, setOpenCreateGameDialog] = useState(false)
+    
+    const [createGame, setCreateGame] = useState({
         developers: [],
         publishers: [],
         genres: [],
@@ -98,7 +99,8 @@ export default function Game() {
             .then(resp => resp.json())
             .then(data => {
                 if (data != null) {
-                    setCreateUpdateGame(data)
+                    setCreateGame(data)
+                    setOpenCreateGameDialog(true)
                 }
             })
     }
@@ -117,11 +119,20 @@ export default function Game() {
     }
 
     const [formUpdateGameValues, setFormUpdateGameValues] = useState(defaultGameFormValues)
+    const [formCreateGameValues, setFormCreateGameValues] = useState(defaultGameFormValues)
 
     const handleUpdateGameChange = (e: { target: { name: any; value: any; } }) => {
         const { name, value } = e.target;
         setFormUpdateGameValues({
             ...formUpdateGameValues,
+            [name]: value,
+        })
+    }
+
+    const handleCreateGameChange = (e: { target: { name: any; value: any; } }) => {
+        const { name, value } = e.target;
+        setFormCreateGameValues({
+            ...formCreateGameValues,
             [name]: value,
         })
     }
@@ -133,6 +144,16 @@ export default function Game() {
         setFormUpdateGameValues(defaultGameFormValues)
         setOpenUpdateGameDialog(false)
     }
+
+    const handleCreateGameDialogOpen = () => {
+        handleUpdateGameDialogClose()
+        fetchCreateGame()
+    }
+    const handleCreateGameDialogClose = () => {
+        setFormCreateGameValues(defaultGameFormValues)
+        setOpenCreateGameDialog(false)
+    }
+
     const handleUpdateGameFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
@@ -400,10 +421,15 @@ export default function Game() {
                 open={openUpdateGameDialog}
                 onClose={handleUpdateGameDialogClose}
             >
-                <DialogTitle align="center">Update Game</DialogTitle>
+                <DialogTitle align="center">
+                    Update Game
+                    <IconButton>
+                        <PostAddIcon onClick={handleCreateGameDialogOpen} sx={{ fontSize: 25 }} />
+                    </IconButton>
+                </DialogTitle>
                 <DialogContent>
                     <form method="post" encType="multipart/form-data" action="/api/game/update">
-                        <FormControl fullWidth sx={{ mt: 2 }}>
+                        <FormControl fullWidth sx={{ mt: 1 }}>
                             <TextField
                                 name="id"
                                 label="Id"
@@ -556,6 +582,107 @@ export default function Game() {
                                 defaultValue={updateGame.play_time_min}
                             >
                             </TextField>
+                        </FormControl>
+
+                        <FormControl 
+                            sx={{
+                                mt: 2,
+                                ml: 2,
+                                width: "49%",
+                            }}
+                        >
+                            <input type="file" id="cover" name="cover" />
+                        </FormControl>
+
+                        <DialogActions sx={{ mt: 1, mb: -1, mr: -1 }}>
+                            <Button onClick={handleUpdateGameDialogClose}>Cancel</Button>
+                            <Button type="submit">Submit</Button>
+                        </DialogActions>
+                    </form>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog
+                open={openCreateGameDialog}
+                onClose={handleCreateGameDialogClose}
+            >
+                <DialogTitle align="center">Create Game</DialogTitle>
+                <DialogContent>
+                    <form method="post" action="/api/game/create">
+                        <FormControl fullWidth sx={{ mt: 2 }}>
+                            <InputLabel htmlFor="title">Title</InputLabel>
+                            <TextField
+                                name="title"
+                                label="Title"
+                            >
+                            </TextField>
+                        </FormControl>
+
+                        <FormControl fullWidth sx={{ mt: 2 }}>
+                            <InputLabel htmlFor="developer">Developer</InputLabel>
+                            <Select
+                                name="developer_id"
+                                label="Developer"
+                            >
+                                {createGame.developers.map((dev: any, index) => {
+                                    return (
+                                        <MenuItem key={index} value={dev.id}>{dev.name}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl fullWidth sx={{ mt: 2 }}>
+                            <InputLabel htmlFor="publisher">Publisher</InputLabel>
+                            <Select
+                                name="publisher_id"
+                                label="Publisher"
+                            >
+                                {createGame.publishers.map((pub: any, index) => {
+                                    return (
+                                        <MenuItem key={index} value={pub.id}>{pub.name}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl 
+                            sx={{
+                                mt: 2,
+                                ml: 2,
+                                width: "49%",
+                            }}
+                        >
+                            <InputLabel htmlFor="Genre">Genre</InputLabel>
+                            <Select
+                                name="genre"
+                                label="Genre"
+                            >
+                                {createGame.genres.map((genre: any, index) => {
+                                    return (
+                                        <MenuItem key={index} value={genre}>{genre}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl
+                            sx={{
+                                mt: 2,
+                                width: "48%",
+                            }}
+                        >
+                            <InputLabel htmlFor="Platform">Platform</InputLabel>
+                            <Select
+                                name="platform"
+                                label="Platform"
+                            >
+                                {createGame.platforms.map((platform: any, index) => {
+                                    return (
+                                        <MenuItem key={index} value={platform}>{platform}</MenuItem>
+                                    )
+                                })}
+                            </Select>
                         </FormControl>
 
                         <FormControl 
