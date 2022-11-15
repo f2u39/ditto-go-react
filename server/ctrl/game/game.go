@@ -17,26 +17,25 @@ import (
 )
 
 const (
-	PAGE_LIMIT = 9
+	PAGE_LIMIT = 14
 )
 
 func Route(e *gin.Engine) {
 	e.Use(static.Serve("/game", static.LocalFile("./web", true)))
 
-	auth := e.Group("/game").Use(mw.Auth)
+	auth := e.Group("api/game").Use(mw.Auth)
 	{
 		auth.Any("/create", create)
-		auth.Any("/update", update)
+		auth.POST("/update", update)
 		auth.Any("/delete", delete)
 		auth.POST("/update_status", updateStatus)
-		auth.GET("/counts", counts)
-		auth.GET("/status/:status/:platform/:page", status)
 	}
 
 	anon := e.Group("/api/game")
 	{
-		anon.GET("/counts", counts)
 		anon.GET("/", index)
+		anon.GET("/counts", counts)
+		anon.GET("/update", update)
 		anon.GET("/status/:status/:platform/:page", status)
 	}
 }
@@ -52,11 +51,11 @@ func updateStatus(c *gin.Context) {
 }
 
 func counts(c *gin.Context) {
-	playedCnt, playingCnt, blockingCnt := h.GameService.Counts()
+	playedCnt, playingCnt, toPlayCnt := h.GameService.Counts()
 	c.JSON(http.StatusOK, gin.H{
-		"played_cnt":   playedCnt,
-		"playing_cnt":  playingCnt,
-		"blocking_cnt": blockingCnt,
+		"played_cnt":  playedCnt,
+		"playing_cnt": playingCnt,
+		"toPlay_cnt":  toPlayCnt,
 	})
 }
 
@@ -103,7 +102,7 @@ func update(c *gin.Context) {
 		id := c.Query("id")
 		g := h.GameService.ByID(id)
 
-		c.HTML(http.StatusOK, "game/update", gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"game":           g,
 			"developers":     h.IncService.Developers(),
 			"publishers":     h.IncService.Publishers(),
@@ -143,11 +142,6 @@ func update(c *gin.Context) {
 			path := root + "/../assets/img/games/" + fn
 			c.SaveUploadedFile(file, path)
 		}
-
-		// Uplaod image to Firebase storage
-		// if err == nil {
-		// 	firebase.Upload(file, gId+".webp")
-		// }
 
 		h.GameService.Update(g)
 		c.Redirect(http.StatusSeeOther, "/game")

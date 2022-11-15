@@ -53,15 +53,15 @@ func Platforms() []Platform {
 // Return status
 func Statuses() []Status {
 	return []Status{
-		PLAYING, PLAYED, BLOCKING,
+		PLAYING, PLAYED, TOPLAY,
 	}
 }
 
 var (
 	// Status
-	PLAYING  = Status("Playing")
-	PLAYED   = Status("Played")
-	BLOCKING = Status("Blocking")
+	PLAYING = Status("Playing")
+	PLAYED  = Status("Played")
+	TOPLAY  = Status("ToPlay")
 
 	// Platform
 	PC          = Platform("PC")

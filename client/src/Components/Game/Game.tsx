@@ -8,18 +8,16 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import TuneIcon from '@mui/icons-material/Tune';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import { Badge, Box, Button, Dialog, DialogContent, DialogTitle, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, Tabs, TextField, Tooltip } from '@mui/material';
+import { Badge, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, Tabs, TextField, Tooltip } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { CheckSquareFill, Tablet, PcDisplay, NintendoSwitch, Playstation, Xbox, Stack } from 'react-bootstrap-icons';
+import { CheckSquareFill, Tablet, PcDisplay, NintendoSwitch, Playstation, Xbox } from 'react-bootstrap-icons';
 import { Code, CodeSlash } from 'react-bootstrap-icons';
 import { Battery, BatteryCharging, BatteryFull } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean
@@ -44,16 +42,48 @@ export default function Game() {
     const [status, setStatus] = useState("Playing")
     const [playedCount, setPlayedCount] = useState(0)
     const [playingCount, setPlayingCount] = useState(0)
-    const [blockingCount, setBlockingCount] = useState(0)
-    const [openGameDialog, setOpenGameDialog] = useState(false)
+    const [toPlayCount, setToPlayCount] = useState(0)
+    const [openUpdateGameDialog, setOpenUpdateGameDialog] = useState(false)
     const [createUpdateGame, setCreateUpdateGame] = useState({
+        id: '',
+        title: '',
         developers: [],
         publishers: [],
         genres: [],
         platforms: [],
     })
 
+    const [updateGame, setUpdateGame] = useState({
+        game: { 
+            id: String,
+            title: String,
+            genre: String,
+            platform: String,
+            developer_id: String,
+            publisher_id: String,
+            status: String,
+            playtime: Number,
+            rating: String,
+        },
+        developers: [],
+        publishers: [],
+        genres: [],
+        platforms: [],
+        play_time_hour: 0,
+        play_time_min: 0
+    })
+
+    const handleUpdateFormChange = (e: { target: { name: any; value: any; } }) => {
+        const { name, value } = e.target;
+        setUpdateGame({
+            ...updateGame,
+            [name]: value,
+        })
+        console.log(updateGame.game)
+    }
+
     const defaultGameFormValues = {
+        id: '',
         title: '',
         developerId: '',
         publisherId: '',
@@ -61,7 +91,7 @@ export default function Game() {
         platform: ''
     }
 
-    function fetchCreateUpdateGame() {
+    function fetchCreateGame() {
         fetch("/api/game/create`", {
             method: "GET",
         })
@@ -73,37 +103,56 @@ export default function Game() {
             })
     }
 
-    const [formGameValues, setFormGameValues] = useState(defaultGameFormValues)
-    const handleGameDialogOpen = () => { setOpenGameDialog(true) }
-    const handleGameDialogClose = () => {
-        setFormGameValues(defaultGameFormValues)
-        setOpenGameDialog(false)
+    function fetchUpdateGame(id: String) {
+        fetch(`/api/game/update?id=${id}`, {
+            method: "GET",
+        })
+            .then(resp => resp.json())
+            .then(data => {
+                if (data != null) {
+                    setUpdateGame(data)
+                    setOpenUpdateGameDialog(true)
+                }
+            })
     }
-    const handleGameFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+    const [formUpdateGameValues, setFormUpdateGameValues] = useState(defaultGameFormValues)
+
+    const handleUpdateGameChange = (e: { target: { name: any; value: any; } }) => {
+        const { name, value } = e.target;
+        setFormUpdateGameValues({
+            ...formUpdateGameValues,
+            [name]: value,
+        })
+    }
+
+    const handleUpdateGameDialogOpen = (id: String) => {
+        fetchUpdateGame(id)
+    }
+    const handleUpdateGameDialogClose = () => {
+        setFormUpdateGameValues(defaultGameFormValues)
+        setOpenUpdateGameDialog(false)
+    }
+    const handleUpdateGameFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         fetch("/api/act/create", {
             method: "POST",
             credentials: 'same-origin',
-            body: JSON.stringify(formGameValues),
+            body: JSON.stringify(formUpdateGameValues),
             headers: {
                 "Content-Type": "application/json"
             }
         })
             .then(response => response.json())
             .then(() => {
-                handleGameDialogClose()
+                handleUpdateGameDialogClose()
             })
             .catch(error => console.error("Error:", error))
     }
 
-    const handleGameInputChange = (e: { target: { name: any; value: any; } }) => {
-        const { name, value } = e.target;
-        setFormGameValues({
-            ...formGameValues,
-            [name]: value,
-        })
-    }
+    
+    
 
     useEffect(() => {
         fetch(`/api/game/status/${status}/${platform}/${page}`)
@@ -124,7 +173,7 @@ export default function Game() {
             .then(data => {
                 setPlayedCount(data["played_cnt"])
                 setPlayingCount(data["playing_cnt"])
-                setBlockingCount(data["blocking_cnt"])
+                setToPlayCount(data["toPlay_cnt"])
             })
     }, [status, platform, page])
 
@@ -145,11 +194,6 @@ export default function Game() {
     const handleStartGame = (id: string) => {
         fetch(`/api/act/watch/start?id=${id}`)
     }
-
-    const developers = Array.isArray(createUpdateGame.developers) ? createUpdateGame.developers : []
-    const publishers = Array.isArray(createUpdateGame.publishers) ? createUpdateGame.publishers : []
-    const genres = Array.isArray(createUpdateGame.genres) ? createUpdateGame.genres : []
-    const platforms = Array.isArray(createUpdateGame.platforms) ? createUpdateGame.platforms : []
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -174,11 +218,11 @@ export default function Game() {
                         />
                         <Tab
                             icon={
-                                <Badge badgeContent={blockingCount} color="error">
+                                <Badge badgeContent={toPlayCount} color="error">
                                     <Battery fontSize="30" color="red" />
                                 </Badge>
                             }
-                            value="Blocking"
+                            value="ToPlay"
                         />
                     </TabList>
                 </Box>
@@ -228,8 +272,8 @@ export default function Game() {
                                         </CardContent>
                                         <CardActions sx={{ mt: -1 }} disableSpacing>
                                             <Tooltip title="Property">
-                                                <IconButton>
-                                                    <TuneIcon onClick={handleGameDialogOpen} />
+                                                <IconButton onClick={e => handleUpdateGameDialogOpen(element.game.id)}>
+                                                    <TuneIcon />
                                                 </IconButton>
                                             </Tooltip>
 
@@ -239,99 +283,99 @@ export default function Game() {
                                                 </IconButton>
                                             </Tooltip>
                                         </CardActions>
-                                            <CardContent sx={{ mt: -4 }}>
-                                                <Box sx={{
-                                                        mx: "auto",
-                                                        display: 'flex',
-                                                        flexDirection: 'column',
-                                                        alignItems: 'center',
-                                                        '& > *': {
-                                                            m: 1,
-                                                        },
+                                        <CardContent sx={{ mt: -4 }}>
+                                            <Box sx={{
+                                                mx: "auto",
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'center',
+                                                '& > *': {
+                                                    m: 1,
+                                                },
+                                            }}
+                                            >
+                                                <TextField
+                                                    fullWidth
+                                                    size="small"
+                                                    sx={{ pt: 1 }}
+                                                    inputProps={{
+                                                        style: { textAlign: 'right' },
+                                                        readOnly: true,
                                                     }}
-                                                >
-                                                    <TextField
-                                                        fullWidth
-                                                        size="small"
-                                                        sx={{ pt: 1 }}
-                                                        inputProps={{
-                                                            style: { textAlign: 'right' },
-                                                            readOnly: true,
-                                                        }}
-                                                        value={element.game.rating}
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    {element.game.platform === 'Mobile' ? <Tablet /> : <></>}
-                                                                    {element.game.platform === 'PC' ? <PcDisplay /> : <></>}
-                                                                    {element.game.platform === 'Playstation' ? <Playstation /> : <></>}
-                                                                    {element.game.platform === 'Nintendo Switch' ? <NintendoSwitch /> : <></>}
-                                                                    {element.game.platform === 'Xbox' ? <Xbox /> : <></>}
-                                                                </InputAdornment>
-                                                            )
-                                                        }}
-                                                    />
+                                                    value={element.game.rating}
+                                                    InputProps={{
+                                                        startAdornment: (
+                                                            <InputAdornment position="start">
+                                                                {element.game.platform === 'Mobile' ? <Tablet /> : <></>}
+                                                                {element.game.platform === 'PC' ? <PcDisplay /> : <></>}
+                                                                {element.game.platform === 'Playstation' ? <Playstation /> : <></>}
+                                                                {element.game.platform === 'Nintendo Switch' ? <NintendoSwitch /> : <></>}
+                                                                {element.game.platform === 'Xbox' ? <Xbox /> : <></>}
+                                                            </InputAdornment>
+                                                        )
+                                                    }}
+                                                />
 
-                                                    <TextField
-                                                        fullWidth
-                                                        size="small"
-                                                        sx={{ pt: 1 }}
-                                                        inputProps={{
-                                                            style: { textAlign: 'right' },
-                                                            readOnly: true,
-                                                        }}
-                                                        value={element.developer.name}
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    <Code />
-                                                                </InputAdornment>
-                                                            )
-                                                        }}
-                                                    />
+                                                <TextField
+                                                    fullWidth
+                                                    size="small"
+                                                    sx={{ pt: 1 }}
+                                                    inputProps={{
+                                                        style: { textAlign: 'right' },
+                                                        readOnly: true,
+                                                    }}
+                                                    value={element.developer.name}
+                                                    InputProps={{
+                                                        startAdornment: (
+                                                            <InputAdornment position="start">
+                                                                <Code />
+                                                            </InputAdornment>
+                                                        )
+                                                    }}
+                                                />
 
-                                                    <TextField
-                                                        fullWidth
-                                                        size="small"
-                                                        sx={{ pt: 1 }}
-                                                        inputProps={{
-                                                            style: { textAlign: 'right' },
-                                                            readOnly: true,
-                                                        }}
-                                                        value={element.publisher.name}
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    <CodeSlash />
-                                                                </InputAdornment>
-                                                            )
-                                                        }}
-                                                    />
+                                                <TextField
+                                                    fullWidth
+                                                    size="small"
+                                                    sx={{ pt: 1 }}
+                                                    inputProps={{
+                                                        style: { textAlign: 'right' },
+                                                        readOnly: true,
+                                                    }}
+                                                    value={element.publisher.name}
+                                                    InputProps={{
+                                                        startAdornment: (
+                                                            <InputAdornment position="start">
+                                                                <CodeSlash />
+                                                            </InputAdornment>
+                                                        )
+                                                    }}
+                                                />
 
-                                                    <TextField
-                                                        fullWidth
-                                                        size="small"
-                                                        sx={{ pt: 1 }}
-                                                        inputProps={{
-                                                            style: { textAlign: 'right' },
-                                                            readOnly: true,
-                                                        }}
-                                                        value={element.play_hour}
-                                                        InputProps={{
-                                                            startAdornment: (
-                                                                <InputAdornment position="start">
-                                                                    {element.game.status === 'Played' ? <BatteryFull /> : <></>}
-                                                                    {element.game.status === 'Playing' ? <BatteryCharging /> : <></>}
-                                                                    {element.game.status === 'Blocking' ? <Battery /> : <></>}
-                                                                </InputAdornment>
-                                                            ),
-                                                            endAdornment: (
-                                                                <InputAdornment position="end">Hour(s)</InputAdornment>
-                                                            )
-                                                        }}
-                                                    />
-                                                </Box>
-                                            </CardContent>
+                                                <TextField
+                                                    fullWidth
+                                                    size="small"
+                                                    sx={{ pt: 1 }}
+                                                    inputProps={{
+                                                        style: { textAlign: 'right' },
+                                                        readOnly: true,
+                                                    }}
+                                                    value={element.play_hour}
+                                                    InputProps={{
+                                                        startAdornment: (
+                                                            <InputAdornment position="start">
+                                                                {element.game.status === 'Played' ? <BatteryFull /> : <></>}
+                                                                {element.game.status === 'Playing' ? <BatteryCharging /> : <></>}
+                                                                {element.game.status === 'ToPlay' ? <Battery /> : <></>}
+                                                            </InputAdornment>
+                                                        ),
+                                                        endAdornment: (
+                                                            <InputAdornment position="end">Hour(s)</InputAdornment>
+                                                        )
+                                                    }}
+                                                />
+                                            </Box>
+                                        </CardContent>
                                     </Card>
                                 ))
                                 }
@@ -356,43 +400,41 @@ export default function Game() {
             </TabContext>
 
             <Dialog
-                open={openGameDialog}
-                onClose={handleGameDialogClose}
+                open={openUpdateGameDialog}
+                onClose={handleUpdateGameDialogClose}
             >
                 <DialogTitle align="center">Update Game</DialogTitle>
                 <DialogContent>
-                    <form onSubmit={handleGameFormSubmit}>
-                        <FormControl
-                            fullWidth
-                            sx={{ mt: 2, minWidth: 150 }}
-                        >
-                            <InputLabel htmlFor="title">Title</InputLabel>
-                            <Select
-                                name="title"
-                                label="Title"
-                                value={formGameValues.title}
-                                onChange={handleGameInputChange}
+                    <form method="post" action="/api/game/update">
+                        <FormControl fullWidth sx={{ mt: 2 }}>
+                            <TextField
+                                name="id"
+                                label="Id"
+                                defaultValue={updateGame.game.id}
+                                inputProps={{
+                                    readOnly: true
+                                }}
                             >
-                                <MenuItem value="Gaming">Gaming</MenuItem>
-                                <MenuItem value="Programming">Programming</MenuItem>
-                            </Select>
+                            </TextField>
                         </FormControl>
 
-                        <FormControl
-                            fullWidth
-                            sx={{ mt: 2, minWidth: 150 }}
-                        >
+                        <FormControl fullWidth sx={{ mt: 2 }}>
+                            <TextField
+                                name="title"
+                                label="Title"
+                                defaultValue={updateGame.game.title}
+                            >
+                            </TextField>
+                        </FormControl>
+
+                        <FormControl fullWidth sx={{ mt: 2 }}>
                             <InputLabel htmlFor="developer">Developer</InputLabel>
                             <Select
-                                name="developerId"
+                                name="developer_id"
                                 label="Developer"
-                                value={formGameValues.developerId}
-                                inputProps={{
-                                    name: 'developerId',
-                                }}
-                                onChange={handleGameInputChange}
+                                defaultValue={updateGame.game.developer_id}
                             >
-                                {developers.map((dev: any, index) => {
+                                {updateGame.developers.map((dev: any, index) => {
                                     return (
                                         <MenuItem key={index} value={dev.id}>{dev.name}</MenuItem>
                                     )
@@ -400,33 +442,109 @@ export default function Game() {
                             </Select>
                         </FormControl>
 
-                        <FormControl
-                            fullWidth
-                            sx={{ mt: 2, minWidth: 150 }}
-                        >
-                            <InputLabel htmlFor="developer">Publisher</InputLabel>
+                        <FormControl fullWidth sx={{ mt: 2 }}>
+                            <InputLabel htmlFor="publisher">Publisher</InputLabel>
                             <Select
-                                name="publisherId"
+                                name="publisher_id"
                                 label="Publisher"
-                                value={formGameValues.publisherId}
-                                inputProps={{
-                                    name: 'publisherId',
-                                }}
-                                onChange={handleGameInputChange}
+                                defaultValue={updateGame.game.publisher_id}
                             >
-                                {publishers.map((pub: any, index) => {
+                                {updateGame.publishers.map((pub: any, index) => {
                                     return (
                                         <MenuItem key={index} value={pub.id}>{pub.name}</MenuItem>
                                     )
                                 })}
                             </Select>
                         </FormControl>
-                        <FormControl sx={{ mt: 2 }}>
-                            <Stack direction="row" spacing={2}>
-                                <Button onClick={handleGameDialogClose}>Cancel</Button>
-                                <Button type="submit">Submit</Button>
-                            </Stack>
+
+                        <FormControl
+                            sx={{
+                                mt: 2,
+                                width: "48%",
+                            }}
+                        >
+                            <InputLabel htmlFor="Status">Status</InputLabel>
+                            <Select
+                                name="status"
+                                label="Status"
+                                defaultValue={updateGame.game.status}
+                            >
+                                <MenuItem key="Played" value="Played">Played</MenuItem>
+                                <MenuItem key="Playing" value="Playing">Playing</MenuItem>
+                                <MenuItem key="ToPlay" value="ToPlay">ToPlay</MenuItem>
+                            </Select>
                         </FormControl>
+
+                        <FormControl 
+                            sx={{
+                                mt: 2,
+                                ml: 2,
+                                width: "49%",
+                            }}
+                        >
+                            <InputLabel htmlFor="Genre">Genre</InputLabel>
+                            <Select
+                                name="genre"
+                                label="Genre"
+                                defaultValue={updateGame.game.genre}
+                            >
+                                {updateGame.genres.map((genre: any, index) => {
+                                    return (
+                                        <MenuItem key={index} value={genre}>{genre}</MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
+
+                        <FormControl sx={{ mt: 2, width: "22%", }}>
+                            <TextField
+                                name="play_time_hour"
+                                type="number"
+                                label="Hour"
+                                defaultValue={updateGame.play_time_hour}
+                            >
+                            </TextField>
+                        </FormControl>
+
+                        <FormControl sx={{ mt: 2, ml: 2, width: "23%", }}>
+                            <TextField
+                                name="play_time_min"
+                                type="number"
+                                label="Min"
+                                defaultValue={updateGame.play_time_min}
+                            >
+                            </TextField>
+                        </FormControl>
+
+                        <FormControl 
+                            sx={{
+                                mt: 2,
+                                ml: 2,
+                                width: "49%",
+                            }}
+                        >
+                            <InputLabel htmlFor="Rating">Rating</InputLabel>
+                            <Select
+                                name="rating"
+                                label="Rating"
+                                defaultValue={updateGame.game.rating}
+                            >
+                                <MenuItem key="S+" value="S+">S+</MenuItem>
+                                <MenuItem key="S" value="S">S</MenuItem>
+                                <MenuItem key="A+" value="A+">A+</MenuItem>
+                                <MenuItem key="A" value="A">A</MenuItem>
+                                <MenuItem key="B+" value="B+">B+</MenuItem>
+                                <MenuItem key="B" value="B">B</MenuItem>
+                                <MenuItem key="C+" value="C+">C+</MenuItem>
+                                <MenuItem key="C" value="C">C</MenuItem>
+                                <MenuItem key="D" value="D">D</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        <DialogActions sx={{ mt: 1, mb: -1, mr: -1 }}>
+                            <Button onClick={handleUpdateGameDialogClose}>Cancel</Button>
+                            <Button type="submit">Submit</Button>
+                        </DialogActions>
                     </form>
                 </DialogContent>
             </Dialog>

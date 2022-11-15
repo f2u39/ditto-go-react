@@ -92,8 +92,8 @@ func count(status game.Status) int {
 func (s *service) Counts() (int, int, int) {
 	playedCnt := count(game.PLAYED)
 	playingCnt := count(game.PLAYING)
-	blockingCnt := count(game.BLOCKING)
-	return playedCnt, playingCnt, blockingCnt
+	toPlayCnt := count(game.TOPLAY)
+	return playedCnt, playingCnt, toPlayCnt
 }
 
 func (s *service) Create(g game.Game) error {

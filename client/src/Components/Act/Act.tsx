@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Link from '@mui/material/Link';
-import { AppBar } from '@mui/material';
+import { AppBar, DialogActions } from '@mui/material';
 import { Badge } from '@mui/material';
 import { Box } from '@mui/material';
 import { FormControl } from '@mui/material';
@@ -499,7 +499,7 @@ export default function Act() {
                     {
                         acts.stopwatch === null ?
                             <form onSubmit={handleStartStopwatchSubmit}>
-                                <FormControl>
+                                <FormControl fullWidth sx={{ mt: 1, minWidth: 150 }}>
                                     <InputLabel htmlFor="type">Type</InputLabel>
                                     <Select
                                         name="type"
@@ -512,7 +512,7 @@ export default function Act() {
                                     </Select>
                                 </FormControl>
 
-                                <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                                <FormControl fullWidth sx={{ mt: 2, minWidth: 150 }}>
                                     <InputLabel htmlFor="type">Game</InputLabel>
                                     <Select
                                         name="gameId"
@@ -531,22 +531,20 @@ export default function Act() {
                                     </Select>
                                 </FormControl>
 
-                                <FormControl sx={{ mt: 2 }}>
-                                    <Stack direction="row" spacing={2} justifyContent="flex-end">
-                                        <Button onClick={handleStopwatchClose}>Cancel</Button>
-                                        <Button type="submit">Start</Button>
-                                    </Stack>
-                                </FormControl>
+                                <DialogActions sx={{ mt: 1, mb: -1, mr: -2 }}>
+                                    <Button onClick={handleStopwatchClose}>Cancel</Button>
+                                    <Button type="submit">Start</Button>
+                                </DialogActions>
                             </form>
                             :
                             <form onSubmit={handleStopStopwatchSubmit}>
-                                <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                                <FormControl sx={{ mt: 2, minWidth: 300 }}>
                                     <TextField label="Start At" value={stopwatching.start_time} disabled></TextField>
                                 </FormControl>
-                                <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                                <FormControl sx={{ mt: 2, minWidth: 300 }}>
                                     <TextField label="Type" value={stopwatching.type} disabled></TextField>
                                 </FormControl>
-                                <FormControl sx={{ mt: 2, minWidth: 500 }}>
+                                <FormControl sx={{ mt: 2, minWidth: 300 }}>
                                     <TextField label="Title" value={stopwatching.game_title} disabled></TextField>
                                 </FormControl>
 

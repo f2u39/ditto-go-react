@@ -66,7 +66,7 @@ export default function Word() {
                                     <Battery fontSize="30" color="red" />
                                 </Badge>
                             }
-                            value="Blocking"
+                            value="ToPlay"
                         />
                     </TabList>
                 </Box>
