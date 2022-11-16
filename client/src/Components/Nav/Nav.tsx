@@ -17,7 +17,6 @@ export default function Nav() {
       >
         <Toolbar>
           <Typography sx={{ flexGrow: 1 }} />
-
           <Link href="/game">
             <IconButton
               size="large"
@@ -28,7 +27,6 @@ export default function Nav() {
               <VideoGameAsset sx={{ fontSize: 30, color: "slateblue" }} />
             </IconButton>
           </Link>
-
           <Link href="/word">
             <IconButton
               size="large"
@@ -39,7 +37,6 @@ export default function Nav() {
               <Bookmarks sx={{ fontSize: 30, color: "cadetblue" }} />
             </IconButton>
           </Link>
-
           <Link href="/act">
             <IconButton
               size="large"
@@ -52,6 +49,5 @@ export default function Nav() {
           </Link>
         </Toolbar>
       </AppBar>
-
   );
 }
