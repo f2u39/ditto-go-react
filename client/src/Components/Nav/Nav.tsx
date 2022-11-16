@@ -14,11 +14,8 @@ export default function Nav() {
       <AppBar
         position="fixed"
         style={{ background: 'transparent', boxShadow: 'none' }}
-        // sx={{ borderBottom: 1, borderColor: 'divider' }}
       >
         <Toolbar>
-          {/* <Themes /> */}
-
           <Typography sx={{ flexGrow: 1 }} />
 
           <Link href="/game">
@@ -53,8 +50,6 @@ export default function Nav() {
               <History sx={{ fontSize: 30, color: "darkorange" }} />
             </IconButton>
           </Link>
-          
-          {/* <Button color="inherit"><VideoGameAsset style={{ color: "slateblue" }} /></Button> */}
         </Toolbar>
       </AppBar>
 

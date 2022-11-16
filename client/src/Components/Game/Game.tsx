@@ -216,7 +216,13 @@ export default function Game() {
     return (
         <Box sx={{ width: '100%' }}>
             <TabContext value={status}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Box 
+                    sx={{ 
+                        borderBottom: 1,
+                        borderTop: 1,
+                        borderColor: 'divider'
+                    }}
+                >
                     <TabList indicatorColor="secondary" onChange={handleStatusChange} centered>
                         <Tab
                             icon={
