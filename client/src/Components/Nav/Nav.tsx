@@ -13,10 +13,15 @@ export default function Nav() {
   return (
       <AppBar
         position="fixed"
-        style={{ background: 'transparent', boxShadow: 'none' }}
+        sx={{ width: '50%' }}
+        style={{
+          background: 'transparent',
+          boxShadow: 'none'
+        }}
       >
         <Toolbar>
           <Typography sx={{ flexGrow: 1 }} />
+          
           <Link href="/game">
             <IconButton
               size="large"

@@ -8,7 +8,7 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import TuneIcon from '@mui/icons-material/Tune';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import { Badge, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, Tabs, TextField, Tooltip } from '@mui/material';
+import { AppBar, Badge, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, Tabs, TextField, Toolbar, Tooltip } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
@@ -46,7 +46,7 @@ export default function Game() {
     const [toPlayCount, setToPlayCount] = useState(0)
     const [openUpdateGameDialog, setOpenUpdateGameDialog] = useState(false)
     const [openCreateGameDialog, setOpenCreateGameDialog] = useState(false)
-    
+
     const [createGame, setCreateGame] = useState({
         developers: [],
         publishers: [],
@@ -55,7 +55,7 @@ export default function Game() {
     })
 
     const [updateGame, setUpdateGame] = useState({
-        game: { 
+        game: {
             id: String,
             title: String,
             genre: String,
@@ -214,10 +214,48 @@ export default function Game() {
     }
 
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box
+            sx={{
+                width: '100%'
+            }}
+        >
+            <Grid
+                container
+                sx={{ width: '50%' }}
+            >
+                <Grid item>
+                    <Box
+                        justifyContent="flex-start"
+                    >
+                        <AppBar
+                            position="fixed"
+                            sx={{
+                                width: '50%',
+                                mr: '50%',
+                            }}
+                            style={{
+                                background: 'transparent',
+                                boxShadow: 'none'
+                            }}
+                        >
+                            <Toolbar>
+                                <IconButton
+                                    size="large"
+                                    aria-controls="menu-appbar"
+                                    aria-haspopup="true"
+                                    color="inherit"
+                                >
+                                    <PostAddIcon sx={{ fontSize: 30, color: "white" }} />
+                                </IconButton>
+                            </Toolbar>
+                        </AppBar>
+                    </Box>
+                </Grid>
+            </Grid>
+
             <TabContext value={status}>
-                <Box 
-                    sx={{ 
+                <Box
+                    sx={{
                         borderBottom: 1,
                         borderTop: 1,
                         borderColor: 'divider'
@@ -504,7 +542,7 @@ export default function Game() {
                             </Select>
                         </FormControl>
 
-                        <FormControl 
+                        <FormControl
                             sx={{
                                 mt: 2,
                                 ml: 2,
@@ -545,7 +583,7 @@ export default function Game() {
                             </Select>
                         </FormControl>
 
-                        <FormControl 
+                        <FormControl
                             sx={{
                                 mt: 2,
                                 ml: 2,
@@ -590,7 +628,7 @@ export default function Game() {
                             </TextField>
                         </FormControl>
 
-                        <FormControl 
+                        <FormControl
                             sx={{
                                 mt: 2,
                                 ml: 2,
@@ -652,7 +690,7 @@ export default function Game() {
                             </Select>
                         </FormControl>
 
-                        <FormControl 
+                        <FormControl
                             sx={{
                                 mt: 2,
                                 ml: 2,
@@ -691,7 +729,7 @@ export default function Game() {
                             </Select>
                         </FormControl>
 
-                        <FormControl 
+                        <FormControl
                             sx={{
                                 mt: 2,
                                 ml: 2,
