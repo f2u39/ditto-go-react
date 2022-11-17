@@ -214,11 +214,7 @@ export default function Game() {
     }
 
     return (
-        <Box
-            sx={{
-                width: '100%'
-            }}
-        >
+        <Box sx={{ width: '100%' }}>
             <Grid
                 container
                 sx={{ width: '50%' }}
