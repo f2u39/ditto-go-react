@@ -19,6 +19,8 @@ import { Code, CodeSlash } from 'react-bootstrap-icons';
 import { Battery, BatteryCharging, BatteryFull } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
 import PostAddIcon from '@mui/icons-material/PostAdd';
+import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean
@@ -239,8 +241,18 @@ export default function Game() {
                                     aria-haspopup="true"
                                     color="inherit"
                                 >
-                                    <PostAddIcon sx={{ fontSize: 30, color: "white" }} onClick={handleCreateGameDialogOpen} />
+                                    <PostAddIcon sx={{ fontSize: 30, color: "thistle" }} onClick={handleCreateGameDialogOpen} />
                                 </IconButton>
+
+                                <IconButton
+                                    size="large"
+                                    aria-controls="menu-appbar"
+                                    aria-haspopup="true"
+                                    color="inherit"
+                                >
+                                    <AddBusinessIcon sx={{ fontSize: 30, color: "thistle" }} />
+                                </IconButton>
+                                
                             </Toolbar>
                         </AppBar>
                     </Box>
@@ -514,123 +526,135 @@ export default function Game() {
                             </Select>
                         </FormControl>
 
-                        <FormControl
-                            sx={{
-                                mt: 2,
-                                width: "48%",
-                            }}
-                        >
-                            <InputLabel htmlFor="Status">Status</InputLabel>
-                            <Select
-                                name="status"
-                                label="Status"
-                                defaultValue={updateGame.game.status}
-                            >
-                                <MenuItem key="Played" value="Played">Played</MenuItem>
-                                <MenuItem key="Playing" value="Playing">Playing</MenuItem>
-                                <MenuItem key="ToPlay" value="ToPlay">ToPlay</MenuItem>
-                            </Select>
-                        </FormControl>
+                        <Grid container>
+                            <Grid item sx={{ width: '48%' }}>
+                                <FormControl
+                                    fullWidth
+                                    sx={{ mt: 2 }}
+                                >
+                                    <InputLabel htmlFor="Status">Status</InputLabel>
+                                    <Select
+                                        name="status"
+                                        label="Status"
+                                        defaultValue={updateGame.game.status}
+                                    >
+                                        <MenuItem key="Played" value="Played">Played</MenuItem>
+                                        <MenuItem key="Playing" value="Playing">Playing</MenuItem>
+                                        <MenuItem key="ToPlay" value="ToPlay">ToPlay</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
 
-                        <FormControl
-                            sx={{
-                                mt: 2,
-                                ml: 2,
-                                width: "49%",
-                            }}
-                        >
-                            <InputLabel htmlFor="Genre">Genre</InputLabel>
-                            <Select
-                                name="genre"
-                                label="Genre"
-                                defaultValue={updateGame.game.genre}
-                            >
-                                {updateGame.genres.map((genre: any, index) => {
-                                    return (
-                                        <MenuItem key={index} value={genre}>{genre}</MenuItem>
-                                    )
-                                })}
-                            </Select>
-                        </FormControl>
+                            <Grid item sx={{ width: '4%' }}></Grid>
 
-                        <FormControl
-                            sx={{
-                                mt: 2,
-                                width: "48%",
-                            }}
-                        >
-                            <InputLabel htmlFor="Platform">Platform</InputLabel>
-                            <Select
-                                name="platform"
-                                label="Platform"
-                                defaultValue={updateGame.game.platform}
-                            >
-                                {updateGame.platforms.map((platform: any, index) => {
-                                    return (
-                                        <MenuItem key={index} value={platform}>{platform}</MenuItem>
-                                    )
-                                })}
-                            </Select>
-                        </FormControl>
+                            <Grid item sx={{ width: '48%' }}>
+                                <FormControl
+                                    fullWidth
+                                    sx={{ mt: 2 }}
+                                >
+                                    <InputLabel htmlFor="Genre">Genre</InputLabel>
+                                    <Select
+                                        name="genre"
+                                        label="Genre"
+                                        defaultValue={updateGame.game.genre}
+                                    >
+                                        {updateGame.genres.map((genre: any, index) => {
+                                            return (
+                                                <MenuItem key={index} value={genre}>{genre}</MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                        </Grid>
 
-                        <FormControl
-                            sx={{
-                                mt: 2,
-                                ml: 2,
-                                width: "49%",
-                            }}
-                        >
-                            <InputLabel htmlFor="Rating">Rating</InputLabel>
-                            <Select
-                                name="rating"
-                                label="Rating"
-                                defaultValue={updateGame.game.rating}
-                            >
-                                <MenuItem key="S+" value="S+">S+</MenuItem>
-                                <MenuItem key="S" value="S">S</MenuItem>
-                                <MenuItem key="A+" value="A+">A+</MenuItem>
-                                <MenuItem key="A" value="A">A</MenuItem>
-                                <MenuItem key="B+" value="B+">B+</MenuItem>
-                                <MenuItem key="B" value="B">B</MenuItem>
-                                <MenuItem key="C+" value="C+">C+</MenuItem>
-                                <MenuItem key="C" value="C">C</MenuItem>
-                                <MenuItem key="D" value="D">D</MenuItem>
-                            </Select>
-                        </FormControl>
+                        <Grid container>
+                            <Grid item sx={{ width: '48%' }}>
+                                <FormControl
+                                    fullWidth
+                                    sx={{ mt: 2 }}
+                                >
+                                    <InputLabel htmlFor="Platform">Platform</InputLabel>
+                                    <Select
+                                        name="platform"
+                                        label="Platform"
+                                        defaultValue={updateGame.game.platform}
+                                    >
+                                        {updateGame.platforms.map((platform: any, index) => {
+                                            return (
+                                                <MenuItem key={index} value={platform}>{platform}</MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
 
-                        <FormControl sx={{ mt: 2, width: "22%", }}>
-                            <TextField
-                                name="play_time_hour"
-                                type="number"
-                                label="Hour"
-                                defaultValue={updateGame.play_time_hour}
-                            >
-                            </TextField>
-                        </FormControl>
+                            <Grid item sx={{ width: '4%' }}></Grid>
 
-                        <FormControl sx={{ mt: 2, ml: 2, width: "23%", }}>
-                            <TextField
-                                name="play_time_min"
-                                type="number"
-                                label="Min"
-                                defaultValue={updateGame.play_time_min}
-                            >
-                            </TextField>
-                        </FormControl>
+                            <Grid item sx={{ width: '48%' }}>
+                                <FormControl
+                                    fullWidth
+                                    sx={{ mt: 2 }}
+                                >
+                                    <InputLabel htmlFor="Rating">Rating</InputLabel>
+                                    <Select
+                                        name="rating"
+                                        label="Rating"
+                                        defaultValue={updateGame.game.rating}
+                                    >
+                                        <MenuItem key="S+" value="S+">S+</MenuItem>
+                                        <MenuItem key="S" value="S">S</MenuItem>
+                                        <MenuItem key="A+" value="A+">A+</MenuItem>
+                                        <MenuItem key="A" value="A">A</MenuItem>
+                                        <MenuItem key="B+" value="B+">B+</MenuItem>
+                                        <MenuItem key="B" value="B">B</MenuItem>
+                                        <MenuItem key="C+" value="C+">C+</MenuItem>
+                                        <MenuItem key="C" value="C">C</MenuItem>
+                                        <MenuItem key="D" value="D">D</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                        </Grid>
 
-                        <FormControl
-                            sx={{
-                                mt: 2,
-                                ml: 2,
-                                width: "49%",
-                            }}
-                        >
-                            <input type="file" id="cover" name="cover" />
-                        </FormControl>
+                        <Grid container>
+                            <Grid item sx={{ width: '23%' }}>
+                                <FormControl fullWidth sx={{ mt: 2 }}>
+                                    <TextField
+                                        name="play_time_hour"
+                                        type="number"
+                                        label="Hour"
+                                        defaultValue={updateGame.play_time_hour}
+                                    >
+                                    </TextField>
+                                </FormControl>
+                            </Grid>
 
+                            <Grid item sx={{ width: '2%' }}></Grid>
+
+                            <Grid item sx={{ width: '23%' }}>
+                                <FormControl fullWidth sx={{ mt: 2 }}>
+                                    <TextField
+                                        name="play_time_min"
+                                        type="number"
+                                        label="Min"
+                                        defaultValue={updateGame.play_time_min}
+                                    >
+                                    </TextField>
+                                </FormControl>
+                            </Grid>
+
+                            <Grid item sx={{ width: '4%' }}></Grid>
+
+                            <Grid item sx={{ width: '48%' }}>
+                                <FormControl fullWidth sx={{ mt: 2 }}>
+                                    <input type="file" id="cover" name="cover" />
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        
                         <DialogActions sx={{ mt: 1, mb: -1, mr: -1 }}>
-                            <Button onClick={handleUpdateGameDialogClose}>Cancel</Button>
-                            <Button type="submit">Create</Button>
+                            <Button color="secondary" onClick={handleUpdateGameDialogClose}>Cancel</Button>
+                            <Button color="success" type="submit">Create</Button>
                         </DialogActions>
                     </form>
                 </DialogContent>
@@ -644,7 +668,7 @@ export default function Game() {
                 <DialogContent>
                     <form method="post" action="/api/game/create">
                         <FormControl fullWidth sx={{ mt: 1, minWidth: 250 }}>
-                            <InputLabel htmlFor="title">Title</InputLabel>
+                            {/* <InputLabel htmlFor="title">Title</InputLabel> */}
                             <TextField name="title" label="Title">
                             </TextField>
                         </FormControl>
@@ -716,7 +740,7 @@ export default function Game() {
                         </FormControl>
 
                         <DialogActions sx={{ mt: 1, mb: -1, mr: -1 }}>
-                            <Button color="secondary" onClick={handleUpdateGameDialogClose}>Cancel</Button>
+                            <Button color="secondary" onClick={handleCreateGameDialogClose}>Cancel</Button>
                             <Button color="success" type="submit">Create</Button>
                         </DialogActions>
                     </form>
