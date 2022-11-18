@@ -93,7 +93,7 @@ export default function Game() {
     }
 
     function fetchCreateGame() {
-        fetch("/api/game/create`", {
+        fetch("/api/game/create", {
             method: "GET",
         })
             .then(resp => resp.json())
@@ -146,7 +146,6 @@ export default function Game() {
     }
 
     const handleCreateGameDialogOpen = () => {
-        handleUpdateGameDialogClose()
         fetchCreateGame()
     }
     const handleCreateGameDialogClose = () => {
@@ -224,7 +223,6 @@ export default function Game() {
                         justifyContent="flex-start"
                     >
                         <AppBar
-                            position="fixed"
                             sx={{
                                 width: '50%',
                                 mr: '50%',
@@ -241,7 +239,7 @@ export default function Game() {
                                     aria-haspopup="true"
                                     color="inherit"
                                 >
-                                    <PostAddIcon sx={{ fontSize: 30, color: "white" }} />
+                                    <PostAddIcon sx={{ fontSize: 30, color: "white" }} onClick={handleCreateGameDialogOpen} />
                                 </IconButton>
                             </Toolbar>
                         </AppBar>
@@ -253,7 +251,6 @@ export default function Game() {
                 <Box
                     sx={{
                         borderBottom: 1,
-                        borderTop: 1,
                         borderColor: 'divider'
                     }}
                 >
@@ -463,9 +460,6 @@ export default function Game() {
             >
                 <DialogTitle align="center">
                     Update Game
-                    <IconButton>
-                        <PostAddIcon onClick={handleCreateGameDialogOpen} sx={{ fontSize: 25 }} />
-                    </IconButton>
                 </DialogTitle>
                 <DialogContent>
                     <form method="post" encType="multipart/form-data" action="/api/game/update">
@@ -636,7 +630,7 @@ export default function Game() {
 
                         <DialogActions sx={{ mt: 1, mb: -1, mr: -1 }}>
                             <Button onClick={handleUpdateGameDialogClose}>Cancel</Button>
-                            <Button type="submit">Submit</Button>
+                            <Button type="submit">Create</Button>
                         </DialogActions>
                     </form>
                 </DialogContent>
@@ -649,12 +643,9 @@ export default function Game() {
                 <DialogTitle align="center">Create Game</DialogTitle>
                 <DialogContent>
                     <form method="post" action="/api/game/create">
-                        <FormControl fullWidth sx={{ mt: 2 }}>
+                        <FormControl fullWidth sx={{ mt: 1, minWidth: 250 }}>
                             <InputLabel htmlFor="title">Title</InputLabel>
-                            <TextField
-                                name="title"
-                                label="Title"
-                            >
+                            <TextField name="title" label="Title">
                             </TextField>
                         </FormControl>
 
@@ -687,10 +678,9 @@ export default function Game() {
                         </FormControl>
 
                         <FormControl
+                            fullWidth
                             sx={{
-                                mt: 2,
-                                ml: 2,
-                                width: "49%",
+                                mt: 2
                             }}
                         >
                             <InputLabel htmlFor="Genre">Genre</InputLabel>
@@ -707,9 +697,9 @@ export default function Game() {
                         </FormControl>
 
                         <FormControl
+                            fullWidth
                             sx={{
                                 mt: 2,
-                                width: "48%",
                             }}
                         >
                             <InputLabel htmlFor="Platform">Platform</InputLabel>
@@ -725,19 +715,9 @@ export default function Game() {
                             </Select>
                         </FormControl>
 
-                        <FormControl
-                            sx={{
-                                mt: 2,
-                                ml: 2,
-                                width: "49%",
-                            }}
-                        >
-                            <input type="file" id="cover" name="cover" />
-                        </FormControl>
-
                         <DialogActions sx={{ mt: 1, mb: -1, mr: -1 }}>
-                            <Button onClick={handleUpdateGameDialogClose}>Cancel</Button>
-                            <Button type="submit">Submit</Button>
+                            <Button color="secondary" onClick={handleUpdateGameDialogClose}>Cancel</Button>
+                            <Button color="success" type="submit">Create</Button>
                         </DialogActions>
                     </form>
                 </DialogContent>

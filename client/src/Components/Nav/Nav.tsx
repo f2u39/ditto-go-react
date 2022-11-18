@@ -12,7 +12,7 @@ import VideoGameAsset from '@mui/icons-material/VideogameAsset';
 export default function Nav() {
   return (
       <AppBar
-        position="fixed"
+        // position="fixed"
         sx={{ width: '50%' }}
         style={{
           background: 'transparent',

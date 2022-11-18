@@ -25,7 +25,7 @@ func Route(e *gin.Engine) {
 
 	auth := e.Group("api/game").Use(mw.Auth)
 	{
-		auth.Any("/create", create)
+		auth.POST("/create", create)
 		auth.POST("/update", update)
 		auth.Any("/delete", delete)
 		auth.POST("/update_status", updateStatus)
@@ -35,6 +35,7 @@ func Route(e *gin.Engine) {
 	{
 		anon.GET("/", index)
 		anon.GET("/counts", counts)
+		anon.GET("/create", create)
 		anon.GET("/update", update)
 		anon.GET("/status/:status/:platform/:page", status)
 	}
@@ -62,7 +63,7 @@ func counts(c *gin.Context) {
 func create(c *gin.Context) {
 	switch c.Request.Method {
 	case "GET":
-		c.HTML(http.StatusOK, "game/create", gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"developers": h.IncService.Developers(),
 			"publishers": h.IncService.Publishers(),
 			"genres":     game.Genres(),

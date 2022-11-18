@@ -392,12 +392,10 @@ export default function Act() {
                                 />
                             </LocalizationProvider>
 
-                            <FormControl sx={{ mt: 2 }}>
-                                <Stack direction="row" spacing={2} justifyContent="flex-end">
-                                    <Button onClick={handleCalendarClose}>Cancel</Button>
-                                    <Button type="submit">Submit</Button>
-                                </Stack>
-                            </FormControl>
+                            <DialogActions sx={{ mt: 1, mb: -1, mr: -1 }}>
+                                <Button color="secondary" onClick={handleCalendarClose}>Cancel</Button>
+                                <Button type="submit" color="success">Select</Button>
+                            </DialogActions>
                         </FormControl>
                     </form>
                 </DialogContent>
@@ -412,7 +410,7 @@ export default function Act() {
                     <form onSubmit={handleCreateActSubmit}>
                         <FormControl
                             fullWidth
-                            sx={{ mt: 2, minWidth: 150 }}
+                            sx={{ mt: 2 }}
                         >
                             <InputLabel htmlFor="type">Type</InputLabel>
                             <Select
@@ -428,7 +426,7 @@ export default function Act() {
 
                         <FormControl
                             fullWidth
-                            sx={{ mt: 2, minWidth: 150 }}
+                            sx={{ mt: 2 }}
                         >
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
@@ -445,7 +443,7 @@ export default function Act() {
 
                         <FormControl
                             fullWidth
-                            sx={{ mt: 2, minWidth: 150 }}
+                            sx={{ mt: 2 }}
                         >
                             <TextField
                                 name="duration"
@@ -461,7 +459,7 @@ export default function Act() {
 
                         <FormControl
                             fullWidth
-                            sx={{ mt: 2, minWidth: 150 }}
+                            sx={{ mt: 2 }}
                         >
                             <InputLabel htmlFor="type">Game</InputLabel>
                             <Select
@@ -480,12 +478,11 @@ export default function Act() {
                                 })}
                             </Select>
                         </FormControl>
-                        <FormControl sx={{ mt: 2 }}>
-                            <Stack direction="row" spacing={2} justifyContent="flex-end">
-                                <Button onClick={handleNewActivityClose}>Cancel</Button>
-                                <Button type="submit">Submit</Button>
-                            </Stack>
-                        </FormControl>
+
+                        <DialogActions sx={{ mt: 1, mb: -1, mr: -1 }}>
+                            <Button color="secondary" onClick={handleNewActivityClose}>Cancel</Button>
+                            <Button type="submit" color="success">Create</Button>
+                        </DialogActions>
                     </form>
                 </DialogContent>
             </Dialog>
@@ -499,7 +496,7 @@ export default function Act() {
                     {
                         acts.stopwatch === null ?
                             <form onSubmit={handleStartStopwatchSubmit}>
-                                <FormControl fullWidth sx={{ mt: 1, minWidth: 150 }}>
+                                <FormControl fullWidth sx={{ mt: 1 }}>
                                     <InputLabel htmlFor="type">Type</InputLabel>
                                     <Select
                                         name="type"
@@ -511,8 +508,7 @@ export default function Act() {
                                         <MenuItem value="Programming">Programming</MenuItem>
                                     </Select>
                                 </FormControl>
-
-                                <FormControl fullWidth sx={{ mt: 2, minWidth: 150 }}>
+                                <FormControl fullWidth sx={{ mt: 2, minWidth: 250 }}>
                                     <InputLabel htmlFor="type">Game</InputLabel>
                                     <Select
                                         name="gameId"
@@ -530,30 +526,26 @@ export default function Act() {
                                         })}
                                     </Select>
                                 </FormControl>
-
                                 <DialogActions sx={{ mt: 1, mb: -1, mr: -2 }}>
-                                    <Button onClick={handleStopwatchClose}>Cancel</Button>
-                                    <Button type="submit">Start</Button>
+                                    <Button color="secondary" onClick={handleStopwatchClose}>Cancel</Button>
+                                    <Button color="success" type="submit">Start</Button>
                                 </DialogActions>
                             </form>
-                            :
+                        :
                             <form onSubmit={handleStopStopwatchSubmit}>
-                                <FormControl sx={{ mt: 2, minWidth: 300 }}>
-                                    <TextField label="Start At" value={stopwatching.start_time} disabled></TextField>
+                                <FormControl fullWidth sx={{ mt: 1 }}>
+                                    <TextField label="Start At" value={dayjs(stopwatching.start_time).format('YYYY/MM/DD  HH:mm:ss')} disabled></TextField>
                                 </FormControl>
-                                <FormControl sx={{ mt: 2, minWidth: 300 }}>
+                                <FormControl fullWidth sx={{ mt: 2  }}>
                                     <TextField label="Type" value={stopwatching.type} disabled></TextField>
                                 </FormControl>
-                                <FormControl sx={{ mt: 2, minWidth: 300 }}>
+                                <FormControl fullWidth sx={{ mt: 2, minWidth: 250 }}>
                                     <TextField label="Title" value={stopwatching.game_title} disabled></TextField>
                                 </FormControl>
-
-                                <FormControl sx={{ mt: 2 }}>
-                                    <Stack direction="row" spacing={2} justifyContent="flex-end">
-                                        <Button onClick={handleStopwatchClose}>Cancel</Button>
-                                        <Button type="submit">Stop</Button>
-                                    </Stack>
-                                </FormControl>
+                                <DialogActions sx={{ mt: 1, mb: -1, mr: -1 }}>
+                                    <Button color="secondary" onClick={handleStopwatchClose}>Cancel</Button>
+                                    <Button type="submit" color="error">Stop</Button>
+                                </DialogActions>
                             </form>
                     }
                 </DialogContent>
