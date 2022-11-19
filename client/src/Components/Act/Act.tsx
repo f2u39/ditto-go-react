@@ -210,31 +210,21 @@ export default function Act() {
 
     return (
         <Box sx={{ width: '100%' }}>
-            <Grid
-                container
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                xs={12}
-            >
-                <Grid item xs={8}>
-                    <Box sx={{ flexGrow: 1 }}>
+            <Grid container sx={{ width: '50%' }}>
+                <Grid item>
+                    <Box justifyContent="flex-start">
                         <AppBar
-                            position="static"
-                            style={{
-                                background: 'transparent',
-                                boxShadow: 'none'
-                            }}
+                            sx={{ width: '50%', mr: '50%' }}
+                            style={{ background: 'transparent', boxShadow: 'none' }}
                         >
                             <Toolbar>
-                                <Typography sx={{ flexGrow: 1 }} />
                                 <IconButton
                                     size="large"
                                     aria-controls="menu-appbar"
                                     aria-haspopup="true"
                                     color="inherit"
                                 >
-                                    <PostAddIcon onClick={handleNewActivityOpen} sx={{ fontSize: 35 }} />
+                                    <PostAddIcon sx={{ fontSize: 30, color: "thistle" }} onClick={handleNewActivityOpen} />
                                 </IconButton>
 
                                 <IconButton
@@ -244,14 +234,22 @@ export default function Act() {
                                     color="inherit"
                                 >
                                     <Badge color="secondary" badgeContent={1} invisible={acts.stopwatch === null}>
-                                        <TimerIcon onClick={handleStopwatchOpen} sx={{ fontSize: 35 }} />
+                                        <TimerIcon sx={{ fontSize: 30, color: "thistle" }} onClick={handleStopwatchOpen} />
                                     </Badge>
                                 </IconButton>
-
-                                <Typography sx={{ flexGrow: 1 }} />
                             </Toolbar>
                         </AppBar>
                     </Box>
+                </Grid>
+            </Grid>
+
+            <Grid
+                container
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+            >
+                <Grid item xs={10}>
                     <TableContainer sx={{ border: 1, borderRadius: 1 }}>
                         <Toolbar sx={{ borderBottom: 1 }}>
                             <Tooltip title="Previous date">

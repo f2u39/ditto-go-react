@@ -3,16 +3,19 @@ package inc
 import (
 	"ditto/db/mgo"
 	"ditto/model/inc"
-	"ditto/service/base"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+type incService struct{}
+
 type IncService interface {
 	All() []inc.Inc
+	IsExists(name string) bool
 	ByID(id any) inc.Inc
+	ByName(name string) (inc.Inc, error)
 	Create(inc inc.Inc) error
 	Developers() []inc.Inc
 	Publishers() []inc.Inc
@@ -20,11 +23,7 @@ type IncService interface {
 }
 
 func NewIncService() IncService {
-	return &incService{Base: base.NewBaseRepo()}
-}
-
-type incService struct {
-	Base base.BaseRepo
+	return &incService{}
 }
 
 func (s *incService) All() []inc.Inc {
@@ -33,11 +32,36 @@ func (s *incService) All() []inc.Inc {
 	return incs
 }
 
+func (s *incService) IsExists(name string) bool {
+	var inc inc.Inc
+
+	filter := bson.D{primitive.E{Key: "name", Value: name}}
+	result := mgo.FindOne(mgo.Incs, filter)
+	err := result.Decode(&inc)
+
+	if err != nil {
+		if err.Error() == "mongo: no documents in result" {
+			return false
+		}
+	}
+
+	return true
+}
+
 func (s *incService) ByID(id any) inc.Inc {
 	var inc inc.Inc
 	result := mgo.FindID(mgo.Incs, id)
 	result.Decode(&inc)
 	return inc
+}
+
+func (s *incService) ByName(name string) (inc.Inc, error) {
+	var inc inc.Inc
+
+	filter := bson.D{primitive.E{Key: "name", Value: name}}
+	result := mgo.FindOne(mgo.Incs, filter)
+	err := result.Decode(&inc)
+	return inc, err
 }
 
 func (s *incService) Create(inc inc.Inc) error {

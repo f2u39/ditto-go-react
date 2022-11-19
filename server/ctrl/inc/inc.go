@@ -11,10 +11,10 @@ import (
 )
 
 func Route(e *gin.Engine) {
-	incGroup := e.Group("/inc").Use(mw.Auth)
+	incGroup := e.Group("/api/inc").Use(mw.Auth)
 	{
 		incGroup.GET("/", index)
-		incGroup.Any("/create", create)
+		incGroup.POST("/create", create)
 		incGroup.Any("/update", update)
 	}
 }
@@ -29,15 +29,14 @@ func index(c *gin.Context) {
 }
 
 func create(c *gin.Context) {
-	switch c.Request.Method {
-	case "GET":
-		c.HTML(http.StatusOK, "inc/create", gin.H{})
+	name := c.PostForm("name")
+	isDev, _ := strconv.Atoi(c.PostForm("is_developer"))
+	isPub, _ := strconv.Atoi(c.PostForm("is_publisher"))
 
-	case "POST":
-		name := c.PostForm("name")
-		isDev, _ := strconv.Atoi(c.PostForm("is_developer"))
-		isPub, _ := strconv.Atoi(c.PostForm("is_publisher"))
-
+	if h.IncService.IsExists(name) {
+		c.JSON(http.StatusBadRequest, gin.H{"msg": name + " is exists!"})
+		return
+	} else {
 		h.IncService.Create(inc.Inc{
 			Name:        name,
 			IsDeveloper: isDev,
