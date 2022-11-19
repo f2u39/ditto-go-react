@@ -52,14 +52,12 @@ func (iter *Iter) Next(T any) bool {
 	} else {
 		return false
 	}
-
-	// return iter.cur.Err() != nil
 	return true
 }
 
 func Connect() {
-	opts := options.Client().ApplyURI("mongodb://mongo:27017")
-	// opts := options.Client().ApplyURI("mongodb://127.0.0.1:27017")
+	// opts := options.Client().ApplyURI("mongodb://mongo:27017") ← Docker
+	opts := options.Client().ApplyURI("mongodb://127.0.0.1:27017")
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
 		log.Fatal(err)

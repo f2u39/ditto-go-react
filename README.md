@@ -7,6 +7,12 @@
 
 ## Memo
 
+### [Docker] Download assets from container
+
+``` cmd
+sudo docker cp ???:/assets/images/games ~/assets/2022????
+```
+
 ### [Ubuntu] Kill port 80
 
 ``` cmd
@@ -36,7 +42,7 @@ sudo tar -C /usr/local -xvf go1.19.2.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 ```
 
-### [MongoDB] Clear trash record
+### [MongoDB] Clear trash records
 
 ``` cmd
 db.act.deleteOne({"_id": ObjectId('000000000000000000000000')})
@@ -46,8 +52,8 @@ db.act.deleteOne({"_id": ObjectId('000000000000000000000000')})
 
 ``` cmd
 # AWS EC2: Docker → Ubuntu
-sudo docker exec 25b mongodump --db ditto --out /mongodump_20221106
-sudo docker cp 25b:/mongodump_20221106 ~/mongodump_20221106
+sudo docker exec 25b mongodump --db ditto --out /mongodump/20221119
+sudo docker cp 25b:/mongodump/20221119 ~/mongodump/20221119
 ```
 
 ### [MongoDB] Restore database
@@ -68,6 +74,12 @@ sudo docker exec -i 25b /usr/bin/mongorestore --db ditto /mongodump_20221106/dit
 docker build -t ditto-go-react .
 docker run -p 80:8080 -d ditto-go-react
 docker-compose up -d --build web
+```
+
+### [Docker] Delete all images
+
+``` cmd
+docker image prune
 ```
 
 ### [Redis] Delete all data

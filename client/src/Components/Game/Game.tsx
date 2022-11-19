@@ -590,7 +590,7 @@ export default function Game() {
                         
                         <DialogActions sx={{ mt: 1, mb: -1, mr: -1 }}>
                             <Button color="secondary" onClick={handleUpdateGameDialogClose}>Cancel</Button>
-                            <Button color="success" type="submit">Create</Button>
+                            <Button color="success" type="submit">Update</Button>
                         </DialogActions>
                     </form>
                 </DialogContent>
