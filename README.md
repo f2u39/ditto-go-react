@@ -7,13 +7,13 @@
 
 ## Memo
 
-### Ubuntu port 80
+### [Ubuntu] Kill port 80
 
 ``` cmd
 sudo kill -9 `sudo lsof -t -i:80`
 ```
 
-### Ubuntu install React
+### [Ubuntu] Install React
 
 ``` cmd
 sudo apt install npm
@@ -22,7 +22,7 @@ npm --version
 node --version
 ```
 
-### Ubuntu update Go version
+### [Ubuntu] Update Go version
 
 ``` cmd
 sudo apt-get remove golang-go
@@ -36,13 +36,13 @@ sudo tar -C /usr/local -xvf go1.19.2.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 ```
 
-### Clear MongoDB trash record
+### [MongoDB] Clear trash record
 
 ``` cmd
 db.act.deleteOne({"_id": ObjectId('000000000000000000000000')})
 ```
 
-### Backup MongoDB
+### [MongoDB] Backup databse
 
 ``` cmd
 # AWS EC2: Docker → Ubuntu
@@ -50,7 +50,7 @@ sudo docker exec 25b mongodump --db ditto --out /mongodump_20221106
 sudo docker cp 25b:/mongodump_20221106 ~/mongodump_20221106
 ```
 
-### Restore MongoDB
+### [MongoDB] Restore database
 
 ``` cmd
 # Windows
@@ -62,7 +62,7 @@ sudo docker cp mongodump_20221106 25b:/mongodump_20221106
 sudo docker exec -i 25b /usr/bin/mongorestore --db ditto /mongodump_20221106/ditto
 ```
 
-### Docker deployment
+### [Docker] Deployment
 
 ``` cmd
 docker build -t ditto-go-react .
@@ -70,7 +70,7 @@ docker run -p 80:8080 -d ditto-go-react
 docker-compose up -d --build web
 ```
 
-### Delete Redis data
+### [Redis] Delete all data
 
 ``` redis-cli
 flushall

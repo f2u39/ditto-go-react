@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Link from '@mui/material/Link';
-import { AppBar, DialogActions } from '@mui/material';
+import { AppBar, DialogActions, Tab } from '@mui/material';
 import { Badge } from '@mui/material';
 import { Box } from '@mui/material';
 import { FormControl } from '@mui/material';
@@ -39,8 +39,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+
+import TodayIcon from '@mui/icons-material/Today';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 export default function Act() {
+    const [mode, setMode] = useState("day")
+
     const [date, setDate] = useState<Dayjs | null>(dayjs(new Date()))
     const [tempDate, setTempDate] = useState<Dayjs | null>(date)
     const [openNewActivity, setOpenNewActivity] = useState(false)
@@ -65,12 +71,11 @@ export default function Act() {
         setOpenCalendar(false)
     }
 
-    const handlePreviousDate = () => {
-        setDate(dayjs(date).add(-1, 'day'))
-    }
-    const handleNextDate = () => {
-        setDate(dayjs(date).add(1, 'day'))
-    }
+    const handlePreviousDate = () => { setDate(dayjs(date).add(-1, 'day')) }
+    const handleNextDate = () => { setDate(dayjs(date).add(1, 'day')) }
+
+    const handlePreviousMonth = () => { setDate(dayjs(date).add(-1, 'month')) }
+    const handleNextMonth = () => { setDate(dayjs(date).add(1, 'month')) }
 
     const handleNewActivityOpen = () => { setOpenNewActivity(true) }
     const handleNewActivityClose = () => {
@@ -208,6 +213,10 @@ export default function Act() {
             .catch(error => console.error("Error:", error))
     }
 
+    const handleModeChange = (event: React.SyntheticEvent, mod: string) => {
+        setMode(mod)
+    }
+
     return (
         <Box sx={{ width: '100%' }}>
             <Grid container sx={{ width: '50%' }}>
@@ -243,133 +252,195 @@ export default function Act() {
                 </Grid>
             </Grid>
 
-            <Grid
-                container
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-            >
-                <Grid item xs={10}>
-                    <TableContainer sx={{ border: 1, borderRadius: 1 }}>
-                        <Toolbar sx={{ borderBottom: 1 }}>
-                            <Tooltip title="Previous date">
-                                <IconButton onClick={handlePreviousDate}>
-                                    <ArrowCircleLeftIcon />
-                                </IconButton>
-                            </Tooltip>
-                            <Grid
-                                container
-                                spacing={0}
-                                direction="row"
-                                alignItems="center"
-                                justifyContent="center"
-                            >
-                                <Grid item>
-                                    <Grid container direction="row" alignItems="center">
-                                        <Link href="#" variant="body1" underline="hover" onClick={handleCalendarOpen}>
-                                            {dayjs(date).format('DD MMM (ddd) YYYY')}
-                                        </Link>
+            <TabContext value={mode}>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <TabList indicatorColor="secondary" onChange={handleModeChange} centered>
+                        <Tab
+                            icon={ <TodayIcon sx={{ fontSize: 30 }} /> } value="day" />
+                        <Tab icon={ <CalendarMonthIcon sx={{ fontSize: 30 }} /> } value="month" />
+                    </TabList>
+                </Box>
+
+                <TabPanel sx={{ mt: 2 }} value="day">
+                    <Grid
+                        container
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <Grid item xs={10}>
+                            <TableContainer sx={{ border: 1, borderRadius: 1 }}>
+                                <Toolbar sx={{ borderBottom: 1 }}>
+                                    <Tooltip title="Previous date">
+                                        <IconButton onClick={handlePreviousDate}>
+                                            <ArrowCircleLeftIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Grid
+                                        container
+                                        spacing={0}
+                                        direction="row"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                    >
+                                        <Grid item>
+                                            <Grid container direction="row" alignItems="center">
+                                                <Link href="#" variant="body1" underline="hover" onClick={handleCalendarOpen}>
+                                                    {dayjs(date).format('DD MMM (ddd) YYYY')}
+                                                </Link>
+                                            </Grid>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </Grid>
 
-                            <Tooltip title="Next date">
-                                <IconButton onClick={handleNextDate}>
-                                    <ArrowCircleRightIcon />
-                                </IconButton>
-                            </Tooltip>
-                        </Toolbar>
+                                    <Tooltip title="Next date">
+                                        <IconButton onClick={handleNextDate}>
+                                            <ArrowCircleRightIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Toolbar>
 
-                        <Table size="small">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell align="center" style={{ width: 40, verticalAlign: 'top' }}><FormatListNumberedRtlIcon /></TableCell>
-                                    <TableCell align="center" style={{ width: 110, verticalAlign: 'top' }}><AccessTimeIcon /></TableCell>
-                                    <TableCell align="left" style={{ verticalAlign: 'top' }}><TitleIcon /></TableCell>
-                                    <TableCell style={{ width: 120, verticalAlign: 'top' }}></TableCell>
-                                </TableRow>
-                            </TableHead>
+                                <Table size="small">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell align="center" style={{ width: 40, verticalAlign: 'top' }}><FormatListNumberedRtlIcon /></TableCell>
+                                            <TableCell align="center" style={{ width: 110, verticalAlign: 'top' }}><AccessTimeIcon /></TableCell>
+                                            <TableCell align="left" style={{ verticalAlign: 'top' }}><TitleIcon /></TableCell>
+                                            <TableCell style={{ width: 120, verticalAlign: 'top' }}></TableCell>
+                                        </TableRow>
+                                    </TableHead>
 
-                            <TableBody>
-                                <TableRow sx={{ borderTop: 1 }}>
-                                    <TableCell colSpan={4} align="center">📆Daily</TableCell>
-                                </TableRow>
+                                    <TableBody>
 
-                                {(dayDetails).map(
-                                    (detail: any) => {
-                                        return (
-                                            <TableRow
-                                                key={detail.id}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0, fontSize: 15 } }}
-                                            >
-                                                {detail.act.type === 'Gaming' ?
-                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><SportsEsportsIcon /></Typography></TableCell> :
-                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitHubIcon /></Typography></TableCell>}
+                                        {(dayDetails).map(
+                                            (detail: any) => {
+                                                return (
+                                                    <TableRow
+                                                        key={detail.id}
+                                                        sx={{ '&:last-child td, &:last-child th': { border: 0, fontSize: 15 } }}
+                                                    >
+                                                        {detail.act.type === 'Gaming' ?
+                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><SportsEsportsIcon /></Typography></TableCell> :
+                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitHubIcon /></Typography></TableCell>}
 
-                                                {detail.act.type === 'Gaming' ?
-                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell> :
-                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell>}
+                                                        {detail.act.type === 'Gaming' ?
+                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell> :
+                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell>}
 
-                                                {detail.act.type === 'Gaming' ?
-                                                    <TableCell colSpan={2} align="left" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.game[0]?.title}</Typography></TableCell> :
-                                                    <TableCell colSpan={2}></TableCell>}
-                                            </TableRow>
-                                        )
-                                    }
-                                )}
+                                                        {detail.act.type === 'Gaming' ?
+                                                            <TableCell colSpan={2} align="left" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.game[0]?.title}</Typography></TableCell> :
+                                                            <TableCell colSpan={2}></TableCell>}
+                                                    </TableRow>
+                                                )
+                                            }
+                                        )}
 
-                                <TableRow>
-                                    <TableCell colSpan={2}></TableCell>
-                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><ControllerIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{daySummary.game_hour === 0 ? '' : daySummary.game_hour + 'h'} {daySummary.game_min}m</Typography></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell colSpan={2}></TableCell>
-                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{daySummary.pgm_hour === 0 ? '' : daySummary.pgm_hour + 'h'} {daySummary.pgm_min}m</Typography></TableCell>
-                                </TableRow>
-                                <TableRow sx={{ borderTop: 1 }}>
-                                    <TableCell colSpan={4} align="center">📅Monthly</TableCell>
-                                </TableRow>
+                                        <TableRow>
+                                            <TableCell colSpan={2}></TableCell>
+                                            <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><ControllerIcon size={23} /></Typography></TableCell>
+                                            <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{daySummary.game_hour === 0 ? '' : daySummary.game_hour + 'h'} {daySummary.game_min}m</Typography></TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell colSpan={2}></TableCell>
+                                            <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitIcon size={23} /></Typography></TableCell>
+                                            <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{daySummary.pgm_hour === 0 ? '' : daySummary.pgm_hour + 'h'} {daySummary.pgm_min}m</Typography></TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Grid>
+                    </Grid>
+                </TabPanel>
 
-                                {(monDetails).map(
-                                    (detail: any) => {
-                                        return (
-                                            <TableRow
-                                                key={detail.id}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0, fontSize: 15 } }}
-                                            >
-                                                {detail.act.type === 'Gaming' ?
-                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><SportsEsportsIcon /></Typography></TableCell> :
-                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitHubIcon /></Typography></TableCell>}
+                <TabPanel sx={{ mt: 2 }} value="month">
+                    <Grid
+                        container
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <Grid item xs={10}>
+                            <TableContainer sx={{ border: 1, borderRadius: 1 }}>
+                                <Toolbar sx={{ borderBottom: 1 }}>
+                                    <Tooltip title="Previous month">
+                                        <IconButton onClick={handlePreviousMonth}>
+                                            <ArrowCircleLeftIcon />
+                                        </IconButton>
+                                    </Tooltip>
 
-                                                {detail.act.type === 'Gaming' ?
-                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell> :
-                                                    <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell>}
+                                    <Grid
+                                        container
+                                        spacing={0}
+                                        direction="row"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                    >
+                                        <Grid item>
+                                            <Grid container direction="row" alignItems="center">
+                                                <Link href="#" variant="body1" underline="hover" onClick={handleCalendarOpen}>
+                                                    {dayjs(date).format('MMMM YYYY')}
+                                                </Link>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
 
-                                                {detail.act.type === 'Gaming' ?
-                                                    <TableCell colSpan={2} align="left" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.game[0]?.title}</Typography></TableCell> :
-                                                    <TableCell colSpan={2}></TableCell>}
-                                            </TableRow>
-                                        )
-                                    }
-                                )}
+                                    <Tooltip title="Next month">
+                                        <IconButton onClick={handleNextMonth}>
+                                            <ArrowCircleRightIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Toolbar>
 
-                                <TableRow>
-                                    <TableCell colSpan={2}></TableCell>
-                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><ControllerIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{monSummary.game_hour === 0 ? '' : monSummary.game_hour + 'h'} {monSummary.game_min}m</Typography></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell colSpan={2}></TableCell>
-                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitIcon size={23} /></Typography></TableCell>
-                                    <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{monSummary.pgm_hour === 0 ? '' : monSummary.pgm_hour + 'h'} {monSummary.pgm_min}m</Typography></TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Grid>
-            </Grid>
+                                <Table size="small">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell align="center" style={{ width: 40, verticalAlign: 'top' }}><FormatListNumberedRtlIcon /></TableCell>
+                                            <TableCell align="center" style={{ width: 110, verticalAlign: 'top' }}><AccessTimeIcon /></TableCell>
+                                            <TableCell align="left" style={{ verticalAlign: 'top' }}><TitleIcon /></TableCell>
+                                            <TableCell style={{ width: 120, verticalAlign: 'top' }}></TableCell>
+                                        </TableRow>
+                                    </TableHead>
+
+                                    <TableBody>
+                                        {(monDetails).map(
+                                            (detail: any) => {
+                                                return (
+                                                    <TableRow
+                                                        key={detail.id}
+                                                        sx={{ '&:last-child td, &:last-child th': { border: 0, fontSize: 15 } }}
+                                                    >
+                                                        {detail.act.type === 'Gaming' ?
+                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><SportsEsportsIcon /></Typography></TableCell> :
+                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitHubIcon /></Typography></TableCell>}
+
+                                                        {detail.act.type === 'Gaming' ?
+                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell> :
+                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell>}
+
+                                                        {detail.act.type === 'Gaming' ?
+                                                            <TableCell colSpan={2} align="left" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.game[0]?.title}</Typography></TableCell> :
+                                                            <TableCell colSpan={2}></TableCell>}
+                                                    </TableRow>
+                                                )
+                                            }
+                                        )}
+
+                                        <TableRow>
+                                            <TableCell colSpan={2}></TableCell>
+                                            <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><ControllerIcon size={23} /></Typography></TableCell>
+                                            <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{monSummary.game_hour === 0 ? '' : monSummary.game_hour + 'h'} {monSummary.game_min}m</Typography></TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell colSpan={2}></TableCell>
+                                            <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitIcon size={23} /></Typography></TableCell>
+                                            <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{monSummary.pgm_hour === 0 ? '' : monSummary.pgm_hour + 'h'} {monSummary.pgm_min}m</Typography></TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Grid>
+                    </Grid>
+                </TabPanel>
+            </TabContext>
 
             <Dialog
                 open={openCalendar}
@@ -529,12 +600,12 @@ export default function Act() {
                                     <Button color="success" type="submit">Start</Button>
                                 </DialogActions>
                             </form>
-                        :
+                            :
                             <form onSubmit={handleStopStopwatchSubmit}>
                                 <FormControl fullWidth sx={{ mt: 1 }}>
                                     <TextField label="Start At" value={dayjs(stopwatching.start_time).format('YYYY/MM/DD  HH:mm:ss')} disabled></TextField>
                                 </FormControl>
-                                <FormControl fullWidth sx={{ mt: 2  }}>
+                                <FormControl fullWidth sx={{ mt: 2 }}>
                                     <TextField label="Type" value={stopwatching.type} disabled></TextField>
                                 </FormControl>
                                 <FormControl fullWidth sx={{ mt: 2, minWidth: 250 }}>
