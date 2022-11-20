@@ -14,9 +14,13 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Badge, Box, Tab } from '@mui/material';
-import { TabContext, TabList } from '@mui/lab';
-import { BatteryFull, BatteryCharging, Battery } from 'react-bootstrap-icons';
+import { AppBar, Badge, Box, Grid, Tab, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Tooltip } from '@mui/material';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { BatteryFull, BatteryCharging, Battery, Link, Table } from 'react-bootstrap-icons';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import { useState } from 'react';
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean;
@@ -34,44 +38,71 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }))
 
 export default function Word() {
-    const [expanded, setExpanded] = React.useState(false)
-    const handleExpandClick = () => {
-        setExpanded(!expanded)
+    const [status, setStatus] = useState("noCheck")
+    // const [expanded, setExpanded] = React.useState(false)
+    // const handleExpandClick = () => {
+    //     setExpanded(!expanded)
+    // }
+
+    const handleStatusChange = (event: React.SyntheticEvent, status: string) => {
+        setStatus(status)
     }
 
     return (
         <Box sx={{ width: '100%' }}>
-            <TabContext value={''}>
+            <Grid container sx={{ width: '50%' }}>
+                <Grid item>
+                    <Box justifyContent="flex-start">
+                        <AppBar
+                            sx={{ width: '50%', mr: '50%' }}
+                            style={{ background: 'transparent', boxShadow: 'none' }}
+                        >
+                            <Toolbar>
+                                <IconButton
+                                    size="large"
+                                    aria-controls="menu-appbar"
+                                    aria-haspopup="true"
+                                    color="inherit"
+                                >
+                                    <PostAddIcon sx={{ fontSize: 30, color: "thistle" }} onClick={() => {}} />
+                                </IconButton>
+                            </Toolbar>
+                        </AppBar>
+                    </Box>
+                </Grid>
+            </Grid>
+
+            <TabContext value={status}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <TabList indicatorColor="secondary" centered>
+                    <TabList indicatorColor="secondary" onChange={handleStatusChange} centered>
                         <Tab
-                            icon={
-                                <Badge color="primary">
-                                    <BatteryFull fontSize="30" color="white" />
-                                </Badge>
-                            }
-                            value="Played"
-                        />
-                        <Tab
-                            icon={
-                                <Badge color="success">
-                                    <BatteryCharging fontSize="30" color="green" />
-                                </Badge>
-                            }
-                            value="Playing"
-                        />
-                        <Tab
-                            icon={
-                                <Badge color="error">
-                                    <Battery fontSize="30" color="red" />
-                                </Badge>
-                            }
-                            value="ToPlay"
-                        />
+                            icon={ <BookmarkIcon sx={{ fontSize: 30 }} /> } value="noCheck" />
+                        <Tab icon={ <BookmarkAddedIcon sx={{ fontSize: 30 }} /> } value="checked" />
                     </TabList>
                 </Box>
 
-                <Card sx={{ maxWidth: 345 }}>
+                <TabPanel sx={{ mt: 2 }} value={status}>
+                    <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        sx={{ display: 'inline-flex' }}
+                    >
+                        <Grid item xs={10}>
+                            <Grid container>
+
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </TabPanel>
+
+            </TabContext>
+        </Box>
+    )
+}  
+
+
+{/* <Card sx={{ maxWidth: 345 }}>
                     <CardHeader
                         avatar={
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -144,8 +175,4 @@ export default function Word() {
                             </Typography>
                         </CardContent>
                     </Collapse>
-                </Card>
-            </TabContext>
-        </Box>
-    )
-}
+                </Card> */}

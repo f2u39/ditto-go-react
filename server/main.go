@@ -9,5 +9,5 @@ func main() {
 	core.Init()
 
 	// Run server
-	core.Ditto.Engine.Run()
+	core.Ditto.Engine.Run(":80")
 }

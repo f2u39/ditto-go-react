@@ -161,6 +161,7 @@ func (s *service) Update(g game.Game) error {
 			primitive.E{Key: "play_time", Value: g.PlayTime},
 			primitive.E{Key: "rating", Value: g.Rating},
 			primitive.E{Key: "ranking", Value: g.Ranking},
+			primitive.E{Key: "updated_at", Value: time.Now()},
 		}},
 	}
 	return mgo.Update(mgo.Games, g.ID, update)

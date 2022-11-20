@@ -207,6 +207,7 @@ func FindMany(col *mongo.Collection, T any, filter bson.D, sorts bson.D) error {
 	return cur.Close(context.TODO())
 }
 
+// Return total page (size/length)
 func FindPage(col *mongo.Collection, T any, filter bson.D, page, limit int, sorts bson.D) (int, error) {
 	_page := int64(page)
 	_limit := int64(limit)

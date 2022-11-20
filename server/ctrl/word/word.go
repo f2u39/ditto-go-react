@@ -5,7 +5,6 @@ import (
 	"ditto/model/word"
 	"ditto/mw"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/gin-contrib/static"
@@ -14,9 +13,8 @@ import (
 
 func Route(e *gin.Engine) {
 	e.Use(static.Serve("/word", static.LocalFile("./web", true)))
-	word := e.Group("/word").Use(mw.Auth)
+	word := e.Group("/api/word").Use(mw.Auth)
 	{
-		word.GET("/", index)
 		word.Any("/create", create)
 		word.POST("/check", check)
 		word.Any("/update", update)
@@ -33,7 +31,7 @@ func check(c *gin.Context) {
 	switch c.Request.Method {
 	case "POST":
 		id := c.PostForm("id")
-		h.WordService.Check(1, id)
+		h.WordService.Check(id, 1)
 	}
 }
 
@@ -53,9 +51,10 @@ func create(c *gin.Context) {
 }
 
 func index(c *gin.Context) {
-	isChecked, _ := strconv.Atoi(c.Query("is_checked"))
+	// TODO Need to fix it
+	// isChecked, _ := strconv.Atoi(c.Query("is_checked"))
 	data := gin.H{
-		"words": h.WordService.ByIsChecked(isChecked),
+		// "words": h.WordService.PageIsChecked(isChecked),
 	}
 	c.JSON(http.StatusOK, data)
 }
@@ -65,7 +64,7 @@ func update(c *gin.Context) {
 	case "GET":
 		id := c.Query("id")
 		w := h.WordService.ByID(id)
-		c.HTML(http.StatusOK, "word/update", gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"word": w,
 		})
 

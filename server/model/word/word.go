@@ -6,15 +6,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-var (
-	NOUN = Pattern("noun")
-	VERB = Pattern("verb")
-	ADJ  = Pattern("adjective")
-	ADV  = Pattern("adverb")
-)
-
-type Pattern string
-
 type Word struct {
 	ID      primitive.ObjectID `json:"id" bson:"_id"`
 	Word    string             `json:"word" bson:"word"`
