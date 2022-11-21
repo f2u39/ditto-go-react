@@ -4,7 +4,6 @@ export default function useToken() {
     const getToken = () => {
         // const authToken = localStorage.getItem('auth_token');
         const authToken = getCookie("auth_token")
-        // console.log(authToken)
         return authToken
     };
 
@@ -12,7 +11,6 @@ export default function useToken() {
     const saveToken = (userToken: { auth_token: any }) => {
         // localStorage.setItem('auth_token', JSON.stringify(userToken));
         if (userToken !== null) {
-            // console.log(JSON.stringify(userToken.auth_token))
             setCookie("auth_token", JSON.stringify(userToken.auth_token))
             setToken(userToken.auth_token)
         } else {
@@ -26,10 +24,10 @@ export default function useToken() {
     }
 
     function setCookie(name: string, val: string) {
-        // const expire = new Date();
-        // expire.setTime(expire.getTime() + (8 * 60 * 60 * 1000));
-        // document.cookie = name+"="+val+"; expires="+expire.toUTCString()+"; path=/";
-        document.cookie = name+"="+val+"; expires=; path=/";
+        const expire = new Date();
+        expire.setTime(expire.getTime() + (8 * 60 * 60 * 1000));
+        // document.cookie = name+"="+val+"; expires=; path=/";
+        document.cookie = name+"="+val+"; expires="+expire.toUTCString()+"; path=/";
     }
 
     function getCookie(name: string): string {

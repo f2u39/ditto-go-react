@@ -14,7 +14,7 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-var expiration = time.Duration(10 * time.Hour) // 10 hours
+var expiration = time.Duration(8 * time.Hour) // 8 hours
 
 func SetAuth(c *gin.Context, userID string) string {
 	b := make([]byte, 64)
@@ -27,7 +27,7 @@ func SetAuth(c *gin.Context, userID string) string {
 	if err := db_redis.Set(token, userID, expiration); err != nil {
 		panic("Failed to set session key to Redis..." + err.Error())
 	}
-	c.SetCookie("auth_token", token, 0, "/", "", false, false)
+	c.SetCookie("auth_token", token, int(expiration), "/", "", false, false)
 	return token
 }
 
