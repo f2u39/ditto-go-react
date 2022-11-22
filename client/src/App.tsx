@@ -6,7 +6,6 @@ import { Route, Routes } from 'react-router-dom';
 import Nav from './Components/Nav/Nav';
 import SignIn from './Components/SignIn/SignIn';
 import Act from './Components/Act/Act';
-import Word from './Components/Word/Word';
 import Game from './Components/Game/Game';
 import useToken from './useToken';
 
@@ -28,7 +27,6 @@ export default function App() {
         <Routes>
           {/* <Route path="/" element={<Home />} /> */}
           <Route path="/act" element={<Act />} />
-          <Route path="/word" element={<Word />} />
           <Route path="/game" element={<Game />} />
         </Routes>
       </>

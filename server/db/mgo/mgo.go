@@ -16,14 +16,10 @@ import (
 )
 
 var (
-	Acts    *mongo.Collection
-	Animes  *mongo.Collection
-	Incs    *mongo.Collection
-	Games   *mongo.Collection
-	Users   *mongo.Collection
-	Todos   *mongo.Collection
-	Words   *mongo.Collection
-	Studios *mongo.Collection
+	Acts  *mongo.Collection
+	Incs  *mongo.Collection
+	Games *mongo.Collection
+	Users *mongo.Collection
 )
 
 type Iter struct {
@@ -70,13 +66,9 @@ func Connect() {
 
 	db := "ditto"
 	Acts = client.Database(db).Collection("act")
-	Animes = client.Database(db).Collection("anime")
 	Incs = client.Database(db).Collection("inc")
 	Games = client.Database(db).Collection("game")
 	Users = client.Database(db).Collection("user")
-	Todos = client.Database(db).Collection("todo")
-	Words = client.Database(db).Collection("word")
-	Studios = client.Database(db).Collection("studio")
 }
 
 func Aggregate(col *mongo.Collection, pipe []bson.D, T any) error {

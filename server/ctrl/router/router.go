@@ -4,9 +4,7 @@ import (
 	"ditto/ctrl/act"
 	"ditto/ctrl/game"
 	"ditto/ctrl/inc"
-
 	"ditto/ctrl/user"
-	"ditto/ctrl/word"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,5 +14,4 @@ func Route(e *gin.Engine) {
 	game.Route(e)
 	inc.Route(e)
 	user.Route(e)
-	word.Route(e)
 }

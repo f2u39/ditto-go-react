@@ -3,7 +3,6 @@ package game
 import (
 	"ditto/db/mgo"
 	"ditto/model/game"
-	"ditto/service/base"
 	"ditto/service/inc"
 	"time"
 
@@ -24,12 +23,10 @@ type GameService interface {
 }
 
 func NewService() GameService {
-	return &service{Base: base.NewBaseRepo()}
+	return &service{}
 }
 
-type service struct {
-	Base base.BaseRepo
-}
+type service struct{}
 
 func (s *service) ByID(id string) game.Game {
 	var game game.Game

@@ -32,16 +32,7 @@ export default function Nav() {
               <VideoGameAsset sx={{ fontSize: 30, color: "slateblue" }} />
             </IconButton>
           </Link>
-          <Link href="/word">
-            <IconButton
-              size="large"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <Bookmarks sx={{ fontSize: 30, color: "cadetblue" }} />
-            </IconButton>
-          </Link>
+
           <Link href="/act">
             <IconButton
               size="large"
