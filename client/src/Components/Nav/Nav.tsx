@@ -45,5 +45,5 @@ export default function Nav() {
           </Link>
         </Toolbar>
       </AppBar>
-  );
+  )
 }
