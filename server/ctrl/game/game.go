@@ -27,7 +27,7 @@ func Route(e *gin.Engine) {
 	{
 		auth.POST("/create", create)
 		auth.POST("/update", update)
-		auth.Any("/delete", delete)
+		auth.POST("/delete", delete)
 		auth.POST("/update_status", updateStatus)
 	}
 
@@ -179,8 +179,6 @@ func delete(c *gin.Context) {
 	root := path.Root()
 	path := root + "/../assets/img/games/" + file
 	os.Remove(path)
-
-	c.Redirect(http.StatusSeeOther, "/game")
 }
 
 func status(c *gin.Context) {

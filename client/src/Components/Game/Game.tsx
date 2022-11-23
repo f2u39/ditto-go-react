@@ -20,6 +20,7 @@ import { Battery, BatteryCharging, BatteryFull } from 'react-bootstrap-icons';
 import { useEffect, useState } from 'react';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+import { useNavigate } from 'react-router-dom';
 
 // import CreateIncDialog from './CreateIncDialog';
 
@@ -39,6 +40,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 export default function Game() {
+    const navigate = useNavigate()
     const [details, setDetails] = useState<Detail[]>([])
     const [platform, setPlatform] = useState('All')
     const [page, setPage] = useState(1)
@@ -121,7 +123,7 @@ export default function Game() {
         setOpenCreateGameDialog(false)
     }
 
-    useEffect(() => {
+    function refresh() {
         fetch(`/api/game/status/${status}/${platform}/${page}`)
             .then(resp => resp.json())
             .then(data => {
@@ -139,13 +141,27 @@ export default function Game() {
             .then(resp => resp.json())
             .then(data => {
                 setPlayedCount(data["played_cnt"])
-                setPlayingCount(data["playing_cnt"])
+                setPlayingCount(data["playing_cnt"]) 
                 setToPlayCount(data["toPlay_cnt"])
             })
+    }
+
+    useEffect(() => {
+        refresh()
     }, [status, platform, page])
 
+    const handleDeleteGame = (id: String) => {
+        fetch(`/api/game/delete?id=${id}`, {
+            method: "POST",
+        })
+        .then(() => {
+            handleUpdateGameDialogClose()
+            refresh()
+        })
+    }
+
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-        setPage(value);
+        setPage(value)
     }
 
     const handleStatusChange = (event: React.SyntheticEvent, newStatus: string) => {
@@ -588,9 +604,12 @@ export default function Game() {
                             </Grid>
                         </Grid>
                         
-                        <DialogActions sx={{ mt: 1, mb: -1, mr: -1 }}>
-                            <Button color="secondary" onClick={handleUpdateGameDialogClose}>Cancel</Button>
-                            <Button color="success" type="submit">Update</Button>
+                        <DialogActions style={{ justifyContent: "space-between" }} sx={{ mt: 1, mb: -1, ml: -1, mr: -1 }}>
+                            <Button color="error" onClick={ e => handleDeleteGame(updateGame.game.id.toString()) }>Delete</Button>
+                            <Box>
+                                <Button color="secondary" onClick={handleUpdateGameDialogClose}>Cancel</Button>
+                                <Button color="success" type="submit">Update</Button>
+                            </Box>
                         </DialogActions>
                     </form>
                 </DialogContent>
