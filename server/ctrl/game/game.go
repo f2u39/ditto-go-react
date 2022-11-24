@@ -145,7 +145,6 @@ func update(c *gin.Context) {
 		}
 
 		h.GameService.Update(g)
-		c.Redirect(http.StatusSeeOther, "/game")
 	}
 }
 
