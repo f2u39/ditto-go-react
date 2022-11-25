@@ -8,6 +8,10 @@ import Link from '@mui/material/Link';
 import History from '@mui/icons-material/History';
 import Bookmarks from '@mui/icons-material/Bookmarks';
 import VideoGameAsset from '@mui/icons-material/VideogameAsset';
+import MuseumIcon from '@mui/icons-material/Museum';
+import ViewInArIcon from '@mui/icons-material/ViewInAr';
+import ViewColumnIcon from '@mui/icons-material/ViewColumn';
+import MemoryIcon from '@mui/icons-material/Memory';
 
 export default function Nav() {
   return (
@@ -43,6 +47,18 @@ export default function Nav() {
               <History sx={{ fontSize: 30, color: "darkorange" }} />
             </IconButton>
           </Link>
+
+          <Link href="/home">
+            <IconButton
+              size="large"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <MuseumIcon sx={{ fontSize: 30, color: "gray" }} />
+            </IconButton>
+          </Link>
+
         </Toolbar>
       </AppBar>
   )

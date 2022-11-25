@@ -53,9 +53,7 @@ export default function Act() {
     const [openCalendar, setOpenCalendar] = useState(false)
     const [openStopwatch, setOpenStopwatch] = useState(false)
 
-    const handleChangeTempDate = (newValue: Dayjs | null) => {
-        setTempDate(newValue)
-    }
+    const handleChangeTempDate = (newValue: Dayjs | null) => { setTempDate(newValue) }
 
     const handleCreateActChangeDate = (newValue: Dayjs | null) => {
         setTempDate(newValue)
@@ -90,6 +88,16 @@ export default function Act() {
     const handleStopwatchClose = () => {
         setFormStopwatch(defaultStopwatchValue)
         setOpenStopwatch(false)
+    }
+
+    const handleTerminateStopwatch = () => {
+        fetch(`/api/act/watch/teminate`, {
+            method: "POST",
+        })
+        .then(() => {
+            handleStopwatchClose()
+            fetchData()
+        })
     }
 
     const [acts, setActs] = useState({
@@ -518,11 +526,9 @@ export default function Act() {
                                 name="duration"
                                 label="Duration"
                                 type="number"
-                                value={formCreateActValues.duration}
-                                onChange={handleCreateActInputChange}
-                                InputProps={{
-                                    inputProps: { min: 0 }
-                                }}
+                                value={ formCreateActValues.duration }
+                                onChange={ handleCreateActInputChange }
+                                InputProps={{ inputProps: { min: 0 } }}
                             />
                         </FormControl>
 
@@ -534,10 +540,8 @@ export default function Act() {
                             <Select
                                 name="gameId"
                                 label="Game"
-                                value={formCreateActValues.gameId}
-                                inputProps={{
-                                    name: 'gameId',
-                                }}
+                                value={ formCreateActValues.gameId }
+                                inputProps={{ name: 'gameId' }}
                                 onChange={handleCreateActInputChange}
                             >
                                 {playingGames.map((game: any, index) => {
@@ -577,16 +581,15 @@ export default function Act() {
                                         <MenuItem value="Programming">Programming</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <FormControl fullWidth sx={{ mt: 2, minWidth: 250 }}>
+
+                                <FormControl fullWidth sx={{ mt: 2 }}>
                                     <InputLabel htmlFor="type">Game</InputLabel>
                                     <Select
                                         name="gameId"
                                         label="Game"
-                                        value={formStopwatch.gameId}
-                                        inputProps={{
-                                            name: 'gameId',
-                                        }}
-                                        onChange={handleStopwatchChange}
+                                        value={ formStopwatch.gameId }
+                                        inputProps={{ name: 'gameId' }}
+                                        onChange={ handleStopwatchChange }
                                     >
                                         {playingGames.map((game: any, index) => {
                                             return (
@@ -595,6 +598,7 @@ export default function Act() {
                                         })}
                                     </Select>
                                 </FormControl>
+
                                 <DialogActions sx={{ mt: 1, mb: -1, mr: -2 }}>
                                     <Button color="secondary" onClick={handleStopwatchClose}>Cancel</Button>
                                     <Button color="success" type="submit">Start</Button>
@@ -605,15 +609,21 @@ export default function Act() {
                                 <FormControl fullWidth sx={{ mt: 1 }}>
                                     <TextField label="Start At" value={dayjs(stopwatching.start_time).format('YYYY/MM/DD  HH:mm:ss')} disabled></TextField>
                                 </FormControl>
+
                                 <FormControl fullWidth sx={{ mt: 2 }}>
                                     <TextField label="Type" value={stopwatching.type} disabled></TextField>
                                 </FormControl>
-                                <FormControl fullWidth sx={{ mt: 2, minWidth: 250 }}>
+
+                                <FormControl fullWidth sx={{ mt: 2 }}>
                                     <TextField label="Title" value={stopwatching.game_title} disabled></TextField>
                                 </FormControl>
-                                <DialogActions sx={{ mt: 1, mb: -1, mr: -1 }}>
-                                    <Button color="secondary" onClick={handleStopwatchClose}>Cancel</Button>
-                                    <Button type="submit" color="error">Stop</Button>
+
+                                <DialogActions style={{ justifyContent: "space-between" }} sx={{ mt: 1, mb: -1, ml: -1, mr: -1 }}>
+                                    <Button color="error" onClick={handleTerminateStopwatch}>Terminate</Button>
+                                    <Box>
+                                        <Button color="secondary" onClick={handleStopwatchClose}>Cancel</Button>
+                                        <Button type="submit" color="error">Stop</Button>
+                                    </Box>
                                 </DialogActions>
                             </form>
                     }

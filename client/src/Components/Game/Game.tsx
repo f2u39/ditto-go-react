@@ -8,7 +8,7 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import TuneIcon from '@mui/icons-material/Tune';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import { AppBar, Badge, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, InputAdornment, InputLabel, MenuItem, Select, Switch, Tabs, TextField, Toolbar, Tooltip } from '@mui/material';
+import { AppBar, Badge, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, InputAdornment, InputLabel, MenuItem, Select, Switch, Tabs, TextField, ToggleButton, ToggleButtonGroup, Toolbar, Tooltip } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
@@ -160,6 +160,14 @@ export default function Game() {
         })
     }
 
+    // TODO Fix it
+    const handleAlignment = (
+        event: React.MouseEvent<HTMLElement>,
+        newAlignment: string | null,
+      ) => {
+        // setAlignment(newAlignment);
+      };
+
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value)
     }
@@ -289,6 +297,7 @@ export default function Game() {
                                                 {element.game.title}
                                             </Typography>
                                         </CardContent>
+
                                         <CardActions sx={{ mt: -1 }} disableSpacing>
                                             <Tooltip title="Property">
                                                 <IconButton onClick={e => handleUpdateGameDialogOpen(element.game.id)}>
@@ -301,7 +310,29 @@ export default function Game() {
                                                     <PlayCircleOutlineIcon />
                                                 </IconButton>
                                             </Tooltip>
+
+                                            <Tooltip title="Status">
+
+                                            <ToggleButtonGroup
+                                                value={element.game.status}
+                                                exclusive
+                                                onChange={handleAlignment}
+                                                aria-label="text alignment"
+                                                >
+                                                <ToggleButton value="Played" aria-label="left aligned">
+                                                    <BatteryFull />
+                                                </ToggleButton>
+                                                <ToggleButton value="Playing" aria-label="centered">
+                                                    <BatteryCharging />
+                                                </ToggleButton>
+                                                <ToggleButton value="ToPlay" aria-label="right aligned">
+                                                    <Battery />
+                                                </ToggleButton>
+                                            </ToggleButtonGroup>
+
+                                            </Tooltip>
                                         </CardActions>
+
                                         <CardContent sx={{ mt: -4 }}>
                                             <Box sx={{
                                                 mx: "auto",
@@ -357,16 +388,11 @@ export default function Game() {
                                                     fullWidth
                                                     size="small"
                                                     sx={{ pt: 1 }}
-                                                    inputProps={{
-                                                        style: { textAlign: 'right' },
-                                                        readOnly: true,
-                                                    }}
+                                                    inputProps={{ style: { textAlign: 'right' }, readOnly: true }}
                                                     value={element.publisher.name}
                                                     InputProps={{
                                                         startAdornment: (
-                                                            <InputAdornment position="start">
-                                                                <CodeSlash />
-                                                            </InputAdornment>
+                                                            <InputAdornment position="start"><CodeSlash /></InputAdornment>
                                                         )
                                                     }}
                                                 />
@@ -375,10 +401,7 @@ export default function Game() {
                                                     fullWidth
                                                     size="small"
                                                     sx={{ pt: 1 }}
-                                                    inputProps={{
-                                                        style: { textAlign: 'right' },
-                                                        readOnly: true,
-                                                    }}
+                                                    inputProps={{ style: { textAlign: 'right' }, readOnly: true }}
                                                     value={element.play_hour}
                                                     InputProps={{
                                                         startAdornment: (

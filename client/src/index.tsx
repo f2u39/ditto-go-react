@@ -23,10 +23,6 @@ root.render(
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
 
-      {/* <Grid xs={12} sx={{ height: 80 }}>
-        <Nav />
-      </Grid> */}
-
       <BrowserRouter>
         <App />
       </BrowserRouter>

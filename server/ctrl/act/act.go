@@ -23,6 +23,7 @@ func Route(e *gin.Engine) {
 	{
 		auth.Any("/watch/start", start)
 		auth.POST("/watch/stop", stop)
+		auth.POST("/watch/teminate", terminate)
 		auth.POST("/create", create)
 		auth.GET("/delete", delete)
 		auth.DELETE("/delete", delete)
@@ -165,8 +166,13 @@ func stop(c *gin.Context) {
 			Type:      sw.Type,
 		})
 	}
-	sw = nil
+
+	sw.Reset()
 	c.JSON(http.StatusOK, nil)
+}
+
+func terminate(c *gin.Context) {
+	sw.Reset()
 }
 
 func stopwatch(c *gin.Context) {
