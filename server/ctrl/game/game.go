@@ -93,7 +93,6 @@ func index(c *gin.Context) {
 	data := gin.H{
 		"details": h.GameService.ByStatus(status),
 	}
-
 	c.JSON(http.StatusOK, data)
 }
 
@@ -143,7 +142,6 @@ func update(c *gin.Context) {
 			path := root + "/assets/images/games/" + fn
 			c.SaveUploadedFile(file, path)
 		}
-
 		h.GameService.Update(g)
 	}
 }
