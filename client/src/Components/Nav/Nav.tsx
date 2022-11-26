@@ -48,14 +48,14 @@ export default function Nav() {
             </IconButton>
           </Link>
 
-          <Link href="/home">
+          <Link href="/">
             <IconButton
               size="large"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               color="inherit"
             >
-              <MuseumIcon sx={{ fontSize: 30, color: "gray" }} />
+              <MuseumIcon sx={{ fontSize: 30, color: "#088F8F" }} />
             </IconButton>
           </Link>
 

@@ -160,14 +160,6 @@ export default function Game() {
         })
     }
 
-    // TODO Fix it
-    const handleAlignment = (
-        event: React.MouseEvent<HTMLElement>,
-        newAlignment: string | null,
-      ) => {
-        // setAlignment(newAlignment);
-      };
-
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value)
     }
@@ -309,27 +301,6 @@ export default function Game() {
                                                 <IconButton onClick={e => handleStartGame(element.game.id)}>
                                                     <PlayCircleOutlineIcon />
                                                 </IconButton>
-                                            </Tooltip>
-
-                                            <Tooltip title="Status">
-
-                                            <ToggleButtonGroup
-                                                value={element.game.status}
-                                                exclusive
-                                                onChange={handleAlignment}
-                                                aria-label="text alignment"
-                                                >
-                                                <ToggleButton value="Played" aria-label="left aligned">
-                                                    <BatteryFull />
-                                                </ToggleButton>
-                                                <ToggleButton value="Playing" aria-label="centered">
-                                                    <BatteryCharging />
-                                                </ToggleButton>
-                                                <ToggleButton value="ToPlay" aria-label="right aligned">
-                                                    <Battery />
-                                                </ToggleButton>
-                                            </ToggleButtonGroup>
-
                                             </Tooltip>
                                         </CardActions>
 
