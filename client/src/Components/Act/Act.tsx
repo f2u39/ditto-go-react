@@ -212,7 +212,6 @@ export default function Act() {
             }
         })
             .then(response => response.json())
-            // .then(response => console.log("Success:", JSON.stringify(response)))
             .then(() => {
                 handleNewActivityClose()
                 fetchData()
