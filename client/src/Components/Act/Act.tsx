@@ -38,7 +38,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 import TodayIcon from '@mui/icons-material/Today';
@@ -60,6 +60,20 @@ export default function Act() {
         setFormCreateActValues({
             ...formCreateActValues,
             "date": newValue!!.format('YYYYMMDD'),
+        })
+    }
+
+    const handleCreateActChangeFrom = (newValue: Dayjs | null) => {
+        setFormCreateActValues({
+            ...formCreateActValues,
+            "from": newValue!!.format('YYYYMMDD'),
+        })
+    }
+
+    const handleCreateActChangeTo = (newValue: Dayjs | null) => {
+        setFormCreateActValues({
+            ...formCreateActValues,
+            "to": newValue!!.format('YYYYMMDD'),
         })
     }
 
@@ -164,6 +178,8 @@ export default function Act() {
     const defaultCreateActValues = {
         type: 'Gaming',
         date: dayjs(new Date()).format('YYYYMMDD'),
+        from: '',
+        to: '',
         duration: '',
         gameId: '',
     }
@@ -521,14 +537,28 @@ export default function Act() {
                             fullWidth
                             sx={{ mt: 2 }}
                         >
-                            <TextField
-                                name="duration"
-                                label="Duration"
-                                type="number"
-                                value={ formCreateActValues.duration }
-                                onChange={ handleCreateActInputChange }
-                                InputProps={{ inputProps: { min: 0 } }}
-                            />
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <TimePicker
+                                    label="Time"
+                                    value={formCreateActValues.from}
+                                    onChange={handleCreateActChangeFrom}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
+                        </FormControl>
+
+                        <FormControl
+                            fullWidth
+                            sx={{ mt: 2 }}
+                        >
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <TimePicker
+                                    label="Time"
+                                    value={formCreateActValues.to}
+                                    onChange={handleCreateActChangeTo}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
                         </FormControl>
 
                         <FormControl
