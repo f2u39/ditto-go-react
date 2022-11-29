@@ -46,7 +46,6 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 export default function Act() {
     const [mode, setMode] = useState("day")
-
     const [date, setDate] = useState<Dayjs | null>(dayjs(new Date()))
     const [tempDate, setTempDate] = useState<Dayjs | null>(date)
     const [openNewActivity, setOpenNewActivity] = useState(false)
