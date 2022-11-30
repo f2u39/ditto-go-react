@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Link from '@mui/material/Link';
-import { AppBar, DialogActions, Tab } from '@mui/material';
+import { AppBar, DialogActions, Paper, Tab } from '@mui/material';
 import { Badge } from '@mui/material';
 import { Box } from '@mui/material';
 import { FormControl } from '@mui/material';
@@ -291,7 +291,7 @@ export default function Act() {
                         alignItems="center"
                     >
                         <Grid item xs={10}>
-                            <TableContainer sx={{ border: 1, borderRadius: 1 }}>
+                            <TableContainer sx={{ border: 1, borderRadius: 1 }} component={Paper}>
                                 <Toolbar sx={{ borderBottom: 1 }}>
                                     <Tooltip title="Previous date">
                                         <IconButton onClick={handlePreviousDate}>
@@ -324,10 +324,10 @@ export default function Act() {
                                 <Table size="small">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell align="center" style={{ width: 40, verticalAlign: 'top' }}><FormatListNumberedRtlIcon /></TableCell>
-                                            <TableCell align="center" style={{ width: 110, verticalAlign: 'top' }}><AccessTimeIcon /></TableCell>
-                                            <TableCell align="left" style={{ verticalAlign: 'top' }}><TitleIcon /></TableCell>
-                                            <TableCell style={{ width: 120, verticalAlign: 'top' }}></TableCell>
+                                            <TableCell align="center"><FormatListNumberedRtlIcon /></TableCell>
+                                            <TableCell align="center"><AccessTimeIcon /></TableCell>
+                                            <TableCell align="left"><TitleIcon /></TableCell>
+                                            <TableCell></TableCell>
                                         </TableRow>
                                     </TableHead>
 
@@ -415,10 +415,10 @@ export default function Act() {
                                 <Table size="small">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell align="center" style={{ width: 40, verticalAlign: 'top' }}><FormatListNumberedRtlIcon /></TableCell>
-                                            <TableCell align="center" style={{ width: 110, verticalAlign: 'top' }}><AccessTimeIcon /></TableCell>
+                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><FormatListNumberedRtlIcon /></TableCell>
+                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><AccessTimeIcon /></TableCell>
                                             <TableCell align="left" style={{ verticalAlign: 'top' }}><TitleIcon /></TableCell>
-                                            <TableCell style={{ width: 120, verticalAlign: 'top' }}></TableCell>
+                                            <TableCell style={{ verticalAlign: 'top' }}></TableCell>
                                         </TableRow>
                                     </TableHead>
 
@@ -532,7 +532,7 @@ export default function Act() {
                             </LocalizationProvider>
                         </FormControl>
 
-                        <FormControl
+                        {/* <FormControl
                             fullWidth
                             sx={{ mt: 2 }}
                         >
@@ -558,7 +558,7 @@ export default function Act() {
                                     renderInput={(params) => <TextField {...params} />}
                                 />
                             </LocalizationProvider>
-                        </FormControl>
+                        </FormControl> */}
 
                         <FormControl
                             fullWidth

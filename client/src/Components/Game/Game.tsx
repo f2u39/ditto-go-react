@@ -22,8 +22,6 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import { useNavigate } from 'react-router-dom';
 
-// import CreateIncDialog from './CreateIncDialog';
-
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean
 }
@@ -274,7 +272,7 @@ export default function Game() {
 
                         <Grid item xs={10}>
                             <Grid container>
-                                {details.map((element, i) => (
+                                {details?.map((element, i) => (
                                     <Card
                                         sx={{ ml: 3, mt: 3, maxWidth: 250 }}
                                         key={element.game.id}
@@ -449,7 +447,7 @@ export default function Game() {
                                 label="Developer"
                                 defaultValue={updateGame.game.developer_id}
                             >
-                                {updateGame.developers.map((dev: any, index) => {
+                                {updateGame.developers?.map((dev: any, index) => {
                                     return (
                                         <MenuItem key={index} value={dev.id}>{dev.name}</MenuItem>
                                     )
@@ -464,7 +462,7 @@ export default function Game() {
                                 label="Publisher"
                                 defaultValue={updateGame.game.publisher_id}
                             >
-                                {updateGame.publishers.map((pub: any, index) => {
+                                {updateGame.publishers?.map((pub: any, index) => {
                                     return (
                                         <MenuItem key={index} value={pub.id}>{pub.name}</MenuItem>
                                     )
@@ -504,7 +502,7 @@ export default function Game() {
                                         label="Genre"
                                         defaultValue={updateGame.game.genre}
                                     >
-                                        {updateGame.genres.map((genre: any, index) => {
+                                        {updateGame.genres?.map((genre: any, index) => {
                                             return (
                                                 <MenuItem key={index} value={genre}>{genre}</MenuItem>
                                             )
@@ -526,7 +524,7 @@ export default function Game() {
                                         label="Platform"
                                         defaultValue={updateGame.game.platform}
                                     >
-                                        {updateGame.platforms.map((platform: any, index) => {
+                                        {updateGame.platforms?.map((platform: any, index) => {
                                             return (
                                                 <MenuItem key={index} value={platform}>{platform}</MenuItem>
                                             )
@@ -550,13 +548,17 @@ export default function Game() {
                                     >
                                         <MenuItem key="S+" value="S+">S+</MenuItem>
                                         <MenuItem key="S" value="S">S</MenuItem>
+                                        <MenuItem key="S-" value="S-">S-</MenuItem>
                                         <MenuItem key="A+" value="A+">A+</MenuItem>
                                         <MenuItem key="A" value="A">A</MenuItem>
+                                        <MenuItem key="A-" value="A-">A-</MenuItem>
                                         <MenuItem key="B+" value="B+">B+</MenuItem>
                                         <MenuItem key="B" value="B">B</MenuItem>
+                                        <MenuItem key="B-" value="B-">B-</MenuItem>
                                         <MenuItem key="C+" value="C+">C+</MenuItem>
                                         <MenuItem key="C" value="C">C</MenuItem>
-                                        <MenuItem key="D" value="D">D</MenuItem>
+                                        <MenuItem key="C-" value="C-">C-</MenuItem>
+                                        <MenuItem key="F" value="F">F</MenuItem>
                                     </Select>
                                 </FormControl>
                             </Grid>
@@ -624,7 +626,7 @@ export default function Game() {
                         <FormControl fullWidth sx={{ mt: 2 }}>
                             <InputLabel htmlFor="developer">Developer</InputLabel>
                             <Select name="developer_id" label="Developer" required>
-                                {createGame.developers.map((dev: any, index) => {
+                                {createGame.developers?.map((dev: any, index) => {
                                     return (<MenuItem key={index} value={dev.id}>{dev.name}</MenuItem>)
                                 })}
                             </Select>
@@ -633,7 +635,7 @@ export default function Game() {
                         <FormControl fullWidth sx={{ mt: 2 }}>
                             <InputLabel htmlFor="publisher">Publisher</InputLabel>
                             <Select name="publisher_id" label="Publisher" required>
-                                {createGame.publishers.map((pub: any, index) => {
+                                {createGame.publishers?.map((pub: any, index) => {
                                     return (<MenuItem key={index} value={pub.id}>{pub.name}</MenuItem>)
                                 })}
                             </Select>
@@ -642,7 +644,7 @@ export default function Game() {
                         <FormControl fullWidth sx={{ mt: 2 }}>
                             <InputLabel htmlFor="Genre">Genre</InputLabel>
                             <Select name="genre" label="Genre" required>
-                                {createGame.genres.map((genre: any, index) => {
+                                {createGame.genres?.map((genre: any, index) => {
                                     return (<MenuItem key={index} value={genre}>{genre}</MenuItem>)
                                 })}
                             </Select>
@@ -651,7 +653,7 @@ export default function Game() {
                         <FormControl fullWidth sx={{ mt: 2 }}>
                             <InputLabel htmlFor="Platform">Platform</InputLabel>
                             <Select name="platform" label="Platform" required>
-                                {createGame.platforms.map((platform: any, index) => {
+                                {createGame.platforms?.map((platform: any, index) => {
                                     return (
                                         <MenuItem key={index} value={platform}>{platform}</MenuItem>
                                     )
