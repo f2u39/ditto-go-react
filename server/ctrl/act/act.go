@@ -105,7 +105,7 @@ func index(c *gin.Context) {
 		"stopwatch":     sw,
 	}
 
-	c.JSON(200, data)
+	c.JSON(http.StatusOK, data)
 }
 
 func start(c *gin.Context) {
