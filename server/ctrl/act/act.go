@@ -134,7 +134,7 @@ func start(c *gin.Context) {
 
 		if act.Type(typ) == act.GAMING {
 			if len(gId) == 0 {
-				c.JSON(http.StatusBadRequest, "")
+				c.JSON(http.StatusBadRequest, "Illeagal Game Id")
 				return
 			}
 		}
