@@ -139,12 +139,6 @@ func start(c *gin.Context) {
 			}
 		}
 
-		if sw == nil && typ != "Recover" {
-			sw = act.NewStopWatch()
-			id := gId
-			title := h.GameService.ByID(gId).Title
-			sw.Start(typ, id, title)
-		}
 		data := gin.H{
 			"stop_watch": sw,
 		}
