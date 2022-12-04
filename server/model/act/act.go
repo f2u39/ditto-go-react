@@ -72,7 +72,3 @@ func (sw *StopWatch) Stop() time.Time {
 	endTime := sw.EndTime
 	return endTime
 }
-
-func (sw *StopWatch) Reset() {
-	sw = nil
-}
