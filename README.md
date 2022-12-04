@@ -34,7 +34,6 @@ node --version
 sudo apt-get remove golang-go
 sudo apt-get remove --auto-remove golang-go
 
-
 sudo rm -rvf /usr/local/go
 
 wget https://golang.org/dl/go1.19.2.linux-amd64.tar.gz
@@ -52,8 +51,8 @@ db.act.deleteOne({"_id": ObjectId('000000000000000000000000')})
 
 ``` cmd
 # AWS EC2: Docker → Ubuntu
-sudo docker exec 25b mongodump --db ditto --out /mongodump/20221119
-sudo docker cp 25b:/mongodump/20221119 ~/mongodump/20221119
+sudo docker exec 25b mongodump --db ditto --out /mongodump/20221204
+sudo docker cp 25b:/mongodump/20221204 ~/mongodump/20221204
 ```
 
 ### [MongoDB] Restore database
