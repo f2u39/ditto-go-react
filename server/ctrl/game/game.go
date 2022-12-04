@@ -143,6 +143,7 @@ func update(c *gin.Context) {
 			c.SaveUploadedFile(file, path)
 		}
 		h.GameService.Update(g)
+		c.Redirect(http.StatusSeeOther, "/game")
 	}
 }
 

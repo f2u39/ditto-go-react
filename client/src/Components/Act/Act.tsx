@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Link from '@mui/material/Link';
-import { AppBar, DialogActions, Paper, Tab } from '@mui/material';
+import { AppBar, DialogActions, Tab } from '@mui/material';
 import { Badge } from '@mui/material';
 import { Box } from '@mui/material';
 import { FormControl } from '@mui/material';
@@ -16,6 +16,7 @@ import { IconButton } from '@mui/material';
 import { InputLabel } from '@mui/material';
 import { MenuItem } from '@mui/material';
 import { Select } from '@mui/material';
+import { Stack } from '@mui/material';
 import { Tooltip } from '@mui/material';
 import { Toolbar } from '@mui/material';
 import { Typography } from '@mui/material';
@@ -37,7 +38,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 import TodayIcon from '@mui/icons-material/Today';
@@ -45,6 +46,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 export default function Act() {
     const [mode, setMode] = useState("day")
+
     const [date, setDate] = useState<Dayjs | null>(dayjs(new Date()))
     const [tempDate, setTempDate] = useState<Dayjs | null>(date)
     const [openNewActivity, setOpenNewActivity] = useState(false)
@@ -58,20 +60,6 @@ export default function Act() {
         setFormCreateActValues({
             ...formCreateActValues,
             "date": newValue!!.format('YYYYMMDD'),
-        })
-    }
-
-    const handleCreateActChangeFrom = (newValue: Dayjs | null) => {
-        setFormCreateActValues({
-            ...formCreateActValues,
-            "from": newValue!!.format('YYYYMMDD'),
-        })
-    }
-
-    const handleCreateActChangeTo = (newValue: Dayjs | null) => {
-        setFormCreateActValues({
-            ...formCreateActValues,
-            "to": newValue!!.format('YYYYMMDD'),
         })
     }
 
@@ -176,8 +164,6 @@ export default function Act() {
     const defaultCreateActValues = {
         type: 'Gaming',
         date: dayjs(new Date()).format('YYYYMMDD'),
-        from: '',
-        to: '',
         duration: '',
         gameId: '',
     }
@@ -290,7 +276,7 @@ export default function Act() {
                         alignItems="center"
                     >
                         <Grid item xs={10}>
-                            <TableContainer sx={{ border: 1, borderRadius: 1 }} component={Paper}>
+                            <TableContainer sx={{ border: 1, borderRadius: 1 }}>
                                 <Toolbar sx={{ borderBottom: 1 }}>
                                     <Tooltip title="Previous date">
                                         <IconButton onClick={handlePreviousDate}>
@@ -323,10 +309,10 @@ export default function Act() {
                                 <Table size="small">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell align="center"><FormatListNumberedRtlIcon /></TableCell>
-                                            <TableCell align="center"><AccessTimeIcon /></TableCell>
-                                            <TableCell align="left"><TitleIcon /></TableCell>
-                                            <TableCell></TableCell>
+                                            <TableCell align="center" style={{ width: 40, verticalAlign: 'top' }}><FormatListNumberedRtlIcon /></TableCell>
+                                            <TableCell align="center" style={{ width: 110, verticalAlign: 'top' }}><AccessTimeIcon /></TableCell>
+                                            <TableCell align="left" style={{ verticalAlign: 'top' }}><TitleIcon /></TableCell>
+                                            <TableCell style={{ width: 120, verticalAlign: 'top' }}></TableCell>
                                         </TableRow>
                                     </TableHead>
 
@@ -414,10 +400,10 @@ export default function Act() {
                                 <Table size="small">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><FormatListNumberedRtlIcon /></TableCell>
-                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><AccessTimeIcon /></TableCell>
+                                            <TableCell align="center" style={{ width: 40, verticalAlign: 'top' }}><FormatListNumberedRtlIcon /></TableCell>
+                                            <TableCell align="center" style={{ width: 110, verticalAlign: 'top' }}><AccessTimeIcon /></TableCell>
                                             <TableCell align="left" style={{ verticalAlign: 'top' }}><TitleIcon /></TableCell>
-                                            <TableCell style={{ verticalAlign: 'top' }}></TableCell>
+                                            <TableCell style={{ width: 120, verticalAlign: 'top' }}></TableCell>
                                         </TableRow>
                                     </TableHead>
 
@@ -531,33 +517,19 @@ export default function Act() {
                             </LocalizationProvider>
                         </FormControl>
 
-                        {/* <FormControl
-                            fullWidth
-                            sx={{ mt: 2 }}
-                        >
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <TimePicker
-                                    label="Time"
-                                    value={formCreateActValues.from}
-                                    onChange={handleCreateActChangeFrom}
-                                    renderInput={(params) => <TextField {...params} />}
-                                />
-                            </LocalizationProvider>
-                        </FormControl>
-
                         <FormControl
                             fullWidth
                             sx={{ mt: 2 }}
                         >
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <TimePicker
-                                    label="Time"
-                                    value={formCreateActValues.to}
-                                    onChange={handleCreateActChangeTo}
-                                    renderInput={(params) => <TextField {...params} />}
-                                />
-                            </LocalizationProvider>
-                        </FormControl> */}
+                            <TextField
+                                name="duration"
+                                label="Duration"
+                                type="number"
+                                value={ formCreateActValues.duration }
+                                onChange={ handleCreateActInputChange }
+                                InputProps={{ inputProps: { min: 0 } }}
+                            />
+                        </FormControl>
 
                         <FormControl
                             fullWidth

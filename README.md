@@ -68,6 +68,13 @@ sudo docker cp mongodump_20221106 25b:/mongodump_20221106
 sudo docker exec -i 25b /usr/bin/mongorestore --db ditto /mongodump_20221106/ditto
 ```
 
+### [Ubuntu] Deploy Locally
+
+``` cmd
+npm run build
+mv build/ ../server/web
+```
+
 ### [Docker] Deployment
 
 ``` cmd
