@@ -7,12 +7,6 @@
 
 ## Memo
 
-### [Docker] Download assets from container
-
-``` cmd
-sudo docker cp ???:/assets/images/games ~/assets/2022????
-```
-
 ### [Ubuntu] Kill port 80
 
 ``` cmd
@@ -41,6 +35,13 @@ sudo tar -C /usr/local -xvf go1.19.2.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 ```
 
+### [Ubuntu] Deploy Locally
+
+``` cmd
+npm run build
+mv build/ ../server/web
+```
+
 ### [MongoDB] Clear trash records
 
 ``` cmd
@@ -67,13 +68,6 @@ sudo docker cp mongodump_20221106 25b:/mongodump_20221106
 sudo docker exec -i 25b /usr/bin/mongorestore --db ditto /mongodump_20221106/ditto
 ```
 
-### [Ubuntu] Deploy Locally
-
-``` cmd
-npm run build
-mv build/ ../server/web
-```
-
 ### [Docker] Deployment
 
 ``` cmd
@@ -86,6 +80,12 @@ docker-compose up -d --build web
 
 ``` cmd
 docker image prune
+```
+
+### [Docker] Download assets from container
+
+``` cmd
+sudo docker cp ???:/assets/images/games ~/assets/2022????
 ```
 
 ### [Redis] Delete all data
