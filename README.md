@@ -42,6 +42,26 @@ npm run build
 mv build/ ../server/web
 ```
 
+### [Docker] Deployment
+
+``` cmd
+docker build -t ditto-go-react .
+docker run -p 80:8080 -d ditto-go-react
+docker-compose up -d --build web
+```
+
+### [Docker] Delete all images
+
+``` cmd
+docker image prune
+```
+
+### [Docker] Download assets from container
+
+``` cmd
+sudo docker cp ???:/assets/images/games ~/assets/2022????
+```
+
 ### [MongoDB] Clear trash records
 
 ``` cmd
@@ -66,26 +86,6 @@ docker exec -i 4e7 /usr/bin/mongorestore --db ditto /mongodump_20221106/ditto
 # AWS EC2: Ubuntu → Docker
 sudo docker cp mongodump_20221106 25b:/mongodump_20221106
 sudo docker exec -i 25b /usr/bin/mongorestore --db ditto /mongodump_20221106/ditto
-```
-
-### [Docker] Deployment
-
-``` cmd
-docker build -t ditto-go-react .
-docker run -p 80:8080 -d ditto-go-react
-docker-compose up -d --build web
-```
-
-### [Docker] Delete all images
-
-``` cmd
-docker image prune
-```
-
-### [Docker] Download assets from container
-
-``` cmd
-sudo docker cp ???:/assets/images/games ~/assets/2022????
 ```
 
 ### [Redis] Delete all data
