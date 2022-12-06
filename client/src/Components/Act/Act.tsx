@@ -40,9 +40,10 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-
 import TodayIcon from '@mui/icons-material/Today';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
+import SwipeLeftAltIcon from '@mui/icons-material/SwipeLeftAlt';
 
 export default function Act() {
     const [mode, setMode] = useState("day")
@@ -309,15 +310,16 @@ export default function Act() {
                                 <Table size="small">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell align="center" style={{ width: 40, verticalAlign: 'top' }}><FormatListNumberedRtlIcon /></TableCell>
-                                            <TableCell align="center" style={{ width: 110, verticalAlign: 'top' }}><AccessTimeIcon /></TableCell>
+                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><FormatListNumberedRtlIcon /></TableCell>
+                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><AccessTimeIcon /></TableCell>
+                                            <TableCell align="center"><SwipeRightAltIcon /></TableCell>
+                                            <TableCell align="center"><SwipeLeftAltIcon /></TableCell>
                                             <TableCell align="left" style={{ verticalAlign: 'top' }}><TitleIcon /></TableCell>
-                                            <TableCell style={{ width: 120, verticalAlign: 'top' }}></TableCell>
+                                            <TableCell style={{ verticalAlign: 'top' }}></TableCell>
                                         </TableRow>
                                     </TableHead>
 
                                     <TableBody>
-
                                         {(dayDetails).map(
                                             (detail: any) => {
                                                 return (
@@ -332,6 +334,14 @@ export default function Act() {
                                                         {detail.act.type === 'Gaming' ?
                                                             <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell> :
                                                             <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell>}
+
+                                                        {detail.act.type === 'Gaming' ?
+                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.start}</Typography></TableCell> :
+                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.start}</Typography></TableCell>}
+
+                                                        {detail.act.type === 'Gaming' ?
+                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.end}</Typography></TableCell> :
+                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.end}</Typography></TableCell>}
 
                                                         {detail.act.type === 'Gaming' ?
                                                             <TableCell colSpan={2} align="left" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.game[0]?.title}</Typography></TableCell> :
