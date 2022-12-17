@@ -7,21 +7,6 @@
 
 ## Memo
 
-## Gaming Night
-
-``` memo
-Dec 7, 2022
-Dec 8, 2022
-Dec 9, 2022
-Dec 10, 2022
-Dec 11, 2022
-Dec 12, 2022
-Dec 13, 2022
-Dec 14, 2022
-Dec 15, 2022
-Dec 16, 2022
-```
-
 ### [Ubuntu] Kill port 80
 
 ``` cmd
