@@ -62,7 +62,7 @@ docker image prune
 sudo docker cp ???:/assets/images/games ~/assets/2022????
 ```
 
-### [MongoDB] Clear trash records
+### [MongoDB] Clean trash records
 
 ``` cmd
 db.act.deleteOne({"_id": ObjectId('000000000000000000000000')})

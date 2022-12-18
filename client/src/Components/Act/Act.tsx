@@ -95,10 +95,10 @@ export default function Act() {
         fetch(`/api/act/watch/teminate`, {
             method: "POST",
         })
-        .then(() => {
-            handleStopwatchClose()
-            fetchData()
-        })
+            .then(() => {
+                handleStopwatchClose()
+                fetchData()
+            })
     }
 
     const [acts, setActs] = useState({
@@ -264,8 +264,8 @@ export default function Act() {
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <TabList indicatorColor="secondary" onChange={handleModeChange} centered>
                         <Tab
-                            icon={ <TodayIcon sx={{ fontSize: 30 }} /> } value="day" />
-                        <Tab icon={ <CalendarMonthIcon sx={{ fontSize: 30 }} /> } value="month" />
+                            icon={<TodayIcon sx={{ fontSize: 30 }} />} value="day" />
+                        <Tab icon={<CalendarMonthIcon sx={{ fontSize: 30 }} />} value="month" />
                     </TabList>
                 </Box>
 
@@ -311,9 +311,9 @@ export default function Act() {
                                     <TableHead>
                                         <TableRow>
                                             <TableCell align="center" style={{ verticalAlign: 'top' }}><FormatListNumberedRtlIcon /></TableCell>
+                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><SwipeRightAltIcon /></TableCell>
+                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><SwipeLeftAltIcon /></TableCell>
                                             <TableCell align="center" style={{ verticalAlign: 'top' }}><AccessTimeIcon /></TableCell>
-                                            <TableCell align="center"><SwipeRightAltIcon /></TableCell>
-                                            <TableCell align="center"><SwipeLeftAltIcon /></TableCell>
                                             <TableCell align="left" style={{ verticalAlign: 'top' }}><TitleIcon /></TableCell>
                                             <TableCell style={{ verticalAlign: 'top' }}></TableCell>
                                         </TableRow>
@@ -327,21 +327,53 @@ export default function Act() {
                                                         key={detail.id}
                                                         sx={{ '&:last-child td, &:last-child th': { border: 0, fontSize: 15 } }}
                                                     >
-                                                        {detail.act.type === 'Gaming' ?
-                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><SportsEsportsIcon /></Typography></TableCell> :
-                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitHubIcon /></Typography></TableCell>}
+                                                        {
+                                                            detail.act.type === 'Gaming' ?
+                                                                <TableCell align="center" style={{ verticalAlign: 'top' }}>
+                                                                    <Typography color="lightpink"><SportsEsportsIcon /></Typography>
+                                                                </TableCell>
+                                                            :
+                                                                <TableCell align="center" style={{ verticalAlign: 'top' }}>
+                                                                    <Typography color="mediumpurple"><GitHubIcon /></Typography>
+                                                                </TableCell>
+                                                        }
 
-                                                        {detail.act.type === 'Gaming' ?
-                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell> :
-                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m</Typography></TableCell>}
+                                                        {
+                                                            detail.act.type === 'Gaming' ?
+                                                                <TableCell align="center" style={{ verticalAlign: 'top' }}>
+                                                                    <Typography color="lightpink">{detail.start}</Typography>
+                                                                </TableCell>
+                                                            :
+                                                                <TableCell align="center" style={{ verticalAlign: 'top' }}>
+                                                                    <Typography color="mediumpurple">{detail.start}</Typography>
+                                                                </TableCell>
+                                                        }
 
-                                                        {detail.act.type === 'Gaming' ?
-                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.start}</Typography></TableCell> :
-                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.start}</Typography></TableCell>}
+                                                        {
+                                                            detail.act.type === 'Gaming' ?
+                                                                <TableCell align="center" style={{ verticalAlign: 'top' }}>
+                                                                    <Typography color="lightpink">{detail.end}</Typography>
+                                                                </TableCell>
+                                                            :
+                                                                <TableCell align="center" style={{ verticalAlign: 'top' }}>
+                                                                    <Typography color="mediumpurple">{detail.end}</Typography>
+                                                                </TableCell>
+                                                        }
 
-                                                        {detail.act.type === 'Gaming' ?
-                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.end}</Typography></TableCell> :
-                                                            <TableCell align="center" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{detail.end}</Typography></TableCell>}
+                                                        {
+                                                            detail.act.type === 'Gaming' ?
+                                                                <TableCell align="center" style={{ verticalAlign: 'top' }}>
+                                                                    <Typography color="lightpink">
+                                                                        {detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m
+                                                                    </Typography>
+                                                                </TableCell>
+                                                            :
+                                                                <TableCell align="center" style={{ verticalAlign: 'top' }}>
+                                                                    <Typography color="mediumpurple">
+                                                                        {detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m
+                                                                    </Typography>
+                                                                </TableCell>
+                                                        }
 
                                                         {detail.act.type === 'Gaming' ?
                                                             <TableCell colSpan={2} align="left" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{detail.game[0]?.title}</Typography></TableCell> :
@@ -352,12 +384,12 @@ export default function Act() {
                                         )}
 
                                         <TableRow>
-                                            <TableCell colSpan={2}></TableCell>
+                                            <TableCell colSpan={4}></TableCell>
                                             <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink"><ControllerIcon size={23} /></Typography></TableCell>
                                             <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="lightpink">{daySummary.game_hour === 0 ? '' : daySummary.game_hour + 'h'} {daySummary.game_min}m</Typography></TableCell>
                                         </TableRow>
                                         <TableRow>
-                                            <TableCell colSpan={2}></TableCell>
+                                            <TableCell colSpan={4}></TableCell>
                                             <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple"><GitIcon size={23} /></Typography></TableCell>
                                             <TableCell align="right" style={{ verticalAlign: 'top' }}><Typography color="mediumpurple">{daySummary.pgm_hour === 0 ? '' : daySummary.pgm_hour + 'h'} {daySummary.pgm_min}m</Typography></TableCell>
                                         </TableRow>
@@ -535,8 +567,8 @@ export default function Act() {
                                 name="duration"
                                 label="Duration"
                                 type="number"
-                                value={ formCreateActValues.duration }
-                                onChange={ handleCreateActInputChange }
+                                value={formCreateActValues.duration}
+                                onChange={handleCreateActInputChange}
                                 InputProps={{ inputProps: { min: 0 } }}
                             />
                         </FormControl>
@@ -549,7 +581,7 @@ export default function Act() {
                             <Select
                                 name="gameId"
                                 label="Game"
-                                value={ formCreateActValues.gameId }
+                                value={formCreateActValues.gameId}
                                 inputProps={{ name: 'gameId' }}
                                 onChange={handleCreateActInputChange}
                             >
@@ -596,9 +628,9 @@ export default function Act() {
                                     <Select
                                         name="gameId"
                                         label="Game"
-                                        value={ formStopwatch.gameId }
+                                        value={formStopwatch.gameId}
                                         inputProps={{ name: 'gameId' }}
-                                        onChange={ handleStopwatchChange }
+                                        onChange={handleStopwatchChange}
                                     >
                                         {playingGames.map((game: any, index) => {
                                             return (

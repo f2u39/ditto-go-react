@@ -39,14 +39,14 @@ type Detail struct {
 func Genres() []Genre {
 	return []Genre{
 		ACT, ARPG, CARD, FPS, MOBA, RHYTHM, RPG, RTS,
-		SB, SIMULATION, SURVIVAL, TPS, VN,
+		SANDBOX, SIMULATION, SURVIVAL, TPS, VISUAL_NOVEL,
 	}
 }
 
 // Return platforms
 func Platforms() []Platform {
 	return []Platform{
-		PC, PLAYSTATION, SWITCH, MOBILE,
+		PC, PLAYSTATION, SWITCH, XBOX, MOBILE,
 	}
 }
 
@@ -71,17 +71,17 @@ var (
 	MOBILE      = Platform("Mobile")
 
 	// Genres
-	ACT        = Genre("ACT")
-	ARPG       = Genre("ARPG")
-	CARD       = Genre("Card")
-	FPS        = Genre("FPS")
-	MOBA       = Genre("MOBA")
-	RHYTHM     = Genre("Rhythm")
-	RPG        = Genre("RPG")
-	RTS        = Genre("RTS")
-	SB         = Genre("Sandbox")
-	SIMULATION = Genre("Simulation")
-	SURVIVAL   = Genre("Survival")
-	TPS        = Genre("TPS")
-	VN         = Genre("Visual Novel")
+	ACT          = Genre("ACT")
+	ARPG         = Genre("ARPG")
+	CARD         = Genre("Card")
+	FPS          = Genre("FPS")
+	MOBA         = Genre("MOBA")
+	RHYTHM       = Genre("Rhythm")
+	RPG          = Genre("RPG")
+	RTS          = Genre("RTS")
+	SANDBOX      = Genre("Sandbox")
+	SIMULATION   = Genre("Simulation")
+	SURVIVAL     = Genre("Survival")
+	TPS          = Genre("TPS")
+	VISUAL_NOVEL = Genre("Visual Novel")
 )
