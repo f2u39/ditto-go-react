@@ -156,6 +156,9 @@ export default function Act() {
     }
 
     const dayDetails = Array.isArray(acts.day_details) ? acts.day_details : []
+
+    console.log(dayDetails)
+
     const daySummary: any = acts.day_summary ? acts.day_summary : []
     const monDetails = Array.isArray(acts.month_details) ? acts.month_details : []
     const monSummary: any = acts.month_summary ? acts.month_summary : []
@@ -341,22 +344,22 @@ export default function Act() {
                                                         {
                                                             detail.act.type === 'Gaming' ?
                                                                 <TableCell align="center" style={{ verticalAlign: 'top' }}>
-                                                                    <Typography color="lightpink">{detail.start}</Typography>
+                                                                    <Typography color="lightpink">{detail.act.start}</Typography>
                                                                 </TableCell>
                                                             :
                                                                 <TableCell align="center" style={{ verticalAlign: 'top' }}>
-                                                                    <Typography color="mediumpurple">{detail.start}</Typography>
+                                                                    <Typography color="mediumpurple">{detail.act.start}</Typography>
                                                                 </TableCell>
                                                         }
 
                                                         {
                                                             detail.act.type === 'Gaming' ?
                                                                 <TableCell align="center" style={{ verticalAlign: 'top' }}>
-                                                                    <Typography color="lightpink">{detail.end}</Typography>
+                                                                    <Typography color="lightpink">{detail.act.end}</Typography>
                                                                 </TableCell>
                                                             :
                                                                 <TableCell align="center" style={{ verticalAlign: 'top' }}>
-                                                                    <Typography color="mediumpurple">{detail.end}</Typography>
+                                                                    <Typography color="mediumpurple">{detail.act.end}</Typography>
                                                                 </TableCell>
                                                         }
 

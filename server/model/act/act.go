@@ -29,8 +29,10 @@ type Detail struct {
 	Act  Act         `json:"act" bson:",inline"`
 	Game []game.Game `json:"game" bson:"game"`
 
-	Hour int `json:"hour"`
-	Min  int `json:"min"`
+	Hour int    `json:"hour"`
+	Min  int    `json:"min"`
+	From string `json:"from"`
+	To   string `json:"to"`
 }
 
 type Summary struct {
