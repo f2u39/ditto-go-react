@@ -7,6 +7,12 @@
 
 ## Memo
 
+### Gaming
+
+``` ng
+Dec 20, 2022
+```
+
 ### [Ubuntu] Kill port 80
 
 ``` cmd
