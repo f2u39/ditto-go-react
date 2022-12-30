@@ -10,7 +10,8 @@
 ### Gaming
 
 ``` ng
-29 Dec 2022
+29 Dec, 2022
+30 Dec, 2022
 ```
 
 ### [Ubuntu] Kill port 80
