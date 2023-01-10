@@ -88,6 +88,12 @@ sudo docker cp mongodump_20221106 25b:/mongodump_20221106
 sudo docker exec -i 25b /usr/bin/mongorestore --db ditto /mongodump_20221106/ditto
 ```
 
+### [React] Run program
+
+``` cmd
+npm run start
+```
+
 ### [Redis] Delete all data
 
 ``` redis-cli

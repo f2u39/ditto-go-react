@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs, { Dayjs } from 'dayjs';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -16,7 +16,6 @@ import { IconButton } from '@mui/material';
 import { InputLabel } from '@mui/material';
 import { MenuItem } from '@mui/material';
 import { Select } from '@mui/material';
-import { Stack } from '@mui/material';
 import { Tooltip } from '@mui/material';
 import { Toolbar } from '@mui/material';
 import { Typography } from '@mui/material';
@@ -47,7 +46,6 @@ import SwipeLeftAltIcon from '@mui/icons-material/SwipeLeftAlt';
 
 export default function Act() {
     const [mode, setMode] = useState("day")
-
     const [date, setDate] = useState<Dayjs | null>(dayjs(new Date()))
     const [tempDate, setTempDate] = useState<Dayjs | null>(date)
     const [openNewActivity, setOpenNewActivity] = useState(false)
@@ -84,6 +82,14 @@ export default function Act() {
 
     const handleCalendarOpen = () => { setOpenCalendar(true) }
     const handleCalendarClose = () => { setOpenCalendar(false) }
+
+    const [openDeleteAct, setOpenDeleteAct] = useState(false)
+    const [delAct, setDelAct] = useState({id: [], type: [], duration: [], title: []})
+    const handleDeleteActOpen = (id: any, type: any, duration: any, title: any) => {
+        setDelAct({id: id, type: type, duration: duration, title: title})
+        setOpenDeleteAct(true)
+    }
+    const handleDeleteActClose = () => { setOpenDeleteAct(false) }
 
     const handleStopwatchOpen = () => { setOpenStopwatch(true) }
     const handleStopwatchClose = () => {
@@ -156,9 +162,6 @@ export default function Act() {
     }
 
     const dayDetails = Array.isArray(acts.day_details) ? acts.day_details : []
-
-    console.log(dayDetails)
-
     const daySummary: any = acts.day_summary ? acts.day_summary : []
     const monDetails = Array.isArray(acts.month_details) ? acts.month_details : []
     const monSummary: any = acts.month_summary ? acts.month_summary : []
@@ -204,11 +207,9 @@ export default function Act() {
 
     const handleCreateActSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        console.log(formCreateActValues)
 
         fetch("/api/act/create", {
             method: "POST",
-            // credentials: 'include',
             credentials: 'same-origin',
             body: JSON.stringify(formCreateActValues),
             headers: {
@@ -218,6 +219,26 @@ export default function Act() {
             .then(response => response.json())
             .then(() => {
                 handleNewActivityClose()
+                fetchData()
+                reset()
+            })
+            .catch(error => console.error("Error:", error))
+    }
+
+    const handleDeleteActSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        fetch("/api/act/delete", {  
+            method: "POST",
+            credentials: 'same-origin',
+            body: JSON.stringify(formCreateActValues),
+            headers: {
+                "Content-Type": "application/json"
+            }
+         })
+            .then(response => response.json())
+            .then(() => {
+                handleDeleteActClose()
                 fetchData()
                 reset()
             })
@@ -333,7 +354,11 @@ export default function Act() {
                                                         {
                                                             detail.act.type === 'Gaming' ?
                                                                 <TableCell align="center" style={{ verticalAlign: 'top' }}>
-                                                                    <Typography color="lightpink"><SportsEsportsIcon /></Typography>
+                                                                    <IconButton color="inherit">
+                                                                        <SportsEsportsIcon 
+                                                                            sx={{ color: "lightpink" }} 
+                                                                            onClick={ () => handleDeleteActOpen(detail.act.id, detail.act.type, detail.act.duration, detail.game[0]?.title) } />
+                                                                    </IconButton>
                                                                 </TableCell>
                                                             :
                                                                 <TableCell align="center" style={{ verticalAlign: 'top' }}>
@@ -522,6 +547,34 @@ export default function Act() {
                 </DialogContent>
             </Dialog>
 
+            <Dialog open={openDeleteAct} onClose={handleDeleteActClose}>
+                <DialogTitle>Edit Activity</DialogTitle>
+                <DialogContent>
+                    <form onSubmit={handleDeleteActSubmit}>
+                        <FormControl fullWidth sx={{ mt: 2 }}>
+                            <TextField label="ID" value={delAct.id} disabled></TextField>
+                        </FormControl>
+
+                        <FormControl fullWidth sx={{ mt: 2 }}>
+                            <TextField label="Type" value={delAct.type} disabled></TextField>
+                        </FormControl>
+
+                        <FormControl fullWidth sx={{ mt: 2 }}>
+                            <TextField label="Duration" value={delAct.duration} disabled></TextField>
+                        </FormControl>
+
+                        <FormControl fullWidth sx={{ mt: 2 }}>
+                            <TextField label="Title" value={delAct.title} disabled></TextField>
+                        </FormControl>
+
+                        <DialogActions sx={{ mt: 1, mb: -1, mr: -2 }}>
+                            <Button color="secondary" onClick={handleDeleteActClose}>Cancel</Button>
+                            <Button type="submit" color="error">Delete</Button>
+                        </DialogActions>
+                    </form>
+                </DialogContent>
+            </Dialog>
+
             <Dialog
                 open={openNewActivity}
                 onClose={handleNewActivityClose}
@@ -604,10 +657,7 @@ export default function Act() {
                 </DialogContent>
             </Dialog>
 
-            <Dialog
-                open={openStopwatch}
-                onClose={handleStopwatchClose}
-            >
+            <Dialog open={openStopwatch} onClose={handleStopwatchClose}>
                 <DialogTitle align="center">Stopwatch</DialogTitle>
                 <DialogContent>
                     {
