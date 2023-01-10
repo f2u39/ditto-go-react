@@ -35,6 +35,7 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -84,9 +85,9 @@ export default function Act() {
     const handleCalendarClose = () => { setOpenCalendar(false) }
 
     const [openDeleteAct, setOpenDeleteAct] = useState(false)
-    const [delAct, setDelAct] = useState({id: [], type: [], duration: [], title: []})
+    const [delAct, setDelAct] = useState({ id: [], type: [], duration: [], title: [] })
     const handleDeleteActOpen = (id: any, type: any, duration: any, title: any) => {
-        setDelAct({id: id, type: type, duration: duration, title: title})
+        setDelAct({ id: id, type: type, duration: duration, title: title })
         setOpenDeleteAct(true)
     }
     const handleDeleteActClose = () => { setOpenDeleteAct(false) }
@@ -171,7 +172,9 @@ export default function Act() {
     const defaultCreateActValues = {
         type: 'Gaming',
         date: dayjs(new Date()).format('YYYYMMDD'),
-        duration: '',
+        // duration: '',
+        from: dayjs().format('HHmmss'),
+        to: dayjs().format('HHmmss'),
         gameId: '',
     }
 
@@ -196,6 +199,20 @@ export default function Act() {
         })
         console.log("CreateActInputValue: " + formCreateActValues.date)
     }
+
+    const handleCreateActFromInputChange = (newValue: Dayjs | null) => {
+        setFormCreateActValues({
+            ...formCreateActValues,
+            from: dayjs(newValue).format('hhmmss'),
+        })
+    };
+
+    const handleCreateActToInputChange = (newValue: Dayjs | null) => {
+        setFormCreateActValues({
+            ...formCreateActValues,
+            to: dayjs(newValue).format('hhmmss'),
+        })
+    };
 
     const handleStopwatchChange = (e: { target: { name: any; value: any; } }) => {
         const { name, value } = e.target;
@@ -228,14 +245,14 @@ export default function Act() {
     const handleDeleteActSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        fetch("/api/act/delete", {  
+        fetch("/api/act/delete", {
             method: "POST",
             credentials: 'same-origin',
             body: JSON.stringify(formCreateActValues),
             headers: {
                 "Content-Type": "application/json"
             }
-         })
+        })
             .then(response => response.json())
             .then(() => {
                 handleDeleteActClose()
@@ -355,12 +372,12 @@ export default function Act() {
                                                             detail.act.type === 'Gaming' ?
                                                                 <TableCell align="center" style={{ verticalAlign: 'top' }}>
                                                                     <IconButton color="inherit">
-                                                                        <SportsEsportsIcon 
-                                                                            sx={{ color: "lightpink" }} 
-                                                                            onClick={ () => handleDeleteActOpen(detail.act.id, detail.act.type, detail.act.duration, detail.game[0]?.title) } />
+                                                                        <SportsEsportsIcon
+                                                                            sx={{ color: "lightpink" }}
+                                                                            onClick={() => handleDeleteActOpen(detail.act.id, detail.act.type, detail.act.duration, detail.game[0]?.title)} />
                                                                     </IconButton>
                                                                 </TableCell>
-                                                            :
+                                                                :
                                                                 <TableCell align="center" style={{ verticalAlign: 'top' }}>
                                                                     <Typography color="mediumpurple"><GitHubIcon /></Typography>
                                                                 </TableCell>
@@ -371,7 +388,7 @@ export default function Act() {
                                                                 <TableCell align="center" style={{ verticalAlign: 'top' }}>
                                                                     <Typography color="lightpink">{detail.act.start}</Typography>
                                                                 </TableCell>
-                                                            :
+                                                                :
                                                                 <TableCell align="center" style={{ verticalAlign: 'top' }}>
                                                                     <Typography color="mediumpurple">{detail.act.start}</Typography>
                                                                 </TableCell>
@@ -382,7 +399,7 @@ export default function Act() {
                                                                 <TableCell align="center" style={{ verticalAlign: 'top' }}>
                                                                     <Typography color="lightpink">{detail.act.end}</Typography>
                                                                 </TableCell>
-                                                            :
+                                                                :
                                                                 <TableCell align="center" style={{ verticalAlign: 'top' }}>
                                                                     <Typography color="mediumpurple">{detail.act.end}</Typography>
                                                                 </TableCell>
@@ -395,7 +412,7 @@ export default function Act() {
                                                                         {detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m
                                                                     </Typography>
                                                                 </TableCell>
-                                                            :
+                                                                :
                                                                 <TableCell align="center" style={{ verticalAlign: 'top' }}>
                                                                     <Typography color="mediumpurple">
                                                                         {detail.hour === 0 ? '' : detail.hour + 'h'} {detail.min}m
@@ -598,11 +615,11 @@ export default function Act() {
                             </Select>
                         </FormControl>
 
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <FormControl
                             fullWidth
                             sx={{ mt: 2 }}
                         >
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     label="Date"
                                     inputFormat={"MM/DD/YYYY"}
@@ -612,22 +629,37 @@ export default function Act() {
                                         <TextField {...params} />
                                     }
                                 />
-                            </LocalizationProvider>
+                        
+                        </FormControl>
+
+
+                        <FormControl
+                            fullWidth
+                            sx={{ mt: 2 }}
+                        >
+                            <TimePicker
+                                label="From"
+                                value={formCreateActValues.from}
+                                onChange={handleCreateActFromInputChange}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
                         </FormControl>
 
                         <FormControl
                             fullWidth
                             sx={{ mt: 2 }}
                         >
-                            <TextField
-                                name="duration"
-                                label="Duration"
-                                type="number"
-                                value={formCreateActValues.duration}
-                                onChange={handleCreateActInputChange}
-                                InputProps={{ inputProps: { min: 0 } }}
+                            <TimePicker
+                                label="To"
+                                value={formCreateActValues.to}
+                                onChange={handleCreateActToInputChange}
+                                renderInput={(params) => <TextField {...params} />}
                             />
                         </FormControl>
+
+                        </LocalizationProvider>
+
+                        
 
                         <FormControl
                             fullWidth
