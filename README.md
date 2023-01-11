@@ -7,6 +7,12 @@
 
 ## Memo
 
+### Gomi commit
+
+``` 53
+Jan 11, 2023
+```
+
 ### [Ubuntu] Kill port 80
 
 ``` cmd
